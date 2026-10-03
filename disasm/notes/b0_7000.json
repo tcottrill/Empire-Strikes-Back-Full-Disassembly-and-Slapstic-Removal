@@ -1,0 +1,367 @@
+{
+ "about": "bank 0 $7000-$77FF: the game phase routines from the end of the TIE fighter wave to the option page (asteroid field, Jedi letter award, end of a set of waves, the four dying phases, end of game, initials, training manual page), then the star movers and the routines that twirl the player's craft",
+ "routines": {
+  "B0:7023": {
+   "name": "phi_tie_flee",
+   "desc": "phase $27, init half of the end of the TIE fighter wave: nothing to set up, it steps PHASE to $28 and falls into the execute half"
+  },
+  "B0:7025": {
+   "name": "phe_tie_flee",
+   "desc": "phase $28, the TIE fighter wave after its time is up: the same frame as the wave itself (view LA515, shots, glow, explosions, shields, Jedi timer) but the fighters run away (CPURET) and the player is turned towards the far object (L76A3). when no alien record is in use and unit vector A's X of the player is $3800 or more it goes to phase $29. shields gone goes to PHIB0D. Star Wars' PHESP2 with the aim test of PHES0G added"
+  },
+  "B0:7071": {
+   "name": "phi_tie_exit",
+   "desc": "phase $29: clears the phase timer and steps to phase $2A"
+  },
+  "B0:707A": {
+   "name": "phe_tie_exit",
+   "desc": "phase $2A, the way out of the TIE fighter wave: view LA599, which slides the far object 16 units to the left every frame, shots, glow, explosions and shields still run, the player keeps turning towards the far object (L76CB) with no fighters left. when the object's screen x far_obj_x is -520 or less it goes to phase $2B, the asteroid field. shields gone goes to PHIB0D"
+  },
+  "B0:70BD": {
+   "name": "phi_asteroids",
+   "desc": "phase $2B, init of the asteroid field wave: pseudo vector ROM set 2, wave type Q_FRC = 3, bonus count from GM_BMP, Jedi letters hidden unless one is being awarded. if instructions were chosen (manual_on) it goes to phase $43 for the training manual page, which comes back through PHES0G, else it branches into PHES0G past the object and star set-up"
+  },
+  "B0:713E": {
+   "name": "phe_asteroids",
+   "desc": "phase $2C, the asteroid field wave: view LA5F9, shots, explosions, glow, shields, Jedi timer, asteroids moved and launched (P2_96E0), player twirled by STWSP2 and moved by S1MVBS. it lasts 300 frames in waves 0 and 1 and 400 in later waves, then phase $2D. 40 frames before the end it requests PM4TH and stops the asteroids (astrd_max = $FF). 60 frames in it shows the Jedi letters. shields gone goes to L73AA"
+  },
+  "B0:71CB": {
+   "name": "phi_jedi_award",
+   "desc": "phase $2D, init of the award after the asteroid field: clears the phase timer, awards the Jedi letter (P1_9573), requests sound $4A (LC64D) and falls into phase $2E"
+  },
+  "B0:71D9": {
+   "name": "phe_jedi_award",
+   "desc": "phase $2E, the award after the asteroid field: view LA63E with message $4D (5,000 points and Jedi letter awarded), explosions, glow and shields still run. requests SPKI at frame 50, shows the Jedi letters at frame 60 if they are hidden, and goes to phase $2F after 70 frames. shields gone goes to L73AA"
+  },
+  "B0:7229": {
+   "name": "ph_to_set_done",
+   "desc": "phases $2F and $30 (both table entries point here): sets PHASE to $31 and falls into its init, so the frame is not lost. phase $2F is set by L71D9, no instruction was found that sets $30"
+  },
+  "B0:722D": {
+   "name": "phi_set_done",
+   "desc": "phase $31, init of the wave completed screen: pseudo vector ROM set 2, phase timer cleared, all messages off, speech request SPKLET, 2,500 points added (LB65D), then it falls into phase $32"
+  },
+  "B0:7243": {
+   "name": "phe_set_done",
+   "desc": "phase $32, the wave completed screen, 128 frames: view LA6B2 shows message $4E (wave completed: 2,500 points) for the first 64 frames and, in the first set of the game (start_bonus), the starting wave bonus message for the next 64. at frame 64 that bonus is added to the score (LB5D4). at frame 128 it clears start_bonus and goes to phase $33"
+  },
+  "B0:7274": {
+   "name": "phi_next_set",
+   "desc": "phase $33, first half of going on to the next set of four waves: objects and the player's ship reset, manual_on cleared, the four bonus quotas (probots, walkers, TIE fighters, GM_BMP) each one higher with 90 as the top, and the wave to continue from (GM_DIF + 1) with the score so far saved in set_wave and set_score. falls into phase $34"
+  },
+  "B0:72C4": {
+   "name": "phe_next_set",
+   "desc": "phase $34, second half: in waves 0 to 2 diff_step goes up by one and is added to diff_adder, then the wave number GM_DIF goes up by one (it stays at $FF) and PHASE = PHS_BGN starts the next set"
+  },
+  "B0:72F6": {
+   "name": "phe_probot_die",
+   "desc": "phase $36, execute half of PHIS0D, the death of the player in the probot wave (the probot phases branch to PHIS0D when S_GAS goes minus): view VEWG0D with the growing GAME OVER, shots still move, the glow is kept flashing, speech request SPKYAU at frame 8, and after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:73AA": {
+   "name": "phi_astrd_die",
+   "desc": "phase $3B, init of the death of the player in the asteroid field (reached by branch from phases $2C and $2E): speech request SPKSIZ, PHASE = $3C, asteroids stopped (astrd_max = $FF), phase timer cleared, Q_RTHV = 1 which mutes the sound effects sent through LC4DA. falls into the execute half"
+  },
+  "B0:73C1": {
+   "name": "phe_astrd_die",
+   "desc": "phase $3C, the death in the asteroid field: view LA66A with the growing GAME OVER, glow kept flashing, explosions, the asteroids still move, and the craft rolls 4.48 degrees a frame as in PHES0D. music request PMBEN at frame 8, after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:73FC": {
+   "name": "phi_die_plain",
+   "desc": "phase $3D, init of a fifth dying phase: speech request SPKSIZ, PHASE = $3E, phase timer cleared, Q_RTHV = 1, falls into the execute half. reached only through the phase table and no instruction was found that sets phase $3D"
+  },
+  "B0:740E": {
+   "name": "phe_die_plain",
+   "desc": "phase $3E: view VEWG1B (score, Jedi letters, shields and the growing GAME OVER, no scene), glow kept flashing, speech request SPKYAU at frame 8, after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:7542": {
+   "name": "phe_manual",
+   "desc": "phase $44, execute half of PHINXT, one page of the rebel training manual shown before a wave when instructions were chosen: view LA697, then LB189 runs the page's script and the demonstration of wave type Q_FRC. when the script ends (manual_done) or after 400 frames PHASE is taken from manual_next_ph for the wave type ($45 probots, $46 walkers, $47 TIE fighters, $48 asteroids, each the wave's own set-up) and the glow, the hit and manual_run are cleared"
+  },
+  "B0:75AC": {
+   "name": "set_bonus_quota",
+   "desc": "sets the four bonus quotas (quota_probot, quota_walker, quota_tie, GM_BMP) from the starting wave number GM_DIF: 6, 8, 10 from quota_tab for waves 0 to 2, GM_DIF + 9 for later waves. called by PHISG2 when a game starts"
+  },
+  "B0:7645": {
+   "name": "SMVBNR",
+   "desc": "star movement of the banner phase, called by L6445: ST_UX and ST_UZ each $80 further. the same instructions as Star Wars' SMVBNR, which the matcher missed"
+  },
+  "B0:766C": {
+   "name": "SMVHIS",
+   "desc": "star movement of the high score table phase, called by L6713: ST_UX $80 further, forward. the same instructions as Star Wars' SMVHIS, which the matcher missed (in ESB PHEHIS calls SMVSCR)"
+  },
+  "B0:7676": {
+   "name": "twirl_tie_wave",
+   "desc": "twirls the player in the TIE fighter wave (phase $26). Star Wars' STWSP1 instruction for instruction - the roll after a hit while S_ROL counts back to zero, AIM at a live alien or the far object, pitch and yaw from the yoke - with 8 tics of roll added every frame through L7B5C"
+  },
+  "B0:76A3": {
+   "name": "twirl_to_far",
+   "desc": "twirls the player while the TIE fighters run away (phase $28): the roll after a hit, then AIMDTH aims at the far object, pitch and yaw. instruction for instruction Star Wars' STWSP2 (the listing has that name at L779A, whose code is STWSP1 with a roll added)"
+  },
+  "B0:76CB": {
+   "name": "turn_to_far",
+   "desc": "twirl of phase $2A: AIMDTH aims at the far object, then pitch and yaw from the yoke. L76A3 without the roll after a hit"
+  },
+  "B0:774B": {
+   "name": "gd_unroll",
+   "desc": "takes the ground flyer's roll back towards level: enters S1TWGD at L7728 with a wanted roll of 0, so GD_ACT moves towards 0 by at most $32 a frame. called by L778C and L7796"
+  },
+  "B0:7750": {
+   "name": "gd_roll_apply",
+   "desc": "no caller found, dead code: adds the low byte of gd_rol to the roll residue, runs the residue routine L7BB1 on the roll block and rolls the ship (S1RL) when it asks. this is the end of Star Wars' S1TWGD, which ESB's S1TWGD no longer runs into"
+  },
+  "B0:7763": {
+   "name": "twirl_ground",
+   "desc": "twirls the player in the probot and walker waves: S1TWGD for the roll, then yaw from the yoke: the X deflection SI_RSX doubled, squared, its high byte times $46, with the sign turned, is added to the yaw residue and S1YW turns the ship when L7BB1 asks"
+  },
+  "B0:778C": {
+   "name": "twirl_turn_back",
+   "desc": "twirl of phase $1E, after the probot wave: unrolls (L774B), sets the yaw rate from the player's unit vector A (L784D) and yaws by it (S1RHYW), which brings the craft round to the heading the phase waits for"
+  },
+  "B0:7796": {
+   "name": "twirl_unroll",
+   "desc": "twirl of phase $24, after the walker wave: only takes the roll back to level (L774B)"
+  },
+  "B0:77C7": {
+   "name": "gd_act_by_stick",
+   "desc": "no caller found, dead code: the yoke's X deflection doubled, times 16, the high byte squared, with the sign of the deflection, is added to GD_ACT, and GD_ACT is brought back by $1555 when it passes $0E38 either way. ends in the RTS of S1TWBS"
+  }
+ },
+ "labels": {
+  "B0:757B": "manual_next_ph",
+  "B0:75CF": "quota_tab"
+ },
+ "comments": {
+  "B0:7002": "440 frames: the TIE fighter wave is over, phase $27",
+  "B0:7009": "60 frames into the wave",
+  "B0:7014": "show the Jedi letters if they are hidden",
+  "B0:70B2": "far object off the left edge (x -520)?",
+  "B0:70BD": "pseudo vector ROM set 2",
+  "B0:70C2": "wave type 3: asteroid field",
+  "B0:70CA": "GM_BMP is this wave's bonus quota",
+  "B0:70D0": "1 = a letter is being awarded, leave it, else hide the letters",
+  "B0:70D7": "instructions chosen?",
+  "B0:70DC": "then the training manual page first",
+  "B0:70E1": "skip the reset, the stars are already set up",
+  "B0:70EF": "player's forward speed",
+  "B0:70F5": "level = 2 * wave number + difficulty adder",
+  "B0:7100": "$20 and up folds into $10-$1F",
+  "B0:7110": "craft type 1",
+  "B0:7118": "sound request only when less than $80 is left of the Jedi time",
+  "B0:7121": "music request by wave number: wave 0",
+  "B0:712F": "even waves from 2 on",
+  "B0:7137": "odd waves",
+  "B0:713A": "phase $2C: the asteroid field",
+  "B0:7173": "length of the wave: 300 frames in waves 0 and 1, 400 later",
+  "B0:718F": "over: phase $2D, the Jedi letter",
+  "B0:7193": "40 frames before the end: 260 or 360",
+  "B0:71B2": "no more asteroids",
+  "B0:71B7": "60 frames in: show the Jedi letters if they are hidden",
+  "B0:71FF": "70 frames",
+  "B0:720C": "frame 50",
+  "B0:7218": "frame 60: show the Jedi letters if they are hidden",
+  "B0:7229": "phase $31, entered at once",
+  "B0:723E": "2,500 points for the completed wave",
+  "B0:7255": "frame 64",
+  "B0:725B": "first set of this game?",
+  "B0:7260": "then add the bonus for the wave the game started on",
+  "B0:7266": "128 frames",
+  "B0:727D": "probot quota one higher, 90 at most",
+  "B0:728A": "walker quota",
+  "B0:7297": "TIE fighter quota",
+  "B0:72B1": "the wave a next game may continue from: the next one",
+  "B0:72B8": "with the score so far",
+  "B0:72C4": "waves 0 to 2: the difficulty adder grows by 1, then 2, then 3",
+  "B0:72D7": "next wave number, it stays at $FF",
+  "B0:72F1": "mutes the sound effects sent through LC4DA",
+  "B0:7302": "frame 8",
+  "B0:732C": "mutes the sound effects sent through LC4DA",
+  "B0:733D": "frame 8",
+  "B0:7367": "mutes the sound effects sent through LC4DA",
+  "B0:738D": "frame 8",
+  "B0:73B1": "stop the asteroid field",
+  "B0:73BC": "mutes the sound effects sent through LC4DA",
+  "B0:73DF": "frame 8",
+  "B0:7409": "mutes the sound effects sent through LC4DA",
+  "B0:7417": "frame 8",
+  "B0:7448": "Jedi letters shown",
+  "B0:744D": "blink counter restarted, sound effects on again",
+  "B0:7468": "Jedi bonus earned in this game?",
+  "B0:746D": "then the last finished set becomes the continue offer: wave",
+  "B0:7473": "and score",
+  "B0:747F": "an offer of wave 4 or higher?",
+  "B0:7486": "phase $11: the continue screen",
+  "B0:748A": "wave type 0 or 1 (probots, walkers)?",
+  "B0:7497": "phase 1: the banner",
+  "B0:74B1": "message $31: message from rebel command post, shoot your initials",
+  "B0:74F8": "Jedi bonus earned: the last finished set becomes the continue offer",
+  "B0:750F": "an offer of wave 4 or higher?",
+  "B0:7516": "phase $11: the continue screen",
+  "B0:751A": "else phase 9: the high score table",
+  "B0:752D": "set up the training manual page of wave type Q_FRC",
+  "B0:7539": "page not finished",
+  "B0:753C": "manual running: the demonstration does not count",
+  "B0:7551": "page script ended?",
+  "B0:7559": "or 400 frames",
+  "B0:755F": "wave type",
+  "B0:7566": "(out of range: probots)",
+  "B0:756B": "the phase that sets the wave up",
+  "B0:757B": "by wave type: probots, walkers, TIE fighters, asteroids",
+  "B0:75AF": "waves 0 to 2: quota from the table",
+  "B0:75BA": "later waves: wave number + 9",
+  "B0:75BC": "over 90?",
+  "B0:75C0": "$90 is loaded here, not $5A (L7274 brings it to $5A at the end of the set)",
+  "B0:75C2": "the same quota for all four wave types",
+  "B0:75CF": "bonus quota of waves 0, 1, 2",
+  "B0:769D": "and 8 tics of roll every frame",
+  "B0:7741": "the step taken (Star Wars adds it to the roll residue here, L7750 holds that code)",
+  "B0:774B": "wanted roll 0, fast limit",
+  "B0:7753": "roll residue",
+  "B0:7757": "the roll block (Star Wars' RHEOR)",
+  "B0:776C": "2 * |x|",
+  "B0:776D": "squared",
+  "B0:7770": "high byte times $46",
+  "B0:7776": "x plus: turn the other way",
+  "B0:777C": "into the yaw residue",
+  "B0:77C1": "and 12 tics of roll the other way every frame",
+  "B0:77EF": "past $0E38: back by $1555"
+ },
+ "ram": {
+  "486F": {
+   "name": "rheor",
+   "desc": "roll block, Star Wars' RHEOR: laid over the yaw block RHEOY one byte up, only its residue byte RHS_RSD ($4877) is used. L7B5C and L7750 hand it to the residue routine L7BB1"
+  },
+  "4876": {
+   "name": "yaw_rsd",
+   "desc": "yaw residue, RHS_RSD+RHEOY: tics of yaw still to turn. L7763 adds the yoke's yaw to it, L7BB1 takes the magic angles out of it and L7C07 turns the downloaded unit vectors by the rest"
+  },
+  "4877": {
+   "name": "roll_rsd",
+   "desc": "roll residue, RHS_RSD of the roll block rheor: tics of roll still to turn. L7B5C adds the steady roll of the TIE fighter and asteroid waves to it, OLD1SHP clears it"
+  },
+  "4894": {
+   "name": "gd_rol",
+   "desc": "word, Star Wars' GD_ROL: in S1TWGD first the roll wanted from the hit count S_ROL, then the limited step that is added to GD_ACT this frame"
+  },
+  "4BEE": {
+   "name": "cont_wave",
+   "desc": "continue offer: the wave number the next game may start on. copied from set_wave at the end of a game in which the Jedi bonus was earned, 3 or more sends the game to the continue screen (phase $11), where it is shown plus 1 and becomes GM_DIF if chosen. cleared when that screen times out"
+  },
+  "4BEF": {
+   "name": "cont_score",
+   "desc": "continue offer: the score that goes with cont_wave, four BCD bytes $4BEF-$4BF2 (this word is digits 8-5), copied from set_score. shown on the continue screen and added to the score as the bonus for continued play (LB5D4)"
+  },
+  "4BF1": {
+   "name": "cont_scr_lo",
+   "desc": "word: digits 4-1 of cont_score"
+  },
+  "4BF3": {
+   "name": "set_wave",
+   "desc": "wave number after the last finished set of waves (GM_DIF + 1), written by L7274, cleared with the continue offer. becomes cont_wave at the end of the game if the Jedi bonus was earned"
+  },
+  "4BF4": {
+   "name": "set_score",
+   "desc": "word: the score at the end of the last finished set of waves, digits 8-5 (S_SC87, S_SC65), kept with set_wave"
+  },
+  "4BF6": {
+   "name": "set_scr_lo",
+   "desc": "word: digits 4-1 of set_score (S_SC43, S_SC21)"
+  },
+  "4C4E": {
+   "name": "astrd_wave",
+   "desc": "wave number used by the asteroid field wave: a copy of GM_DIF made by L6B55 when a set of waves begins. sets the wave's level and, in P2_95B5, how many asteroids fly at once"
+  },
+  "4C50": {
+   "name": "jedi_time",
+   "desc": "word, with a third byte of fraction at $4C52: time left of the state that begins when the fourth Jedi letter is earned (P1_95D7 sets $01C0). P1_95F1 counts it down every frame and P1_970B draws it as a bar. the wave set-ups make their start sound request only when it is below $80"
+  },
+  "4C53": {
+   "name": "bonus_left",
+   "desc": "enemies still to shoot for the bonus of the current wave: loaded from the wave type's quota at the wave's init, counted down by the enemy code in the slapstic pages, shown in the SHOOT nn FOR BONUS message, 0 = bonus awarded"
+  },
+  "4C55": {
+   "name": "quota_probot",
+   "desc": "bonus quota of the probot wave: the bonus_left that wave starts with. set by L75AC from the starting wave number, one higher after every set (L7274), 90 at most"
+  },
+  "4C56": {
+   "name": "quota_walker",
+   "desc": "bonus quota of the walker wave, kept as quota_probot is"
+  },
+  "4C57": {
+   "name": "quota_tie",
+   "desc": "bonus quota of the TIE fighter wave, kept as quota_probot is. the fourth quota, loaded by the asteroid wave, is GM_BMP at $4C58"
+  },
+  "4C59": {
+   "name": "diff_step",
+   "desc": "amount diff_adder grows by at the end of a set: cleared at game start, one higher after each set finished in waves 0 to 2"
+  },
+  "4C5A": {
+   "name": "diff_adder",
+   "desc": "difficulty adder: bits 3-2 of the option switches OPTS1 at game start, plus diff_step at the end of each set finished in waves 0 to 2. added to twice the wave number to give wave_level"
+  },
+  "4C5B": {
+   "name": "wave_level",
+   "desc": "level of the wave being played, 0-$1F: twice its wave number plus diff_adder, with $20 and up folded into $10-$1F. each wave's set-up writes it and the enemy gun code of slapstic page 1 reads it"
+  },
+  "4C60": {
+   "name": "craft_type",
+   "desc": "which craft the player flies: 0 set by the probot wave set-up, 1 by the TIE fighter and asteroid set-ups. indexes the cockpit view table at LB7D4 and the laser origin table of P3_95D3"
+  },
+  "4C61": {
+   "name": "manual_on",
+   "desc": "instructions were chosen on the starting wave screen (cursor on its fourth or fifth target): each wave type's init then goes to phase $43 to show its training manual page first. cleared when the first set is finished (L7274) and when a game starts from the continue screen"
+  },
+  "4C62": {
+   "name": "start_bonus",
+   "desc": "1 from the start of a game (PHISG2) until its first set of waves is finished: the bonus for the wave the game started on is still to be awarded, in phase $32, which clears it. the continue screen also picks its message by it"
+  },
+  "4C67": {
+   "name": "astrd_max",
+   "desc": "asteroid field: most asteroids in flight at once, 3 to 10 by wave number (P2_95B5). $FF (minus) = field stopped, no more are launched and those not marked are removed: set 40 frames before the wave ends and when the player dies in it"
+  },
+  "4C82": {
+   "name": "jedi_show",
+   "desc": "display state of the Jedi letters: 0 hidden, 1 a letter is being awarded (set by P1_9573, P1_9663 runs the award display and then sets 2), 2 shown. each wave shows them 60 frames in, each wave init hides them unless an award is running, the attract phases flip between 0 and 2 every 32 frames"
+  },
+  "4C83": {
+   "name": "jedi_blink",
+   "desc": "counter stepped every frame by P1_9645. the attract phases flip jedi_show when its low five bits are 0. cleared at the end of a game"
+  },
+  "4C85": {
+   "name": "jedi_earned",
+   "desc": "Jedi bonus earned: set to 1 by P1_95E0 when all four Jedi letters are held, cleared when a game starts. at the end of the game it decides whether the last finished set becomes the continue offer"
+  },
+  "4CB8": {
+   "name": "manual_done",
+   "desc": "training manual page finished: cleared by PHINXT, set to $FF by the script's end command (LAE23), tested by L7542"
+  },
+  "4CB9": {
+   "name": "manual_run",
+   "desc": "nonzero while a training manual page is shown (PHINXT sets it, L7542 clears it): the enemy code of slapstic pages 1 and 3 tests it so that the demonstration does not count as play"
+  },
+  "4CCC": {
+   "name": "far_obj_x",
+   "desc": "word: screen x of the far object of the TIE fighter wave (picture JSRL $B4C7), saved sign extended by VWDTHB with its y at $4CCE. LA8F8 moves it 16 to the left every frame in phase $2A, which ends when it is -520 or less"
+  },
+  "4CD9": {
+   "name": "hit_said",
+   "desc": "cleared by each wave's set-up, set by the first enemy shot that hits the player in the wave (P1_94AB), which makes that hit's speech and music requests once per wave"
+  },
+  "5086": {
+   "name": "s1_vx",
+   "desc": "word: the player's forward speed, MS_VX+M_S1 (the listing shows the same address as that expression in the carried lines). PHES0G sets it to $0100 for the asteroid field"
+  }
+ },
+ "regions": [],
+ "questions": [
+  "B0:73FC / B0:740E (phases $3D, $3E) and phase $30 (second table entry of L7229): no instruction was found that sets PHASE to $3D or $30, so these look unused, unless the phase annotator finds a computed entry",
+  "B0:7750 and B0:77C7 have no caller and nothing in bank 0, bank 1 or the slapstic pages refers to them: described as dead code. L7750 is the tail of Star Wars' S1TWGD (roll the ship by GD_ROL), cut off because ESB's S1TWGD ends at L774A with an RTS",
+  "B0:70E3 PHES0G keeps the carried description 'SPACE TO GROUND TRANSITION', but in ESB it is the set-up of the asteroid field wave (phase $48, entered after the training manual page, and entered at L70E9 from L70BD). likewise PHINXT (B0:751F) is here the init of the training manual page (phase $43), PHIS0D / L72F6 are the death in the probot wave, PHIG0D / PHEG0D the death in the walker wave, PHIB0D / PHES0D the death in the TIE fighter wave. not re-described because they carry Atari names and descriptions",
+  "B0:779A carries the name STWSP2 but its code is Star Wars' STWSP1 (AIM) with a roll of -12 tics a frame added, used by the asteroid wave. Star Wars' STWSP2 instruction for instruction is at B0:76A3, Star Wars' STWSP1 with +8 tics of roll at B0:7676",
+  "carried comments are one line off in several of these phase routines, for example B0:7040 (CPURET call says 'PULL IN SITE COORDS'), B0:7043, B0:7051, and the view calls of bank 0 $A5xx. B0:7434 says 'SAY REMEMBER' on a call of SPKSIZ",
+  "RAM that is Atari's by position: $486F is Star Wars' RHEOR (roll block, one byte above RHEOY), $4877 = RHS_RSD+RHEOR, $4876 = RHS_RSD+RHEOY (shown as that expression at L75A8), $4894 = GD_ROL, $5086 = MS_VX+M_S1. given lower-case names here, the generator may prefer the Atari names or expressions",
+  "the far object of the TIE fighter wave (VWDTHB, LA8F8, LA881, LA843 draw it with JSRL $B4C7 = vector RAM $298E, pseudo ROM set 2 at LC202): could not tell from this stretch what the picture is",
+  "B0:75C0 loads $90 where the limit tested just before is $5A: looks like a slip (decimal 90 written as hex), harmless because it is only reached for a starting wave above 81",
+  "Q_RTHV ($4CCA, Atari's name) is used in ESB as a mute flag: LC4DA / K6530 send their sound effect only when it is 0, the dying phases set it to 1 and PHEEGM clears it. its carried description (FIRST DARTH IN VIEW) no longer fits",
+  "Q_FRC ($4C4F) is used in ESB as the wave type within a set (0 probots, 1 walkers, 2 TIE fighters, 3 asteroid field) and GM_DIF ($4C49) as the wave (set) number, GM_BMP ($4C58) as the bonus quota of the asteroid wave: their carried descriptions describe Star Wars"
+ ]
+}

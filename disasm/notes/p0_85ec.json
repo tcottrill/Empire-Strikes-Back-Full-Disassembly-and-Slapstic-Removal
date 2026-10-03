@@ -1,0 +1,271 @@
+{
+ "about": "slapstic page 0 $85EC-$8BFF: the AT-AT walkers of the walker part - set-up of the three records at atat_rec, their per-frame movement (spawning, head swing, walking, falling, the legs bonus) and their view (body, legs, head, the head's aim at the player)",
+ "routines": {
+  "P0:85EC": {
+   "name": "atat_init",
+   "desc": "set-up of the AT-ATs for the walker part, called by wave2_setup: loads the points of objects $17 and $18 into the math box, clears atat_under and fills the three $19-byte records at atat_rec from atat_init_tab with their type byte left 0 (free), then sets w2_spawn_b to 3 so that atat_move_all brings them in one at a time"
+  },
+  "P0:8674": {
+   "name": "atat_demo_init",
+   "desc": "set-up of the demo AT-AT of the training manual, called by man_init_walker and man_show_atat with B = the manual page: fills the first record from entry B of atat_demo_tab (entry 0 when B is over 2) as a standing walker, frees the other two records, loads the points of objects $17 and $18 and clears w2_spawn_b so that nothing is spawned"
+  },
+  "P0:8705": {
+   "name": "atat_move_all",
+   "desc": "per-frame movement of the AT-ATs, called by the walker phases and by man_move_walker. while w2_spawn_b is positive it respawns one free record (P0_9163), when it is negative (end of the part) it frees the walkers that are neither falling nor in view nor over the player, then it awards the legs bonus when the player comes under a walker (atat_under remembers which one until the player has left it), and for every live record counts it in w2_active_b, runs down its shot delay, swings the head, moves it by its mode and steps the walk cycle. a falling walker carries the height of the tow cable's end down with it"
+  },
+  "P0:8828": {
+   "name": "atat_head_swing",
+   "desc": "moves the head of the AT-AT record at U: adds the pitch rate to the pitch angle and the yaw rate to the yaw angle, turning a rate round at random when the angle would leave its range, and takes the size of each rate (1 to 3) from a table indexed by the angle. when the head saw the player in the last view but was not yet aimed, the two rates are first pointed towards the player by the signs atat_head_aim left in bytes $17 and $18"
+  },
+  "P0:88DE": {
+   "name": "atat_move_mode",
+   "desc": "calls the movement routine for the mode in byte 4 of the AT-AT record at U through atat_move_tab: 0 stand, 1 walk, 2 fall (a mode over 2 counts as 0)"
+  },
+  "P0:88F0": {
+   "name": "atat_mode_stand",
+   "desc": "movement mode 0 of an AT-AT, standing: does nothing. reached through atat_move_tab, hence no caller found"
+  },
+  "P0:88F1": {
+   "name": "atat_mode_walk",
+   "desc": "movement mode 1 of an AT-AT, walking: adds $33 to the x position of the record at U. reached through atat_move_tab, hence no caller found"
+  },
+  "P0:88F9": {
+   "name": "atat_mode_fall",
+   "desc": "movement mode 2 of an AT-AT, falling after the tow cable caught its legs: lowers the height of the record at U by $0400 a frame and, when it reaches the ground, calls P0_9006 which blows the walker up, scores it and respawns it. reached through atat_move_tab, hence no caller found"
+  },
+  "P0:8912": {
+   "name": "atat_step_anim",
+   "desc": "adds 1 to the walk cycle counter in byte $15 of the AT-AT record at U, the time the leg drawing (P0_8C27) follows the leg tracks with"
+  },
+  "P0:891A": {
+   "name": "atat_view_all",
+   "desc": "view of the AT-ATs, called by vew_walker, by the game over view and by man_view_walker with Y at the display list. for every live record it clears the frame's flags in byte 1 (the hit flash is kept only while the walker was drawn last frame), writes the colour (green, or the flash list when hit), sets the ship 2 block to a unit matrix and concatenates it, crashes the ship (P0_913C) when it is under a falling walker, and draws the body, the legs and the head"
+  },
+  "P0:898C": {
+   "name": "atat_view_body",
+   "desc": "views the centre of the AT-AT at U from the ship (pre-subtract MS_PSB2 on its position), keeps the result in M_XT, M_YT and M_ZT for the legs and the head, and calls atat_draw_body when the centre is ahead between $0010 and $4000 and within 45 degrees of the line of sight both ways"
+  },
+  "P0:89E4": {
+   "name": "atat_draw_body",
+   "desc": "draws the body of the AT-AT at U, object $17: marks the record drawn and its body in view (bits $10 and $40 of byte 1), dims the colour with the distance beyond $2000, has bank 1 view and draw the object's points and tests the lazar against the body (P0_8EE1)"
+  },
+  "P0:8A1C": {
+   "name": "atat_view_legs",
+   "desc": "draws the four legs of the AT-AT at U: only a call of P0_8C27"
+  },
+  "P0:8A20": {
+   "name": "atat_view_head",
+   "desc": "views the head of the AT-AT at U: post-adds the head's offset in bytes 11 to 16 of the record to the viewed centre and, when that point is ahead between $0010 and $4000 and within 45 degrees both ways, sets the colour (dimmed beyond $2000, else full brightness unless the hit flash is on), makes the point the new M_XT, M_YT, M_ZT and calls atat_draw_head"
+  },
+  "P0:8AA5": {
+   "name": "atat_head_aim",
+   "desc": "aim of the head's guns at the player, called while the head is drawn with U at the AT-AT record. only when the head faces the ship: finds the muzzle of the gun on the side given by bit 7 of the type byte, moves the ship 2 block there and views the player from it. with the player in front the head turns red, bit 2 of byte 1 is set and the player's side and height are left in bytes $17 and $18 for atat_head_swing. with the player within 45 degrees (always from w2_level_b 9 up) the head flashes, bit 1 is set and, when the record may shoot and its delay has run out, a shot is started on page 1 (P1_8F8B) and the gun side changed. ends with the lazar test on the guns (P0_8FA6)"
+  },
+  "P0:8B82": {
+   "name": "atat_draw_head",
+   "desc": "draws the head of the AT-AT at U: marks the record drawn, yaws and pitches the ship 2 block by a quarter of the head's two angles and concatenates it, views the points of object $18 and draws object $1A (only when the body is in view), object $18 and, after the lazar test on the head (P0_8F64) and atat_head_aim, object $19"
+  }
+ },
+ "labels": {
+  "P0:8656": "atat_init_tab",
+  "P0:86E7": "atat_demo_tab",
+  "P0:88B8": "atat_pit_rate",
+  "P0:88C8": "atat_yaw_rate",
+  "P0:88D8": "atat_move_tab",
+  "P0:8BCD": "atat_gait_tab",
+  "P0:8BD3": "atat_legs_0",
+  "P0:8BDB": "atat_legs_1",
+  "P0:8BE3": "atat_legs_2",
+  "P0:8BEB": "atat_leg_recs"
+ },
+ "comments": {
+  "P0:85EC": "object $17, the AT-AT's body: load its points into the math box (bank 1 JADOBJ)",
+  "P0:85F1": "object $18, the AT-AT's head",
+  "P0:85F9": "the player is under no walker",
+  "P0:8606": "byte 0, the type: 0 = record free, the spawn routine P0_9163 makes it $29",
+  "P0:8608": "byte 1, the flags of the frame",
+  "P0:860A": "byte 3, the delay before the head may shoot",
+  "P0:860E": "bytes 5-6, x position, from the table",
+  "P0:8612": "bytes 11-16: where the head is from the centre, x $06D6, y 0, z $02A3",
+  "P0:8617": "bytes 7-8, y position",
+  "P0:8620": "bytes 9-10, z position (height)",
+  "P0:8629": "byte $11, the head's yaw angle",
+  "P0:862E": "byte $13, the head's pitch angle",
+  "P0:8633": "byte $15, the walk cycle counter",
+  "P0:8638": "byte $16, which set of leg tracks (atat_gait_tab), and byte 4, the movement mode",
+  "P0:863F": "the table has three entries",
+  "P0:864A": "end of the three records",
+  "P0:8650": "three walkers to bring in",
+  "P0:8656": "10 bytes a walker: x word, y word, z word, head yaw, head pitch, leg set, movement mode (1 = walk)",
+  "P0:867D": "B = manual page: 10 bytes a table entry",
+  "P0:8680": "a page over 2 uses entry 0",
+  "P0:86BE": "byte $16, the leg set",
+  "P0:86C1": "byte 0, the type, from the table: the record is live at once",
+  "P0:86C3": "movement mode 0: the demo walker stands",
+  "P0:86CA": "free the other two records",
+  "P0:86E1": "no spawning in the manual",
+  "P0:86E7": "10 bytes a manual page: x word, y word, z word, head yaw, head pitch, leg set, type byte",
+  "P0:8705": "spawn count: positive while walkers are to be brought in",
+  "P0:870F": "a free record among the first w2_spawn_b",
+  "P0:8715": "place it far from the player and make it live, one a frame",
+  "P0:8726": "negative at the end of the part: let the walkers go",
+  "P0:872B": "not while the tow cable is out",
+  "P0:8737": "a falling walker stays",
+  "P0:873B": "so does one that was drawn this frame",
+  "P0:874C": "and one the player is under: within $0BB8 in x",
+  "P0:875C": "and within $05DC in y",
+  "P0:8761": "free the record",
+  "P0:8777": "the walker the player was under",
+  "P0:8788": "still within $0BB8 in x",
+  "P0:8798": "and $05DC in y: no new bonus yet",
+  "P0:87A8": "the player has left it",
+  "P0:87AE": "under no walker: look for one",
+  "P0:87C5": "within $07D0 in x",
+  "P0:87D5": "and $03E8 in y: the player passes under this walker",
+  "P0:87DA": "remember it, score the legs bonus",
+  "P0:87EE": "count the live walkers afresh",
+  "P0:87FB": "run the shot delay down to 0",
+  "P0:8807": "it may have been blown up",
+  "P0:8809": "free now: nothing more",
+  "P0:880B": "bit 1 of the type: falling, caught by the tow cable",
+  "P0:8814": "falling: the cable's end comes down with it, at half the walker's height + $0300",
+  "P0:882D": "bit 2: the head saw the player last frame",
+  "P0:8833": "bit 1: already aimed, leave the rates alone",
+  "P0:8837": "pitch rate against the player's height as seen from the head",
+  "P0:883F": "signs differ: turn the pitch rate round",
+  "P0:8846": "yaw rate against the player's side as seen from the head",
+  "P0:884E": "signs equal: turn the yaw rate round",
+  "P0:8855": "pitch angle, kept in $80-$FF (a positive one restarts from $C0)",
+  "P0:885C": "add the pitch rate",
+  "P0:8861": "would leave the range: keep the angle and, one time in two, reverse the rate",
+  "P0:8872": "size of the pitch rate from the angle: slow at the ends, fast in the middle",
+  "P0:887F": "keep the rate's sign",
+  "P0:888B": "add the yaw rate",
+  "P0:8890": "would pass +-$80: keep the angle and, one time in two, reverse the rate",
+  "P0:88A1": "size of the yaw rate from the angle: slow near $80, fast near 0",
+  "P0:88AD": "keep the rate's sign",
+  "P0:88B8": "pitch rate sizes, indexed by (pitch and $7F) / 8",
+  "P0:88C8": "yaw rate sizes, indexed by yaw / 16",
+  "P0:88D8": "movement routines by mode: 0 stand",
+  "P0:88DA": "1 walk",
+  "P0:88DC": "2 fall",
+  "P0:88E0": "movement mode",
+  "P0:88E3": "a mode over 2 counts as 0",
+  "P0:88F1": "walk: $33 a frame along x",
+  "P0:88FB": "no movement along x",
+  "P0:8900": "the height comes down by $0400 a frame",
+  "P0:8907": "on the ground: blow it up",
+  "P0:891D": "the record being viewed, for P0_913C",
+  "P0:8923": "the hit flash (bit 7) lasts only while the walker was drawn last frame (bit 4)",
+  "P0:892B": "all other flags of the frame cleared",
+  "P0:892F": "where the colour goes in the display list, for P0_913C to change",
+  "P0:8939": "hit: JSRL to the flash colour list",
+  "P0:893E": "green, brightness $80",
+  "P0:8943": "the ship 2 block: a unit matrix, the body is not turned",
+  "P0:894B": "MS_CNCT: view ship 2 from ship 1",
+  "P0:8952": "falling",
+  "P0:8961": "and the player under it, within $0BB8 in x",
+  "P0:8971": "and $05DC in y",
+  "P0:8976": "the ship runs into it",
+  "P0:899B": "the scratch block M_X0",
+  "P0:89A1": "MS_PSB2: the centre as seen from the ship",
+  "P0:89B8": "x is the distance ahead: not behind or too near",
+  "P0:89E4": "bit 4: drawn this frame, bit 6: the body is in view",
+  "P0:89EA": "beyond $2000 the colour dims with the distance",
+  "P0:89F2": "$4000 - distance, held to 0-$0800",
+  "P0:8A06": "/16: brightness 0-$80",
+  "P0:8A09": "green with that brightness",
+  "P0:8A0D": "object $17, the body: view its points (JOBJBPNT)",
+  "P0:8A12": "draw the object",
+  "P0:8A15": "end of the object",
+  "P0:8A18": "lazar against the body",
+  "P0:8A20": "the head's place from the centre",
+  "P0:8A35": "MS_PAD: add the viewed centre",
+  "P0:8A3D": "not behind or too near",
+  "P0:8A43": "not too far",
+  "P0:8A6B": "beyond $2000 the colour dims with the distance",
+  "P0:8A7E": "held to 0-$0C00: brightness 0-$C0",
+  "P0:8A90": "near: full colour, unless the hit flash is on",
+  "P0:8A96": "green, brightness $C0",
+  "P0:8A9B": "the head's centre is now the viewed centre",
+  "P0:8AA7": "green, brightness $40: replaced below when the head sees the player",
+  "P0:8AAC": "A.X of the concatenated head matrix: only when negative, the head facing the ship",
+  "P0:8AB3": "the gun's muzzle in the head's coordinates: x $05DC forward",
+  "P0:8AB9": "bit 7 of the type: which side's gun",
+  "P0:8ABF": "y +$01C2",
+  "P0:8AC4": "or y -$01C2",
+  "P0:8ADB": "the muzzle as seen from the ship, doubled, into the ship 2 block's position",
+  "P0:8AF3": "BIC of M_XT2",
+  "P0:8AF9": "program $60: back to universe coordinates",
+  "P0:8AFE": "the ship 2 block now sits at the muzzle",
+  "P0:8B10": "BIC of the player's position, $5098",
+  "P0:8B16": "the player as seen from the head",
+  "P0:8B1F": "the player is behind the head: no aim",
+  "P0:8B23": "red in place of the green written above",
+  "P0:8B28": "bit 2: the head sees the player",
+  "P0:8B2E": "the player's height and side from the head, for atat_head_swing",
+  "P0:8B3A": "from level 9 up the head shoots whatever the angle",
+  "P0:8B5D": "aimed: JSRL to VRMFL, the head flashes",
+  "P0:8B62": "bit 1: aimed",
+  "P0:8B68": "bit 5 of the type: this walker shoots",
+  "P0:8B6E": "and its delay has run out",
+  "P0:8B75": "carry set: a shot was started",
+  "P0:8B77": "the other gun next time",
+  "P0:8B7D": "lazar against the guns",
+  "P0:8B82": "bit 4: drawn this frame",
+  "P0:8B88": "BIC of the ship 2 block",
+  "P0:8B8E": "a quarter of the head's yaw angle: 45 degrees each way at most",
+  "P0:8B9C": "a quarter of the head's pitch angle",
+  "P0:8BA4": "MS_CNCT: view the turned head from the ship",
+  "P0:8BA9": "object $18, the head: view its points (JOBJBPNT)",
+  "P0:8BAE": "the body is in view",
+  "P0:8BB4": "then object $1A is drawn, from the head's points",
+  "P0:8BB9": "draw object $18",
+  "P0:8BBE": "lazar against the head",
+  "P0:8BC4": "draw object $19",
+  "P0:8BC9": "end of the object",
+  "P0:8BCD": "leg sets by byte $16 of the record: each a list of four leg records",
+  "P0:8BD3": "leg set 0: pointers to its four leg records",
+  "P0:8BDB": "leg set 1",
+  "P0:8BE3": "leg set 2",
+  "P0:8BEB": "leg records, 5 bytes: number of the leg's first track (P0_93B4 takes it and the next two), then where the leg joins the body, x word and y word"
+ },
+ "ram": {
+  "4C3D": {
+   "name": "atat_col_ptr",
+   "desc": "word: display list address of the colour instruction atat_view_all wrote for the AT-AT being viewed. P0_913C overwrites that instruction with the flash list call when the ship runs into the walker"
+  },
+  "4C3F": {
+   "name": "atat_under",
+   "desc": "word: address of the AT-AT record the player is flying under, 0 when none. set by atat_move_all when the player comes within $07D0 by $03E8 of a walker and the legs bonus is scored, cleared when the player is $0BB8 by $05DC away or the walker is gone, so one pass scores once"
+  },
+  "4AD2": {
+   "name": "cable_rec",
+   "desc": "first byte of the tow cable's record, which follows the three AT-AT records (page 0, P0_9561 on): 0 while no cable is out, bit 3 set by P0_9915 once it has caught a walker's legs. byte 2 is its mode and byte 3 a timer. the AT-AT code tests it before letting the walkers go at the end of the part and before the leg catch test, and clears it when a caught walker blows up"
+  },
+  "5098": {
+   "name": "s1_tx",
+   "desc": "MS_TX+M_S1: the player's universe x position, word"
+  },
+  "50FC": {
+   "name": "cable_tz",
+   "desc": "MS_TZ+M_AL: word, the height of the tow cable's end in its unit vector block at M_AL. the cable code moves it and atat_move_all sets it to half the height of a falling walker + $0300 every frame"
+  },
+  "5006": {
+   "name": "M_AX",
+   "desc": "CONCAT RESULT (Atari's name in Star Wars): word, A.X of the matrix MS_CNCT leaves. the head aim routines of pages 0 and 1 (P0_8AAC, P1_8A7E) go on only when its high byte is negative"
+  }
+ },
+ "regions": [
+  ["P0", "8BCD", "8BEB", "ptrs"]
+ ],
+ "questions": [
+  "P0:9163 gives a spawned AT-AT the type byte $29 and the demo table at P0:86E7 uses 1 and 9. bit 1 (falling), bit 5 (may shoot, P0:8B68) and bit 7 (gun side) are settled in this range, what bits 0 and 3 mean is not: nothing in $85EC-$8BFF tests them",
+  "P0:8AAC the sign test of $5006 after MS_CNCT is read as the head facing the ship (the forward axes of head and ship opposed). the code only shows that the aim is skipped when the high byte is positive",
+  "P0:8BB4 object $1A is drawn only when the body was in view this frame and object $19 is drawn last, both from the points of object $18 (objects $18-$1A share one point table). which part of the head each of the three is was not checked against shapes_preview.html",
+  "P0:88FB ADDD #$0000 on the x position in the fall mode does nothing, apparently a speed constant left at 0",
+  "P0:866E/P0:866F the listing splits the last entry of atat_init_tab in two rows (a label at P0_866F). the table is plain data, 3 entries of 10 bytes from P0_8656 to P0_8673",
+  "the leg records labelled at P0:8BEB run on past the end of this stretch to $8C26 (12 records of 5 bytes, $8BEB-$8C26). the last one starting in range is at $8BFF",
+  "$5006 is given Atari's Star Wars name M_AX and $5098 the name s1_tx after the existing s1_ty and s1_tz. $4AD2 (cable_rec) and $50FC (cable_tz) belong to the tow cable code at P0_9561-P0_992A, outside this stretch: if that stretch's annotation names them differently, its names should win"
+ ]
+}

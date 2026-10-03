@@ -1,0 +1,253 @@
+{
+ "about": "slapstic page 1 $9800-$9DCC: the end of the Jedi letter drawing with its stroke tables, then the indicator and the status messages at the top of the screen in the probot part (transmissions sent) and the walker part (the walkers' advance, tow cables, legs bonus)",
+ "routines": {
+  "P1:98E5": {
+   "name": "jedi_letter_strokes",
+   "desc": "draws one of the four letters J, E, D, I through Y as vectors between six points. the letter number is taken from $4C7E, the current beam position in the letters' coordinates from the temps $4803 (y) and $4801 (x), which are left at the last point. each byte of the letter's stroke list names a point (bits 2-4) and says whether to move there dark (bit 0 set) or draw at intensity 7, $FF ends the list. returns X = the letter's point table, which P1_97DA then uses for its rays. called by P1_97DA and P1_96D0"
+  },
+  "P1:99C3": {
+   "name": "probot_ind_init",
+   "desc": "start of the probot part (bank 0 L6BCC): clears prog_count, the mark flash and adv_hold and sets the status message to $34, IMPERIAL PROBOTS SEARCHING FOR REBELS"
+  },
+  "P1:99D7": {
+   "name": "walker_ind_init",
+   "desc": "start of the walker part (bank 0 L6DF9): clears the mark flash and adv_hold, sets the status message to $3A, prog_count to 4 marks, the advance walk_adv to -400, the left end of the indicator, and the hold a hit adds ($4CA5) to 30 frames"
+  },
+  "P1:99F8": {
+   "name": "xmit_got_through",
+   "desc": "probot part: called by page 3 P3_9975 when it removes a transmission that was not shot, outside the training manual. unless a mark is already flashing in it starts the flash of the next mark of the indicator (falling into ind_flash_start), with sound effect $46 when no manual page is shown. the mark is counted in prog_count when its flash has faded (vw_xmit_mark_new)"
+  },
+  "P1:9A05": {
+   "name": "ind_flash_start",
+   "desc": "sets flash_fade and the mark flash flag $4CA7 to $7F: a mark of the indicator is changing. entered from xmit_got_through in the probot part and called by vw_walker_ind when the walkers' advance takes a mark"
+  },
+  "P1:9A0E": {
+   "name": "vw_wave_ind",
+   "desc": "draws the indicator and the status messages at the top of the screen through Y, called by the views of the probot part and of the walker part in bank 0 (vew_probot, vew_probot_end, vew_walker). wave_type 0 gives the transmission indicator and the probot messages, any other value the walkers' advance indicator and the walker messages. X preserved"
+  },
+  "P1:9A25": {
+   "name": "vw_probot_ind",
+   "desc": "probot part: draws the indicator of transmissions sent, a frame 800 wide and 150 high (pseudo ROM $28DE) with four dashed slots ($28F4), one mark for each count of prog_count (vw_xmit_marks) and the mark that is flashing in (vw_xmit_mark_new). with all four marks the frame and the slots take the flash colour"
+  },
+  "P1:9A76": {
+   "name": "vw_xmit_marks",
+   "desc": "draws prog_count marks (the picture at pseudo ROM $293A) at y 238 and x -150, -50, 50, 150, in colour 1, or in the flash colour when there are four. holds prog_count at 4. leaves the x of the last mark drawn in the temp word $4802"
+  },
+  "P1:9AB1": {
+   "name": "vw_xmit_mark_new",
+   "desc": "while the mark flash flag is set and fewer than four marks count: draws the next mark in the slot after the last one, in the fading flash colour of vector RAM $0032, and steps flash_fade down by 8 a frame. when the level runs out it counts the mark in prog_count and clears the flag"
+  },
+  "P1:9AEA": {
+   "name": "probot_status_msg",
+   "desc": "probot part: every 32 frames picks the status message for the top line from probot_msg_tab by prog_count and FRAMEL bits 5-6, keeps it in $4CA8 and draws it every frame with do_message. message $37, SHOOT nn PROBOTS FOR BONUS, gets bonus_left drawn into its gap as one or two digits, and is replaced by message $4A, 5,000 POINTS AND JEDI LETTER AWARDED, once bonus_left is 0"
+  },
+  "P1:9B56": {
+   "name": "vw_walker_ind",
+   "desc": "walker part: draws the advance indicator, a frame 800 wide and 75 high (pseudo ROM $2986) with four dashed slots ($299C), the marks left (vw_gen_marks), the burst of a mark just lost (vw_gen_mark_lost) and the advance itself, a bar 75 high at x = walk_adv with a lazar splash picture at each end, red while adv_hold holds it up. then it moves the advance: adv_hold is counted down, or walk_adv goes up by 5 or 6 a frame to 400 at most, and each time it passes the x of the next mark (-150, -50, 50, 150) prog_count loses one, the burst starts and a sound and at the first and last mark a speech are sent"
+  },
+  "P1:9C5C": {
+   "name": "vw_gen_marks",
+   "desc": "walker part: draws prog_count marks (the picture at pseudo ROM $29E4) in colour 1 at y 238 and x 150, 50, -50, -150, so that the leftmost ones go first as the count falls. holds prog_count at 4. leaves the x of the last mark drawn in the temp word $4802"
+  },
+  "P1:9C90": {
+   "name": "vw_gen_mark_lost",
+   "desc": "walker part, while the mark flash flag is set: draws the burst picture (pseudo ROM $2A0A) in the slot of the mark just lost, with flash_fade as the linear scale and twice flash_fade as the brightness, so that it grows and fades, and steps flash_fade down by 8 a frame. clears the flag when the level runs out"
+  },
+  "P1:9CCE": {
+   "name": "walker_status_msg",
+   "desc": "walker part: every 32 frames picks the status message for the top line from walker_msg_tab by prog_count and FRAMEL bits 5-6, keeps it in $4CA8 and draws it every frame. message $3E, SHOOT nn WALKERS FOR BONUS, gets bonus_left drawn into its gap and is replaced by message $4C, 5,000 POINTS AND JEDI LETTER AWARDED, once bonus_left is 0. message $3B becomes $3C, SHOOT RED EYE WITH LASERS, when no tow cable is left. then the second line at y 200: while legs_bon_tmr runs, legs_bonus as six digits with message $44, BONUS POINTS FOR TRICK FLYING, otherwise the tow cables left with message $41, $42 or $43"
+  }
+ },
+ "labels": {
+  "P1:9935": "jedi_pts_ptrs",
+  "P1:993D": "jedi_strk_ptrs",
+  "P1:9945": "jedi_j_pts",
+  "P1:995D": "jedi_e_pts",
+  "P1:9975": "jedi_d_pts",
+  "P1:998D": "jedi_i_pts",
+  "P1:99A5": "jedi_j_strokes",
+  "P1:99AC": "jedi_e_strokes",
+  "P1:99B4": "jedi_d_strokes",
+  "P1:99BC": "jedi_i_strokes",
+  "P1:9C54": "adv_mark_x",
+  "P1:9DA4": "probot_msg_tab",
+  "P1:9DB8": "walker_msg_tab"
+ },
+ "comments": {
+  "P1:9801": "is the letter being drawn among the letters earned (bit masks at P1_95ED)",
+  "P1:9805": "earned: JSRL $002A, the flash colour word kept in vector RAM",
+  "P1:980A": "not earned: colour 1, brightness $80",
+  "P1:9812": "jedi_show 1: is this the letter just earned",
+  "P1:9817": "yes: scale word $72nn, its linear part goes from 0 to $C8 and shrinks the letter from the default size into its place",
+  "P1:9824": "in the flash colour",
+  "P1:9829": "the other letters: colour 1 at the brightness that falls while the new letter comes in",
+  "P1:9830": "the letter's strokes, returns X = its point table",
+  "P1:9836": "only while a letter is coming in: rays at intensity 3 between the anchor point (P1_97D8 y, P1_97D6 x) and the six points of the letter",
+  "P1:983C": "from point 5, where the strokes ended, to the anchor",
+  "P1:9852": "anchor to point 4",
+  "P1:9868": "dark move to point 3",
+  "P1:987A": "point 3 to the anchor",
+  "P1:988E": "anchor to point 2",
+  "P1:98A2": "dark move to point 1",
+  "P1:98B2": "point 1 to the anchor",
+  "P1:98C6": "anchor to point 0",
+  "P1:98E8": "letter number * 2",
+  "P1:98E9": "a number above 4 is drawn as letter 0 (4 itself would pass, the callers use 0-3)",
+  "P1:98EE": "X = the letter's point table: six points, y word and x word each",
+  "P1:98F3": "U = the letter's stroke list",
+  "P1:98FA": "bit 0 set: dark move. clear: draw at intensity 7",
+  "P1:9906": "bits 2-4: point number * 4, the offset of the point's y",
+  "P1:990A": "y of the point less y of the current position",
+  "P1:9916": "x of the point less x of the current position, with the intensity",
+  "P1:9920": "the point is the new current position",
+  "P1:9930": "$FF ends the list",
+  "P1:9935": "point tables of J, E, D, I",
+  "P1:993D": "stroke lists of J, E, D, I",
+  "P1:9945": "points of J, y then x: the four letters share one coordinate system, x from -420 to 385",
+  "P1:995D": "points of E",
+  "P1:9975": "points of D",
+  "P1:9989": "from $998D: points of I",
+  "P1:99A1": "from $99A5: the stroke lists of J, E, D, I, each ended by $FF",
+  "P1:99D1": "message $34, IMPERIAL PROBOTS SEARCHING FOR REBELS",
+  "P1:99E2": "message $3A, IMPERIAL WALKERS ATTACKING POWER GENERATOR",
+  "P1:99E7": "four marks",
+  "P1:99EC": "-400, the left end of the indicator",
+  "P1:99F2": "30 frames of hold for the first hit",
+  "P1:99F8": "a mark is already flashing in: this transmission is not counted",
+  "P1:99FD": "no sound while a training manual page is shown",
+  "P1:9A05": "full level, and the flag that a mark is changing",
+  "P1:9A10": "part 0, probots: the transmission indicator. any other part: the walkers' advance",
+  "P1:9A25": "from the centre to y 238, x -150",
+  "P1:9A2F": "four marks: the frame in the flash colour (JSRL $002A), else in colour 1",
+  "P1:9A40": "JSRL $28DE in the pseudo ROM: the frame, 800 wide and 150 high",
+  "P1:9A4F": "the slots: flash colour with four marks, else colour 7",
+  "P1:9A60": "JSRL $28F4: the four dashed slots",
+  "P1:9A68": "a mark is flashing in",
+  "P1:9A76": "x -250: the marks go at -150, -50, 50, 150",
+  "P1:9A84": "more than 4: hold the count at 4",
+  "P1:9A8B": "the display list word $A015, JSRL $002A (flash colour), not a program address",
+  "P1:9A90": "the display list word $6180, colour 1, not a program address",
+  "P1:9A95": "marks still to draw",
+  "P1:9A97": "y 238",
+  "P1:9A9C": "x of the next slot",
+  "P1:9AA7": "JSRL $293A: the mark picture",
+  "P1:9AB8": "JSRL $0032: the flash colour the IRQ keeps there, its brightness follows flash_fade",
+  "P1:9AC2": "the slot after the last mark drawn",
+  "P1:9AD3": "the mask is 0: never skips, the level steps every frame",
+  "P1:9ADE": "faded out: the mark counts from now on",
+  "P1:9AED": "every 32 frames: choose the message",
+  "P1:9AF1": "a row of four messages for each count",
+  "P1:9AF6": "FRAMEL bits 5 and 6 step through the row, 32 frames for each message",
+  "P1:9B0D": "$37 is SHOOT nn PROBOTS FOR BONUS: the number goes into its gap",
+  "P1:9B16": "colour 7",
+  "P1:9B1B": "y 336, the line of the message",
+  "P1:9B20": "blank one leading zero",
+  "P1:9B27": "8 shifts: one byte to BCD",
+  "P1:9B34": "two digits: x -175",
+  "P1:9B3E": "one digit: x -163",
+  "P1:9B50": "quota reached: message $4A, 5,000 POINTS AND JEDI LETTER AWARDED, in its place",
+  "P1:9B56": "from the centre to y 238, x -150",
+  "P1:9B65": "JSRL $2986 in the pseudo ROM: the frame, 800 wide and 75 high",
+  "P1:9B79": "JSRL $299C: the four dashed slots",
+  "P1:9B81": "a mark was just lost: its burst",
+  "P1:9B8E": "y 238, x = the advance",
+  "P1:9B9F": "moving: JSRL $0012, the animated lazar splash picture the IRQ keeps there",
+  "P1:9BA4": "held up: colour 4 and JSRL VGLZS3, the larger lazar splash circle",
+  "P1:9BB3": "the bar: flash colour while moving, colour 4 while held up",
+  "P1:9BBD": "a line 75 up",
+  "P1:9BC7": "the same picture at the upper end",
+  "P1:9BE5": "held up: count the hold down, no advance this frame",
+  "P1:9BED": "5 on every fourth frame, 6 on the others",
+  "P1:9BFF": "400 is the right end",
+  "P1:9C0B": "adv_mark_x less 2: the count is 1-4 here",
+  "P1:9C15": "has the advance passed the x of the next mark",
+  "P1:9C1D": "yes: one mark less, and its burst starts",
+  "P1:9C23": "last mark: the final explosion effect, else effect $48",
+  "P1:9C30": "first mark lost and no tow cable fired yet in this part: speech $17",
+  "P1:9C3F": "last mark lost: speech $12 in a wave with an even GM_WAV, $15 with an odd one",
+  "P1:9C54": "x the advance has to pass to take a mark, for a count of 1, 2, 3, 4: 150, 50, -50, -150",
+  "P1:9C5C": "x 250: the marks go at 150, 50, -50, -150",
+  "P1:9C66": "more than 4: hold the count at 4",
+  "P1:9C71": "colour 1",
+  "P1:9C86": "JSRL $29E4: the mark picture",
+  "P1:9C95": "the slot after the last mark drawn: the mark just lost",
+  "P1:9C9E": "scale: binary 1 with the level as the linear part, the burst grows as the level falls",
+  "P1:9CA5": "colour 1 at twice the level: it fades out",
+  "P1:9CAD": "JSRL $2A0A: the burst picture",
+  "P1:9CB2": "back to the default scale",
+  "P1:9CB7": "the mask is 0: never skips, the level steps every frame",
+  "P1:9CD1": "every 32 frames: choose the message",
+  "P1:9CD8": "count * 2 only, where the table is laid out as four messages for each count: the rows used overlap and the last row is never read",
+  "P1:9CF0": "$3E is SHOOT nn WALKERS FOR BONUS: the number goes into its gap",
+  "P1:9CF9": "colour 7",
+  "P1:9CFE": "y 336, the line of the message",
+  "P1:9D17": "two digits: x -175",
+  "P1:9D21": "one digit: x -163",
+  "P1:9D33": "quota reached: message $4C, 5,000 POINTS AND JEDI LETTER AWARDED, in its place",
+  "P1:9D37": "$3B, SHOOT RED EYE OR USE TOW CABLE ON LEGS, becomes $3C, SHOOT RED EYE WITH LASERS, when no tow cable is left",
+  "P1:9D45": "second line: the legs bonus while its timer runs, else the tow cables left",
+  "P1:9D4D": "colour 6",
+  "P1:9D52": "y 200, x -416",
+  "P1:9D5C": "blank up to three leading zeros",
+  "P1:9D6B": "message $44, BONUS POINTS FOR TRICK FLYING",
+  "P1:9D74": "message $43, ALL TOW CABLES GONE",
+  "P1:9D7C": "message $42, 1 TOW CABLE",
+  "P1:9D85": "y 200, x -140: the digit in front of message $41, TOW CABLES",
+  "P1:9DA4": "four messages for each count 0-4: $34 probots searching, $35 shoot probots and transmissions, $36 partial transmission sent, $38 Darth Vader alerted, $39 Empire launching troops, and $37 shoot nn probots for bonus as every second one",
+  "P1:9DB8": "laid out as four messages for each count 0-4, read at count * 2: $3F rebels evacuating, $40 power generator destroyed, $3D partial generator damage, $3B shoot red eye or use tow cable, $3A walkers attacking, and $3E shoot nn walkers for bonus as every second one",
+  "P1:9DC8": "the row for a count of 4, which the index never reaches, then at $9DCC a filler byte $FF before the code that is the same on all four pages"
+ },
+ "ram": {
+  "4C7C": {
+   "name": "jedi_old_brt",
+   "desc": "brightness of the Jedi letters other than the one coming in while jedi_show is 1: $80 when a letter is earned (P1_95A7), then down by 3 a frame until it is below 8 (P1_96A3). cleared with the letters by P1_9561"
+  },
+  "4C7E": {
+   "name": "jedi_ltr_no",
+   "desc": "number (0-3 for J, E, D, I) of the Jedi letter being drawn: the loop counter of P1_9663 and P1_96D0, read by P1_97DA and jedi_letter_strokes"
+  },
+  "4C7F": {
+   "name": "jedi_new_no",
+   "desc": "number (0-3) of the Jedi letter just earned, set by P1_9573. while jedi_show is 1 P1_97DA draws that letter in the flash colour, shrinking into its place"
+  },
+  "4C81": {
+   "name": "jedi_new_lin",
+   "desc": "linear scale of the Jedi letter coming in: 0 when the letter is earned, up by 5 a frame (P1_9686), used up to $C8 in the scale word, at $F0 the letter is in place and jedi_show goes to 2"
+  },
+  "4CA5": {
+   "name": "hold_add",
+   "desc": "walker part: frames a hit adds to adv_hold while the bonus quota is open. 30 at the start of the part (walker_ind_init), one less after each hit down to 15 (page 0 P0_90E5, P0_9102, P0_911F)"
+  },
+  "4CA7": {
+   "name": "ind_flash",
+   "desc": "nonzero while a mark of the top indicator is changing: set to $7F with flash_fade by ind_flash_start, cleared when flash_fade has run out. in the probot part the new mark flashes in and is counted in prog_count at the end, and a transmission that gets through meanwhile is not counted. in the walker part the burst of the lost mark is drawn"
+  },
+  "4CA8": {
+   "name": "status_msg",
+   "desc": "number of the status message on the top line in the probot and walker parts: $34 or $3A at the start of the part, then chosen again every 32 frames from probot_msg_tab or walker_msg_tab by prog_count and the frame counter"
+  },
+  "4CD6": {
+   "name": "cables_used",
+   "desc": "tow cables fired in this walker part: cleared by the part's setup (page 0 P0_9561), counted up by page 0 P0_9596 for each cable fired. while it is 0 the loss of the first mark of the advance indicator sends speech $17"
+  },
+  "4BFE": {
+   "name": "cables_left",
+   "desc": "tow cables left in the walker part: 4 + kill_count/5, 9 at most, from the part's setup (page 0 P0_9561), one less for each cable fired (page 0 P0_9596, which fires none at 0). shown on the second status line, and at 0 the message about the tow cable gives way to SHOOT RED EYE WITH LASERS"
+  }
+ },
+ "regions": [
+  ["P1", "9935", "9945", "ptrs"],
+  ["P1", "9945", "99A5", "words"],
+  ["P1", "9C54", "9C5C", "words"]
+ ],
+ "questions": [
+  "P1:9CD8 walker_status_msg indexes walker_msg_tab with prog_count * 2 + (0-3), but the table at P1_9DB8 has 20 bytes laid out like probot_msg_tab, four messages for each count 0-4 (probot_status_msg multiplies by 4). as coded the rows overlap: a count of 4 shows $3D PARTIAL GENERATOR DAMAGE and $3B, a count of 1 shows $40 POWER GENERATOR DESTROYED and $3D, and the last row with $3A IMPERIAL WALKERS ATTACKING POWER GENERATOR is never read ($3A is shown only until the first choice after walker_ind_init). it looks like a missing ASLB, not confirmed against the running game",
+  "P1:9A8B and P1:9A90 show as LDX #LA015 and LDX #L6180: the operands are display list words ($A015 JSRL $002A, $6180 colour 1) stored through Y, not bank 0 addresses, and should be shown as plain constants",
+  "P1:9C0B shows as LDX #P1_9C50+2: it is the table adv_mark_x at $9C54 less 2, since the count indexing it is 1-4",
+  "the routine P1_97DA starts before this stretch ($97DA) and runs to $98E4, its header belongs to the neighbouring chunk. comments were given here for its lines from $9801 on. the anchor constants P1_97D6 / P1_97D8 and the letter coordinates are taken as display units at the scale in force, where exactly the letters sit on screen was not worked out",
+  "$4C7C, $4C7E, $4C7F and $4C81 are named here from their use in $9800-$98E5 but are written in $9561-$96AC, the neighbouring chunk of page 1: if that chunk names them too, one name has to be chosen. $4BFE, $4CD6 and $4CA5 are likewise shared with page 0 ($9561-$963C and $90E5-$9138)",
+  "what the four marks of the walker indicator stand for is not shown by the code beyond the messages (PARTIAL GENERATOR DAMAGE, POWER GENERATOR DESTROYED). the pictures at pseudo ROM $293A, $29E4 and $2A0A (set 1, bank 0 LBF56, LC000, LC026) are described only as mark and burst",
+  "P1:98E9 CMPB #$08 / BLS lets a letter number of 4 through, which would read the first entry of the stroke pointer table as a point table. the callers only pass 0-3",
+  "the temps $4801-$4806 used here (current position y in $4803 and x in $4801 for the letters, the mark x in $4802, the stroke's intensity in $4805 and point offset in $4806, the mark counter in $4801) are the shared direct page temps that already carry several names, none was added"
+ ]
+}

@@ -1,0 +1,203 @@
+{
+ "about": "slapstic page 2 $85EC-$89FF: the wave 1 probots - set-up of the five records at ALIEN for the wave and for the training manual, spawning, the per-frame move loop, the head, spin and bob animation, the behaviour state table and the code that picks a new behaviour",
+ "routines": {
+  "P2:85EC": {
+   "name": "probot_setup",
+   "desc": "wave 1 set-up of the probots, called once from wave1_setup (phase $45) through maze entry MZ_859E. loads the points of objects 4-7 and 9-$10 into math RAM through the cross-bank JADOBJ entry L60A8 (B = object number), keeping the math RAM address before and after objects 9-$10 in w1_anim_pts and w1_anim_end for the point animation at P2_8E86, then frees all five $1A-byte records at ALIEN and presets each one's height ($0200), spin angle and rate and part mask from the table at P2_866C, state 4 and both timers 8. ends with w1_spawn = 5 so that probots_move fills the records one per frame"
+  },
+  "P2:8684": {
+   "name": "probot_spawn",
+   "desc": "brings the free record at U to life: type 7, flags 0, and a place on the far edge of the square round the player - by the sign of a random byte either x or y gets $8000 added and the other axis gets a random value in -$4000..$3FFF - then state 2 (close in on the player). called by probots_move, which clears x and y first"
+  },
+  "P2:86C7": {
+   "name": "man_probot_setup",
+   "desc": "training manual set-up of the demo probot, called from man_init_probot through maze entry MZ_825C with B = manual page 0-2 (anything higher is taken as 0). fills the first record at ALIEN from the 10-byte row of the table at P2_875E for that page (x, y, height, spin angle and rate, part mask, type), state 0 so that it holds still, frees the other four records, loads objects 4-7 and 9-$10 into math RAM as probot_setup does, and sets w1_spawn to 0 so that nothing is spawned"
+  },
+  "P2:877C": {
+   "name": "probots_move",
+   "desc": "per-frame move of the wave 1 probots, called through maze entry MZ_837F from wave1_exec (phase $1A), wave1_end_exec (phase $1C) and the manual's man_move_probot. with w1_spawn above 0 it spawns one probot in the first free record among the first w1_spawn records, with w1_spawn minus it frees every record that is not in view (flag $10 of byte 1 clear). then it counts the live records into w1_active and for each one runs the head, spin and bob animation, the behaviour, the point animation (P2_8E86) and the two timers (P2_8F9A)"
+  },
+  "P2:87E2": {
+   "name": "probot_turn_bob",
+   "desc": "animation of the probot record at U. the head angle (byte $10) moves by a quarter of its rate (byte $11) each frame: while the angle is more than $20 from the target (byte $12) the rate grows away from zero, up to $11 or down to $F3, and within $20 of the target a rate of exactly +1 or -1 takes a new random target and reverses (probot_head_back, probot_head_fwd), any other rate is left as it is. the body spin angle (byte 11) advances by its rate (byte 12), and the bob offset (word at 13) counts up and down between 0 and $2F, reversing its direction byte (15) at either end"
+  },
+  "P2:884F": {
+   "name": "probot_head_fwd",
+   "desc": "gives the probot at U a new random head target angle (byte $12 from RND_S1), reverses its bob direction (byte 15) and sets the head rate to +1"
+  },
+  "P2:8861": {
+   "name": "probot_head_back",
+   "desc": "as probot_head_fwd with the head rate set to -1"
+  },
+  "P2:88A7": {
+   "name": "probot_pick_state",
+   "desc": "picks a new behaviour for the probot at U by calling one state start routine, which stores the state number in byte 4 and may set a goal or speed. state 0 (the manual's demo probot) is left alone. with w1_spawn minus (end of the wave) it is P2_8A9D, state 11, fly off and free the record. a probot that is out of view and not already in state 9 gets P2_8C14, state 9, a goal in front of the player. otherwise during the first 150 frames of the phase (PH_TIM below $96) the entry of the 4-word table at P2_889F for w1_level and 3 is used, and after that a random one of the ten entries of the table at P2_888B"
+  },
+  "P2:88F0": {
+   "name": "probot_behave",
+   "desc": "per-frame behaviour of the probot at U. on every fourth frame with one chance in eight it picks a new behaviour (probot_pick_state), then it calls the handler of the current state: byte 4 of the record indexes the table of twelve routine addresses at P2_8873, a state above 11 is run as state 2. unless the state is 0 it then eases the height (probot_height) and, when the position is held relative to the player and is within $0200 of him on both axes, starts state 3 (P2_8A3E, back away). X is preserved"
+  },
+  "P2:8942": {
+   "name": "probot_height",
+   "desc": "eases the height of the probot at U (word at 9) a quarter of the way to $0200 plus eight times its bob offset (word at 13)"
+  },
+  "P2:8954": {
+   "name": "probot_drift",
+   "desc": "moves the player-relative position of the probot at U (words at 5 and 7) against the player's motion: the matrix processor's perspective multiply (MS_PERS) scales the player's speeds s1_vx and s1_vy by a quarter of the sum of the sizes of the probot's x and y, and the products are subtracted from x and y. used by the state handlers that keep the position relative to the player"
+  },
+  "P2:898D": {
+   "name": "probot_goal_drift",
+   "desc": "as probot_drift, but the scaled player speeds are subtracted from the probot's goal position (words at $15 and $17) and not from its own position. used by the go-to-goal states 6, 7 and 9"
+  },
+  "P2:89CA": {
+   "name": "probot_set_hold",
+   "desc": "makes the position of the probot at U relative to the player (P2_8E54) and stores state 0, hold still. nothing calls or points to it: dead code. the manual set-up stores state 0 itself"
+  },
+  "P2:89D2": {
+   "name": "probot_st_hold",
+   "desc": "state 0 handler: only makes the position relative to the player (P2_8E54), so the probot stays where it is in front of him. the state of the training manual's demo probot, which probot_pick_state never changes"
+  },
+  "P2:89D6": {
+   "name": "probot_set_drift",
+   "desc": "state start routine, entry 0 of the table at P2_888B: stores state 1 (drift) in byte 4 of the record at U"
+  },
+  "P2:89DB": {
+   "name": "probot_st_drift",
+   "desc": "state 1 handler: makes the position relative to the player and drifts it against the player's motion (probot_drift). when the probot is out of view it picks a new behaviour"
+  },
+  "P2:89EB": {
+   "name": "probot_set_fixed",
+   "desc": "state start routine, entry 3 of the table at P2_888B and entry 0 of the table at P2_889F, also called by probot_setup for every record: stores state 4 (stay at a fixed place) in byte 4 of the record at U"
+  },
+  "P2:89F0": {
+   "name": "probot_st_fixed",
+   "desc": "state 4 handler: makes the position absolute (P2_8E6D adds the player's position once and sets bit $08 of the type byte), so the probot stays at one place on the ground while the player moves. when it is out of view it picks a new behaviour"
+  },
+  "P2:89FD": {
+   "name": "probot_set_close",
+   "desc": "state start routine, entry 1 of the table at P2_888B, also called by probot_spawn: stores state 2 (close in on the player) in byte 4 of the record at U"
+  }
+ },
+ "labels": {
+  "P2:866C": "probot_init_tab",
+  "P2:875E": "man_probot_tab",
+  "P2:8873": "probot_state_tab",
+  "P2:888B": "probot_start_tab",
+  "P2:889F": "probot_early_tab"
+ },
+ "comments": {
+  "P2:85EC": "objects 4-7 into math RAM: B = object number for JADOBJ in bank 1",
+  "P2:8600": "math RAM address after object 7: the points of objects 9-$10 start here",
+  "P2:8605": "objects 9-$10, four points each",
+  "P2:862D": "math RAM address after object $10: end of the animated points",
+  "P2:8635": "five records of $1A bytes, up to xmit_atst",
+  "P2:863C": "type 0: the record is free",
+  "P2:8640": "height",
+  "P2:8648": "bob offset",
+  "P2:864A": "spin angle and spin rate",
+  "P2:864E": "part mask in A, the fourth table byte is not used",
+  "P2:8653": "state 4",
+  "P2:8656": "both timers 8",
+  "P2:8666": "keep five records filled",
+  "P2:866C": "4 bytes per record: spin angle, spin rate, part mask (one bit per object 9-$10 drawn by P2_91CC), unused. six rows, the code reads five",
+  "P2:8684": "no effect on a fresh record: its type byte is 0",
+  "P2:8687": "type 7: bit $02 lets it shoot, bit $04 lets it transmit",
+  "P2:8692": "random: which axis is put at the far edge",
+  "P2:8699": "x was cleared by the caller: x = $8000",
+  "P2:86A1": "random bit: the other axis is 0..$3FFF or $C000..$FFFF",
+  "P2:86B0": "y = $8000, and x gets the random value",
+  "P2:86C3": "state 2: close in on the player",
+  "P2:86C7": "B = manual page: 10 bytes per page",
+  "P2:86CA": "page 3 or more: use page 0",
+  "P2:86D7": "x, y and height",
+  "P2:86E3": "bob offset",
+  "P2:86E8": "spin angle and spin rate",
+  "P2:86EC": "part mask and type byte",
+  "P2:86F7": "state 0: hold still",
+  "P2:8705": "free the other four records",
+  "P2:8712": "the probot objects into math RAM, as in probot_setup",
+  "P2:8758": "spawn none",
+  "P2:875E": "10 bytes per manual page: x, y, height (words), spin angle, spin rate, part mask, type byte. three pages",
+  "P2:877F": "0 or minus: spawn none",
+  "P2:8786": "a free record: spawn one probot there and stop looking",
+  "P2:8788": "x and y 0 before the spawn",
+  "P2:8794": "only the first w1_spawn records are looked at",
+  "P2:87A3": "minus (end of the wave): free the probots that are out of view",
+  "P2:87AE": "$10 = in view, set by the view routine P2_8FD3",
+  "P2:87BF": "count the live records afresh",
+  "P2:87E5": "head turn rate",
+  "P2:87E8": "head angle less the target angle",
+  "P2:87F2": "more than $20 from the target: speed up",
+  "P2:87F9": "near the target: only a rate of exactly 1 or -1 does anything. the changed B is not stored",
+  "P2:880D": "rate up to $11 at most",
+  "P2:8816": "rate down to $F3 at most",
+  "P2:8822": "head angle += rate / 4",
+  "P2:882A": "body spin angle += spin rate",
+  "P2:8830": "bob direction",
+  "P2:883E": "outside 0..$2F: keep the offset and reverse the direction",
+  "P2:884F": "new random target angle for the head",
+  "P2:8855": "reverse the bob direction",
+  "P2:8861": "new random target angle for the head",
+  "P2:8867": "reverse the bob direction",
+  "P2:8873": "state handlers, indexed by byte 4 of the record (JSR [B,X] at P2_8912): 0 hold, 1 drift, 2 close in, 3 back away, 4 fixed place, 5 fly with a speed, 6 go to goal, 7 go to goal at a limited step, 8 circle the player, 9 go to goal, 10 circle a point, 11 fly off and free",
+  "P2:888B": "state start routines, one picked at random by probot_pick_state (JSR ,X at P2_88ED): they start states 1, 2, 3, 4, 5, 6, 7, 8, 9 and 10 in this order",
+  "P2:889F": "the last four entries are also the table for the first 150 frames, indexed by w1_level and 3: states 4, 8, 9 and 10",
+  "P2:88A7": "state 0 (manual demo): never changed",
+  "P2:88AD": "minus: the wave is ending",
+  "P2:88B2": "state 11: fly off and free the record",
+  "P2:88B7": "state 9 already, or in view: pick by time and level or at random",
+  "P2:88C1": "out of view: state 9, a goal in front of the player",
+  "P2:88C6": "first 150 frames of the phase: pick by level",
+  "P2:88CE": "level and 3 picks state 4, 8, 9 or 10",
+  "P2:88DE": "10 * random byte / 256: 0-9",
+  "P2:88E4": "word index into the ten start routines",
+  "P2:88ED": "start the state: X = routine from one of the three choices above",
+  "P2:88F5": "every fourth frame",
+  "P2:88FC": "one chance in eight: new behaviour",
+  "P2:8906": "state number",
+  "P2:8909": "above 11: run state 2",
+  "P2:8912": "the state's handler",
+  "P2:8914": "state 0: no height easing and no back away",
+  "P2:891D": "bit $08: position is absolute, skip the closeness test",
+  "P2:8923": "size of x under $0200",
+  "P2:8930": "and size of y under $0200: too close to the player",
+  "P2:893D": "state 3: back away",
+  "P2:8942": "bob offset * 8",
+  "P2:894A": "less the height, a quarter of the difference is added",
+  "P2:8954": "size of x (ones complement)",
+  "P2:8963": "plus size of y, the sum divided by 4",
+  "P2:896D": "the player's speeds, to be multiplied by it",
+  "P2:8979": "MS_PERS, perspective multiply",
+  "P2:897E": "x and y less the scaled player speed",
+  "P2:898D": "size of x (ones complement)",
+  "P2:899C": "plus size of y, the sum divided by 4",
+  "P2:89B2": "MS_PERS, perspective multiply",
+  "P2:89B7": "goal x and y less the scaled player speed",
+  "P2:89CD": "state 0",
+  "P2:89E1": "in view: keep drifting",
+  "P2:89F3": "in view: stay"
+ },
+ "ram": {
+  "4855": {
+   "name": "rnd_s4",
+   "desc": "fourth saved random byte: rnd_set moves the previous RND_S2 here when it stores the old RND_S1 and RND_S2 as a word at RND_S3. page 2 uses it as one more random byte, in probot_pick_state to pick one of the ten state start routines"
+  },
+  "4CAF": {
+   "name": "w1_anim_pts",
+   "desc": "word: math RAM address (BJ_RAM) taken by the probot set-up after objects 4-7 are loaded, so the first of the 8-byte point records of objects 9-$10. P2_8E86 starts its per-frame point animation here"
+  },
+  "4CB1": {
+   "name": "w1_anim_end",
+   "desc": "word: math RAM address (BJ_RAM) taken by the probot set-up after object $10 is loaded, the end of the point records that P2_8E86 animates"
+  }
+ },
+ "regions": [],
+ "questions": [
+  "P2:89CA - nothing calls or points to this routine (store state 0 after making the position relative): taken as dead code",
+  "P2:866C - the table holds six 4-byte rows ($866C-$8683) but probot_setup reads only five, one per record, and uses only the first three bytes of a row. the sixth row looks like a leftover of a six-record version",
+  "P2:875E - the type byte of the manual rows is $01, $01 and $11. bits $02 (may shoot) and $04 (may transmit) are tested by the view code at P2_915F and P2_9175, bit $08 means absolute position. what bits $01 and $10 of the type byte mean was not found in this stretch",
+  "P2:87F9 - near the head's target angle the DECB / INCB result is never stored back to byte $11, so only a rate of exactly +1 or -1 picks a new target, and a rate of 0 with the angle within $20 of the target never changes. it looks like a slip in the original code. described as the code runs",
+  "49D2 - the probot record at ALIEN ($1A bytes, five records $49D2-$4A53) as read from this stretch and its callees: 0 type and flag bits (0 = free), 1 per-frame flags ($10 in view, $80 lined up), 3 timer, 4 behaviour state, 5 x, 7 y, 9 height (words), 11 spin angle, 12 spin rate, 13 bob offset (word), 15 bob direction, $10 head angle, $11 head rate, $12 head target, $13 part mask, $14 timer, $15 and $17 goal position or speed (words). the offsets have no names in the defines",
+  "5098 - used as the player's x position next to s1_ty by the routines this stretch calls (P2_8E54, P2_8E6D), it has no name in the defines. it is outside this range, so not named here"
+ ]
+}

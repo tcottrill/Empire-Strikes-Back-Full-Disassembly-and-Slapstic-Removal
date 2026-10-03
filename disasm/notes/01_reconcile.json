@@ -1,0 +1,1602 @@
+{
+ "about": "reconciliation of the seven bank 0 notes files (b0_61b6 .. b0_c4ca): one name for each RAM address they named twice, the Star Wars names and comments that sat on the wrong routine or line dropped and replaced, the sound command stubs named by command number, and the texts of the b0 files that used a losing or a missing name repeated here with the name the listing shows. a wave is what GM_WAV counts, a part is one of its four (probots, walkers, TIE fighters, asteroid field)",
+ "sw_drop_symbols": [
+  "GM_WAV",
+  "GS_LEN",
+  "Q_FRC",
+  "PHIHIS",
+  "SCHKR",
+  "IDSALW",
+  "IDSELE",
+  "IDSFOA",
+  "IDSFOR",
+  "IDSGRE",
+  "IDSHAV",
+  "IDSHIT",
+  "IDSI",
+  "IDSIMO",
+  "IDSLET",
+  "IDSLOS",
+  "IDSR2N",
+  "IDSR2T",
+  "IDSRED",
+  "IDSREM",
+  "IDSSHK",
+  "IDSSIZ",
+  "IDSSKP",
+  "IDSSTA",
+  "IDSSTR",
+  "IDSTHI",
+  "IDSTRU",
+  "IDSUSE",
+  "IDSYAU",
+  "IDPBEN",
+  "IDPCNT",
+  "IDPDAR",
+  "IDPDES",
+  "IDPEND",
+  "IDP4TH",
+  "IDPREB",
+  "IDPRRP",
+  "IDPSF2",
+  "IDPTH5",
+  "IDPTHB",
+  "IDACR",
+  "IDADF",
+  "IDADR",
+  "IDAPB",
+  "IDAPBZ",
+  "IDAPF",
+  "IDAPH",
+  "IDAPS",
+  "IDARC",
+  "IDARD",
+  "IDARS",
+  "IDARY"
+ ],
+ "sw_drop_names": [
+  "B0:6671",
+  "B0:668D",
+  "B0:6EBE",
+  "B0:779A",
+  "B0:79C9",
+  "B0:7A95",
+  "B0:7AFB",
+  "B0:7B04",
+  "B0:7B0D",
+  "B0:A39D",
+  "B0:AAAA",
+  "B0:AB60",
+  "B0:B214",
+  "B0:B40B",
+  "B0:B453",
+  "B0:B46B",
+  "B0:C4EA",
+  "B0:C4EF",
+  "B0:C4F4",
+  "B0:C4F9",
+  "B0:C4FE",
+  "B0:C503",
+  "B0:C508",
+  "B0:C50D",
+  "B0:C512",
+  "B0:C517",
+  "B0:C51C",
+  "B0:C521",
+  "B0:C526",
+  "B0:C52B",
+  "B0:C530",
+  "B0:C535",
+  "B0:C53A",
+  "B0:C53F",
+  "B0:C544",
+  "B0:C549",
+  "B0:C54E",
+  "B0:C553",
+  "B0:C558",
+  "B0:C55D",
+  "B0:C562",
+  "B0:C567",
+  "B0:C56C",
+  "B0:C571",
+  "B0:C576",
+  "B0:C57B",
+  "B0:C580",
+  "B0:C585",
+  "B0:C58A",
+  "B0:C58F",
+  "B0:C594",
+  "B0:C599",
+  "B0:C59E",
+  "B0:C5A3",
+  "B0:C5A8",
+  "B0:C5AD",
+  "B0:C5B2",
+  "B0:C5B7",
+  "B0:C5BC",
+  "B0:C5C1",
+  "B0:C5C6",
+  "B0:C5CB",
+  "B0:C5D0",
+  "B0:C5D5",
+  "B0:F4E3",
+  "B1:6540",
+  "B1:6545",
+  "B1:654A",
+  "B1:654F",
+  "B1:6554",
+  "B1:6559",
+  "B1:655E",
+  "B1:6563",
+  "B1:6568",
+  "B1:656D",
+  "B1:6572",
+  "B1:6577",
+  "B1:657C",
+  "B1:6581",
+  "B1:6586",
+  "B1:658B",
+  "B1:6590",
+  "B1:6595",
+  "B1:659A",
+  "B1:659F",
+  "B1:65A4",
+  "B1:65A9",
+  "B1:65AE",
+  "B1:65B3",
+  "B1:65B8",
+  "B1:65BD",
+  "B1:65C2",
+  "B1:65C7",
+  "B1:65CC",
+  "B1:65D1",
+  "B1:65D6",
+  "B1:65DB",
+  "B1:65E0",
+  "B1:65E5",
+  "B1:65EA",
+  "B1:65EF",
+  "B1:65F4",
+  "B1:65F9",
+  "B1:65FE",
+  "B1:6603",
+  "B1:6608",
+  "B1:660D",
+  "B1:6612",
+  "B1:6617",
+  "B1:661C",
+  "B1:6621",
+  "B1:6626",
+  "B1:662B"
+ ],
+ "sw_drop_comments": [
+  "B0:631F",
+  "B0:63C1",
+  "B0:63D2",
+  "B0:68B4",
+  "B0:68F0",
+  "B0:6921",
+  "B0:6924",
+  "B0:6926",
+  "B0:6A75",
+  "B0:79D5",
+  "B0:7A35",
+  "B0:7AA1",
+  "B0:7B01",
+  "B0:7B19",
+  "B0:A897",
+  "B0:A89C",
+  "B0:AAAA",
+  "B0:AAAF",
+  "B0:AACD",
+  "B0:AAD2",
+  "B0:AB3C",
+  "B0:AB41",
+  "B0:AB46",
+  "B0:ABC0",
+  "B0:B214",
+  "B0:B21C",
+  "B0:C4EA",
+  "B0:C4EF",
+  "B0:C4F4",
+  "B0:C4F9",
+  "B0:C4FE",
+  "B0:C503",
+  "B0:C508",
+  "B0:C50D",
+  "B0:C512",
+  "B0:C517",
+  "B0:C51C",
+  "B0:C521",
+  "B0:C526",
+  "B0:C52B",
+  "B0:C530",
+  "B0:C535",
+  "B0:C53A",
+  "B0:C53F",
+  "B0:C544",
+  "B0:C549",
+  "B0:C54E",
+  "B0:C553",
+  "B0:C558",
+  "B0:C55D",
+  "B0:C562",
+  "B0:C567",
+  "B0:C56C",
+  "B0:C571",
+  "B0:C576",
+  "B0:C57B",
+  "B0:C580",
+  "B0:C585",
+  "B0:C58A",
+  "B0:C58F",
+  "B0:C594",
+  "B0:C599",
+  "B0:C59E",
+  "B0:C5A3",
+  "B0:C5A8",
+  "B0:C5AD",
+  "B0:C5B2",
+  "B0:C5B7",
+  "B0:C5BC",
+  "B0:C5C1",
+  "B0:C5C6",
+  "B0:C5CB",
+  "B0:C5D0",
+  "B0:C5D5",
+  "B0:CC0A",
+  "B0:F4E3",
+  "B1:6540",
+  "B1:6545",
+  "B1:654A",
+  "B1:654F",
+  "B1:6554",
+  "B1:6559",
+  "B1:655E",
+  "B1:6563",
+  "B1:6568",
+  "B1:656D",
+  "B1:6572",
+  "B1:6577",
+  "B1:657C",
+  "B1:6581",
+  "B1:6586",
+  "B1:658B",
+  "B1:6590",
+  "B1:6595",
+  "B1:659A",
+  "B1:659F",
+  "B1:65A4",
+  "B1:65A9",
+  "B1:65AE",
+  "B1:65B3",
+  "B1:65B8",
+  "B1:65BD",
+  "B1:65C2",
+  "B1:65C7",
+  "B1:65CC",
+  "B1:65D1",
+  "B1:65D6",
+  "B1:65DB",
+  "B1:65E0",
+  "B1:65E5",
+  "B1:65EA",
+  "B1:65EF",
+  "B1:65F4",
+  "B1:65F9",
+  "B1:65FE",
+  "B1:6603",
+  "B1:6608",
+  "B1:660D",
+  "B1:6612",
+  "B1:6617",
+  "B1:661C",
+  "B1:6621",
+  "B1:6626",
+  "B1:662B"
+ ],
+ "ram": {
+  "4867": {
+   "name": "rheop_sp",
+   "desc": "RHS_SP+RHEOP: spread multiplier of the pitch pot. PHERES sets it from the pot limits saved in NVRAM and game_vars_init bumps it at every game start"
+  },
+  "486F": {
+   "name": "RHEOR",
+   "desc": "ROLL BLOCK (Atari's name, $4870 in Star Wars): laid over the yaw block RHEOY one byte up, only its RHS_RSD byte at $4877 is used. s1_roll_add and gd_roll_apply hand it to RHRSDU"
+  },
+  "4870": {
+   "name": "rheoy_sp",
+   "desc": "RHS_SP+RHEOY: spread multiplier of the yaw pot, kept as rheop_sp is"
+  },
+  "4876": {
+   "name": "rheoy_rsd",
+   "desc": "RHS_RSD+RHEOY: yaw tics still to be turned. twirl_ground adds the yoke's yaw to it, RHRSDU takes whole magic steps out of it and RESIDU turns the downloaded unit vectors by the rest"
+  },
+  "4877": {
+   "name": "rheor_rsd",
+   "desc": "RHS_RSD+RHEOR: roll tics still to be turned. s1_roll_add adds the steady roll of the TIE fighter and asteroid parts to it, RESIDU turns the view by what is left, OLD1SHP clears it"
+  },
+  "488C": {
+   "name": "gs_fade",
+   "desc": "brightness of the shield segment just lost: DO1GAS sets $F0, VWGAS takes 8 off each frame and ends the loss (GS_HIT and GS_GLW cleared) at zero. the IRQ puts it in the colour instruction at $002E in vector RAM, which the lost segment and the gauge's entry 0 colour are drawn with"
+  },
+  "4894": {
+   "name": "GD_ROL",
+   "desc": "ROLL AMOUNT AFTER HIT (Atari's name, $48A5 in Star Wars): word. in S1TWGD first the roll wanted from the hit count S_ROL and the yoke, then the limited step that is added to GD_ACT this frame. cleared when the probot part starts"
+  },
+  "48CD": {
+   "name": "vg_set",
+   "desc": "number (0-3) of the display list set that load_vg_set last copied from program ROM to the pseudo vector ROM at $2800, kept so that the set can be loaded again after a buffer overrun or a vector generator time out. the self test uses the same byte as the low byte of SWNEW"
+  },
+  "4BEE": {
+   "name": "cont_wave",
+   "desc": "the wave (as GM_WAV, from 0) the next game may start on. Copied from pend_wave at the end of a game in which the Jedi bonus was earned - 3 or more sends the end of game to the continue offer screen. Cleared when the offer runs out."
+  },
+  "4BEF": {
+   "name": "cont_bonus",
+   "desc": "4 BCD bytes ($4BEF-$4BF2), 8 digits: the bonus that goes with cont_wave, the score an earlier game had when it finished its last wave. copied from pend_bonus at the end of a game in which the Jedi bonus was earned, shown on the continue screen and with message $52, and added to the score by scr_level_bonus when a game started at wave 4 or higher finishes its first wave"
+  },
+  "4BF1": {
+   "name": "cont_bonus_2",
+   "desc": "word: third and fourth bytes of cont_bonus, digits 4-1"
+  },
+  "4BF2": {
+   "name": "cont_bonus_3",
+   "desc": "fourth byte of cont_bonus"
+  },
+  "4BF3": {
+   "name": "pend_wave",
+   "desc": "pending continue offer: GM_WAV + 1 noted by phi_next_set each time a wave is completed. it becomes cont_wave at the end of the game if the Jedi bonus was earned, and is cleared with the offer when the continue screen times out"
+  },
+  "4BF4": {
+   "name": "pend_bonus",
+   "desc": "4 BCD bytes: the score (S_SC87 to S_SC21) when pend_wave was noted. it becomes cont_bonus"
+  },
+  "4BF6": {
+   "name": "pend_bonus_2",
+   "desc": "word: third and fourth bytes of pend_bonus, digits 4-1"
+  },
+  "4C49": {
+   "name": "GM_WAV",
+   "desc": "OVERALL GAME WAVE # (Atari's name, $4B15 in Star Wars): the wave being played, counted from 0 - a wave being the four parts probots, walkers, TIE fighters and asteroid field. 0, 1 or 2 from the select screen (easy, medium, hard), cont_wave from the continue offer, one more after each completed wave, held at $FF. begin_act_init copies it to the level of each part and makes wave_bcd from it"
+  },
+  "4C4A": {
+   "name": "wave_bcd",
+   "desc": "wave number in BCD as the score line shows it: 1 after reset, GM_WAV + 1 (at most 99) when a wave begins. bank 1's bookkeeping keeps the highest value"
+  },
+  "4C4C": {
+   "name": "w1_level",
+   "desc": "level of wave 1, set to GM_WAV at the start of each set of four waves. Its double plus diff_adder is wave 1's fire_level, and page 2 picks wave 1 behaviour by it."
+  },
+  "4C4D": {
+   "name": "w2_level",
+   "desc": "level of wave 2, set to GM_WAV at the start of each set of four waves."
+  },
+  "4C4E": {
+   "name": "w4_level",
+   "desc": "level of the asteroid part: a copy of GM_WAV made by begin_act_init when a wave begins. twice it plus diff_adder is that part's fire_level, and page 2 takes the number of asteroids in flight from it (P2_95B5). (the TIE fighter part's level is SP_WAV)"
+  },
+  "4C4F": {
+   "name": "wave_type",
+   "desc": "which of the four parts of a wave is being played: 0 probots, 1 walkers, 2 TIE fighters, 3 asteroid field. set by the init of each part, cleared by begin_act_init. it picks the enemy name of the status display, the training manual section and the phase the manual returns to, the laser sound and several speeches"
+  },
+  "4C50": {
+   "name": "jedi_time",
+   "desc": "3 bytes, the last a fraction: time left of the state that follows the completion of the four Jedi letters, the Jedi force. page 1 sets the top word to $01C0 when the fourth letter is earned and counts it down every frame (P1_95F1) at a rate picked by jedi_count. 0 = not running, the game start clears the top word. while it runs the cockpit and the lazar splash take the force colour and the shield gauge is not drawn, under $60 they blink on its bit 3. the setups of the walker, TIE fighter and asteroid parts send their music only when it is under $80"
+  },
+  "4C53": {
+   "name": "bonus_left",
+   "desc": "enemies still to shoot in the current part for its bonus and Jedi letter: loaded from the part's quota by its init, counted down by the routines that score a kill, shown with the enemy's name by vw_wave_left and in the SHOOT nn FOR BONUS messages. while it is not 0 a kill scores the small amount, the kill that brings it to 0 earns 5,000 points and the letter (P1_9573), and later kills score ten times the small amount"
+  },
+  "4C55": {
+   "name": "quota_probot",
+   "desc": "bonus quota of the probot part, the bonus_left that part starts with: set from the starting wave by set_bonus_quota (6, 8, 10, then GM_WAV + 9), one more each time the part's letter is earned and after each wave (phi_next_set), 90 at most"
+  },
+  "4C56": {
+   "name": "quota_walker",
+   "desc": "bonus quota of the walker part, kept as quota_probot is"
+  },
+  "4C57": {
+   "name": "quota_tie",
+   "desc": "bonus quota of the TIE fighter part, kept as quota_probot is"
+  },
+  "4C58": {
+   "name": "quota_astrd",
+   "desc": "fourth bonus quota, set by set_bonus_quota and raised by phi_next_set with the other three. phi_asteroids loads it into bonus_left, which the status display does not show in the asteroid part"
+  },
+  "4C5A": {
+   "name": "diff_adder",
+   "desc": "difficulty adder, Star Wars' GM_DIF by the code that keeps it: the difficulty option (bits 3-2 of the option byte $4D7B) when a game starts, plus diff_step after each of the first three waves (GM_WAV 0 to 2). twice a part's level plus this is fire_level, and page 2 adds it to the asteroid part's level"
+  },
+  "4C5B": {
+   "name": "fire_level",
+   "desc": "level the current part is played at, 0-$1F: twice the part's level plus diff_adder, with $20 and up folded into $10-$1F. each part's setup writes it, the enemy gun code of page 1 indexes its shot tables with it and fires when a 5 bit random number is below it. the probot part steps it up every 32 frames once its quota is met or 100 frames have passed"
+  },
+  "4C60": {
+   "name": "craft_type",
+   "desc": "which craft the player flies: 0 in the probot and walker parts, 1 in the TIE fighter and asteroid parts. picks the cockpit list of view_cockpit and the laser origins of page 3 P3_95D3, where type 1 has a second pair of guns"
+  },
+  "4C61": {
+   "name": "manual_on",
+   "desc": "1 when the player picked one of the two instructions targets on the select screen: the init of each part then goes to phase $43 to show its training manual page first. cleared when the first wave is finished (phi_next_set) and when a game starts from the continue offer"
+  },
+  "4C62": {
+   "name": "start_bonus",
+   "desc": "1 from the start of a game (PHISG2) until its first wave is finished: the bonus for the wave the game started on is still due. phase $32 shows it (vew_wave_bonus), adds it (scr_level_bonus) and clears the flag. still set at the end of a game it selects message $30 on the continue screen"
+  },
+  "4C72": {
+   "name": "rank_index",
+   "desc": "index of the high score table entry (7 bytes each in INITLS) the player's score has to reach next: $18, the last of the 25, at reset and at game start, stepped down by bank 1 KE209 each frame the score has reached that entry, minus when the score is the best. the score display shows that entry and the player's place from it"
+  },
+  "4C84": {
+   "name": "jedi_on",
+   "desc": "set again every frame by page 1 P1_9645: 1 while jedi_time is running or a letter is growing into place (jedi_show 1), else 0. the cockpit, the star and the lazar splash drawing take another colour while it is set. cleared at game start"
+  },
+  "4C85": {
+   "name": "jedi_done",
+   "desc": "1 once all four Jedi letters have been earned in this game (page 1 P1_95E2), cleared by PHISG2. at the end of the game it turns the pending continue offer into the offer and picks the message of the continue screen"
+  },
+  "4CAE": {
+   "name": "ph_col_brt",
+   "desc": "PH_COL+1, the brightness byte of the phase colour, where the listing shows it as a bare address: the attract pages step it down to fade their messages and the message drawing (mes_lines_fade) takes the brightness of every line from it"
+  },
+  "4CB8": {
+   "name": "man_done",
+   "desc": "$FF when the script of a training manual page has reached its end record (man_op_end), cleared by phi_manual. phe_manual leaves the page when it is set"
+  },
+  "4CB9": {
+   "name": "man_running",
+   "desc": "nonzero while a training manual page is shown (phases $43 and $44): phi_manual bumps it, phe_manual and begin_act_init clear it. the slapstic pages then leave out sounds and speech, place their objects by fixed values, fire at once when the script asks and do not count the demonstration as play"
+  },
+  "4CBA": {
+   "name": "sc_add_top",
+   "desc": "SC_ADD-1: the top two BCD digits of the amount last added to the score, which is shown as 8 digits from here. zero except for the continued play bonus"
+  },
+  "4CBF": {
+   "name": "legs_bonus",
+   "desc": "3 BCD bytes ($4CBF-$4CC1): the progressive bonus for flying through an AT-AT's legs. cleared by the walker part's setup, raised by 5,000 up to 900,000 and added to the score by scr_legs_bonus each time page 0 (P0_87DD) sees the player pass under a walker, shown while legs_bon_tmr runs"
+  },
+  "4CC1": {
+   "name": "legs_bonus_2",
+   "desc": "third byte of legs_bonus"
+  },
+  "4CCA": {
+   "name": "snd_mute",
+   "desc": "nonzero mutes the sound effects: doxmt_gated, and bank 1's copy of it at K6530, send their command only while it is 0. the five dying phases set it to 1, the starting wave select, the continue offer, begin_act_init and PHEEGM clear it"
+  },
+  "4CCC": {
+   "name": "exec_x",
+   "desc": "word: screen x of the Executor in the TIE fighter part, saved sign extended by VWDTHB from its projected centre. exec_drift_left moves it 16 to the left every frame in phase $2A, which ends when it is -520 or less"
+  },
+  "4CD5": {
+   "name": "w2_spk_cnt",
+   "desc": "wave 2: counts the frames a page 0 test (P0_8F45) holds running. At 20 the speech spk_cmd_03 is started and the count parks at $80. Cleared by the wave 2 setup."
+  },
+  "4CD7": {
+   "name": "hit_spk_done",
+   "desc": "wave 2: nonzero once the speech spk_cmd_09 has been started by page 0 (P0_9641), or is no longer wanted - the end of wave init bumps it."
+  },
+  "4CDE": {
+   "name": "foa_said",
+   "desc": "set by page 2 P2_92EE once it has sent the sound command of spk_cmd_05, so that it is sent once in a game. cleared at game start"
+  },
+  "4CDF": {
+   "name": "legs_bon_tmr",
+   "desc": "frames the legs bonus stays on screen: 20 from scr_legs_bonus, counted down by page 1 (P1_9D45) while it shows legs_bonus"
+  },
+  "5032": {
+   "name": "M_BY1",
+   "desc": "Ship 1 unit vector B, Y (Atari's name, the same address in Star Wars, MS_BY+M_U1): word, the y part of the ship's side axis in the ship 1 download block"
+  },
+  "5034": {
+   "name": "M_BZ1",
+   "desc": "Ship 1 unit vector B, Z (Atari's name, MS_BZ+M_U1): word, the y part of the ship's up axis in the ship 1 download block"
+  },
+  "503A": {
+   "name": "M_CY1",
+   "desc": "Ship 1 unit vector C, Y (Atari's name, MS_CY+M_U1): word, the z part of the ship's side axis in the ship 1 download block"
+  },
+  "503C": {
+   "name": "M_CZ1",
+   "desc": "Ship 1 unit vector C, Z (Atari's name, MS_CZ+M_U1): word, the z part of the ship's up axis in the ship 1 download block"
+  },
+  "5042": {
+   "name": "M_YT1",
+   "desc": "SHIP 1 UNIVERSE LOC (Atari's name in Star Wars, MS_TY+M_U1): word, y of the ship 1 download block's position, a copy of the player's"
+  },
+  "5044": {
+   "name": "M_ZT1",
+   "desc": "SHIP 1 UNIVERSE LOC (Atari's name in Star Wars, MS_TZ+M_U1): word, z (height) of the ship 1 download block's position, a copy of the player's"
+  },
+  "5080": {
+   "name": "s1_ax",
+   "desc": "MS_AX+M_S1: unit vector A,X of the player's ship, word ($4000 = 1.0): the x part of its forward axis, plus when the ship heads towards +x. $C0 in its high byte with the same in s1_by turns the ship to face backwards"
+  },
+  "5086": {
+   "name": "s1_vx",
+   "desc": "word: the player's forward speed, MS_VX+M_S1 (the listing shows the same address as that expression in the carried lines). asteroid_setup sets it to $0100 for the asteroid field"
+  },
+  "508A": {
+   "name": "s1_by",
+   "desc": "MS_BY+M_S1: unit vector B,Y of the player's ship, word: the y part of its side axis. the carried lines show the same address as that expression"
+  },
+  "509C": {
+   "name": "s1_tz",
+   "desc": "MS_TZ+M_S1: the player's universe z position, word: the height above the ground in the probot and walker parts. the part setups preset it and the movement routines keep it within the part's limits"
+  }
+ },
+ "routines": {
+  "B0:630A": {
+   "name": "IPARM",
+   "desc": "Star Wars' IPARM, which the matcher missed: init the general parameters (init_general) and the player's ship (NW1SHP)"
+  },
+  "B0:64A3": {
+   "name": "PHEINS",
+   "desc": "phase $06, Star Wars' PHEINS changed: one frame of the flight instructions page. score, coin lines, the page (view_ins_page), stars and Jedi letters, the stars move sideways. when view_ins_page has set the timer to $200 it goes on to the design team page. flashes the Jedi letters and checks the start and test switches"
+  },
+  "B0:6559": {
+   "name": "PHESCR",
+   "desc": "phase $04, Star Wars' PHESCR changed: one frame of the scoring page. score, coin lines, the page (VWPAGE), stars and Jedi letters, the stars move up. when VWPAGE has set the timer to $200 it goes on to the flight instructions. flashes the Jedi letters and checks the start and test switches"
+  },
+  "B0:6671": {
+   "name": "team_page_init",
+   "desc": "phase $07, init of the design team page: message offset and timer 0, messages off, full brightness, message $01 (Atari's game design team) on"
+  },
+  "B0:668D": {
+   "name": "team_page_exec",
+   "desc": "phase $08, one frame of the design team page: score, coin lines, stars, Jedi letters and the message, the stars move up. from frame $A0 the message fades two steps a frame, and when it is dark the timer is set to $100, which ends the phase: on to the high score table. flashes the Jedi letters and checks the start and test switches"
+  },
+  "B0:66E9": {
+   "name": "PHIHIS",
+   "desc": "phase $09 (PHS_HIS), Star Wars' PHIHIS with the timer started at 0: init of the high score table display. blue for the table, messages off, math box and ship restored, stars facing forward, high scores checked for reasonableness by bank 1"
+  },
+  "B0:6713": {
+   "name": "PHEHIS",
+   "desc": "phase $0A, Star Wars' PHEHIS with the timer counting up: one frame of the high score table display. draws the copyright message, stars, score, coin lines, the table in the phase colour (faded from frame $B0) and the Jedi letters, moves the stars forward, and after $100 frames goes back to the banner. flashes the Jedi letters and checks the start and test switches"
+  },
+  "B0:6786": {
+   "name": "PHESG1",
+   "desc": "phase $0C, the first instructions of Star Wars' PHESG1: clears kill_count, sets phase $0D (select the starting wave) and falls into game_vars_init, the rest of PHESG1"
+  },
+  "B0:67DA": {
+   "name": "PHISG2",
+   "desc": "phase $13, Star Wars' PHISG2 with more to reset: finish starting up the game. math box, parameters and stars, the four bonus quotas from the starting wave (set_bonus_quota), ship facing backwards, bonus coin count, score, foa_said and jedi_done cleared, rank_index at the last entry, start_bonus set and diff_adder taken from the difficulty option. falls into PHESG2"
+  },
+  "B0:6815": {
+   "name": "PHESG2",
+   "desc": "phase $14, Star Wars' PHESG2: goes to phase $15 (PHS_BGN), begin a wave"
+  },
+  "B0:6856": {
+   "desc": "phase $0E, the starting difficulty select screen. Star Wars' PHESDS changed: the table TDTH now has five targets, three planets (easy, medium, hard = GM_WAV 0, 1, 2) and two instructions targets that pick easy and set manual_on. Each frame it hit tests the cursor against the targets with the octagon check, draws the planets, the two instructions pictures, the cursor (yellow when on a target), the messages and a countdown, and goes to phase $0F when a fire or thumb switch is pressed on a target or, on easy, when 256 frames have passed"
+  },
+  "B0:6980": {
+   "desc": "phase $0F, init of the sequence shown between the select screen and the game: picture set 0, stars (ISTAR), phase timer 0, all messages off, a tune (tune_cmd_2f) and an effect (aud_cmd_47), then falls into the execute phase"
+  },
+  "B0:69F9": {
+   "desc": "phase $12, the continue offer screen, a second changed copy of Star Wars' PHESDS with one planet at cont_planet. Draws the score, the coin messages, the planet, the cursor, the messages, a countdown, the offered wave number (cont_wave + 1) and its bonus (cont_bonus, 6 or 8 digits). A fire or thumb switch pressed with the cursor on the planet takes a credit, sets GM_WAV to cont_wave and goes straight to phase $13 (PHISG2) - with no credit it puts 256 frames back on the countdown, once. When the timer reaches $200 the offer and the pending offer are cleared and the phase goes back to the banner"
+  },
+  "B0:6B55": {
+   "desc": "phase $15 (PHS_BGN), begin a set of four waves. Star Wars' PHIBGN changed: resets the ship's flight state (OLD1SHP), makes the BCD wave number for the display from GM_WAV + 1 (at most 99), copies GM_WAV to the level of each of the four wave types, clears wave_type, snd_mute and man_running, then falls into the execute phase"
+  },
+  "B0:6B8F": {
+   "desc": "phase $17, init of wave 1: picture set 1, wave_type 0, bonus_left from the wave 1 quota, the Jedi letter display turned off unless a letter is being awarded, prog_count cleared. If instructions were asked for it goes to phase $43 (which comes back at wave1_setup), otherwise it falls into wave1_setup"
+  },
+  "B0:6BB8": {
+   "desc": "phase $45, the rest of the wave 1 init, entered by falling in from wave1_init or from the training manual phase (manual_next_ph): general parameters and a new ship (IPARM) turned to face backwards, ground stars (ISTARG), the wave 1 objects and the progress indicator set up on the slapstic pages, player speed, position and height, timer and the hit speech flags cleared, the part's tune (tune_cmd_2e) and one of two speeches by the low bit of GM_WAV, craft type 0, then phase $18"
+  },
+  "B0:6C0B": {
+   "desc": "phase $18, the first 40 frames of wave 1 before anything attacks: views the scene (vew_probot), ends the game through phi_probot_die when the shields are gone, runs the shield gauge and the Jedi flags, turns and moves the player, then goes to phase $19"
+  },
+  "B0:6C3C": {
+   "desc": "phase $19: works out the level wave 1 is played at, 2 * w1_level + diff_adder, folded into $10-$1F once it passes $1F, stores it in fire_level and its two wave 1 copies, clears the phase timer and GD_ROL and falls into the wave 1 play phase (wave1_exec, phase $1A)"
+  },
+  "B0:6C5F": {
+   "name": "wave1_exec",
+   "desc": "phase $1A, wave 1 play: views with vew_probot, ends the game through phi_probot_die when the shields are gone, moves shots, transmissions, glow, the shield gauge, explosions and the wave 1 objects (page 2 P2_877C), runs the Jedi time, turns and moves the player. at frame 20 it shows the Jedi letters. once the quota is met or 100 frames have passed the level climbs (wave1_level_up), and when prog_count reaches 4 it goes to phase $1B"
+  },
+  "B0:6CF3": {
+   "desc": "phase $1B, wave 1 is over (prog_count reached 4): timer 0, a speech picked by GM_WAV (0, 1, 2, from 3 up one of the four in w1_end_spk at random), and w1_spawn = $FF so that page 2 frees the wave 1 objects. Falls into phase $1C (wave1_end_exec), which plays on until none is left"
+  },
+  "B0:6D2B": {
+   "name": "wave1_end_exec",
+   "desc": "phase $1C: plays wave 1 on, as wave1_exec does without the level and indicator tests, until page 2 counts no live object record (w1_active 0), then goes to phase $1D"
+  },
+  "B0:6D73": {
+   "desc": "phase $1E, the flight out of wave 1: views with vew_probot_end, still moves shots, explosions, glow and the shield gauge, turns the player with L778C and moves him. After 40 frames it waits for the ship to face backwards (unit vector A x at or below $C100) and at 80 frames at the latest goes to phase $1F, the init of wave 2"
+  },
+  "B0:6DBF": {
+   "desc": "phase $1F, init of wave 2: picture set 1, wave_type 1, bonus_left from the wave 2 quota, the Jedi letter display turned off unless a letter is being awarded. With instructions asked for it goes to phase $43 (which comes back at wave2_setup), otherwise it joins wave2_setup at L6DF3, past the new ship and stars, so the flight carries on from wave 1"
+  },
+  "B0:6DE5": {
+   "desc": "phase $46, the rest of the wave 2 init, entered from the training manual phase (manual_next_ph) with a new ship facing backwards and ground stars, and at L6DF3 from wave2_init: sets up the two kinds of wave 2 objects and the progress indicator on the slapstic pages, works out fire_level from w2_level and diff_adder, clears the timer, the legs bonus and the speech flags, sends the part's tune (tune_cmd_2b) while jedi_time is under $80 and a speech (spk_cmd_18) and goes to phase $20"
+  },
+  "B0:6E44": {
+   "desc": "phase $20, wave 2 play: views with LA448, ends the game through phi_walker_die when the shields are gone, moves shots, explosions and the two kinds of wave 2 objects, runs the Jedi time, turns and moves the player. After 1200 frames, or once the quota is met with Jedi time running, it clears adv_hold so nothing holds the advance up. At frame 60 it shows the Jedi letters, and when walk_adv reaches 400 it goes to phase $21"
+  },
+  "B0:6EB0": {
+   "desc": "phase $21, wave 2 is over: timer 0 and both spawn counts = $FF so that the slapstic pages free the wave 2 objects, the hit speech flag bumped, then phase $22"
+  },
+  "B0:6F08": {
+   "desc": "phase $23: clears the phase timer, sends a speech (spk_cmd_23) and an effect (aud_cmd_45) and falls into the wave 2 exit phase"
+  },
+  "B0:6F56": {
+   "desc": "phase $25, init of wave 3: picture set 2, wave_type 2, bonus_left from the wave 3 quota, the Jedi letter display turned off unless a letter is being awarded. With instructions asked for it goes to phase $43 (which comes back at wave3_setup), otherwise it falls into wave3_setup"
+  },
+  "B0:6F7A": {
+   "desc": "phase $47, the rest of the wave 3 init, entered by falling in from wave3_init or from the training manual phase (manual_next_ph): general parameters and a new ship facing backwards, stars (ISTAR), the wave 3 setup on page 3, fire_level from SP_WAV and diff_adder, timer and hit speech flags cleared, craft type 1 with its second pair of lasers, a speech (spk_cmd_24) and, while jedi_time is under $80, the part's tune (tune_cmd_2c), then phase $26"
+  },
+  "B0:6FC4": {
+   "desc": "phase $26, wave 3 play, built on Star Wars' PHESP1: views with LA515, ends the game through phi_tie_die when the shields are gone, moves shots, glows, explosions and the computer ships, runs the Jedi time, turns and moves the player and moves the stars. At frame 60 it shows the Jedi letters, after 440 frames it goes to phase $27, and while fewer than three ships are alive it adds another (ADASHP on page 3)"
+  },
+  "B0:7025": {
+   "desc": "phase $28, the TIE fighter wave after its time is up: the same frame as the wave itself (view LA515, shots, glow, explosions, shields, Jedi timer) but the fighters run away (CPURET) and the player is turned towards the far object (L76A3). when no alien record is in use and unit vector A's X of the player is $3800 or more it goes to phase $29. shields gone goes to phi_tie_die. Star Wars' PHESP2 with the aim test of its PHES0G added"
+  },
+  "B0:707A": {
+   "desc": "phase $2A, the way out of the TIE fighter wave: view LA599, which slides the far object 16 units to the left every frame, shots, glow, explosions and shields still run, the player keeps turning towards the far object (L76CB) with no fighters left. when the object's screen x exec_x is -520 or less it goes to phase $2B, the asteroid field. shields gone goes to phi_tie_die"
+  },
+  "B0:70BD": {
+   "desc": "phase $2B, init of the asteroid field wave: pseudo vector ROM set 2, wave_type = 3, bonus count from quota_astrd, Jedi letters hidden unless one is being awarded. if instructions were chosen (manual_on) it goes to phase $43 for the training manual page, which comes back through asteroid_setup, else it branches into asteroid_setup past the object and star set-up"
+  },
+  "B0:70E3": {
+   "name": "asteroid_setup",
+   "desc": "phase $48, the rest of the asteroid part's init, entered from the training manual phase (manual_next_ph) with new parameters and stars, and at L70E9 from phi_asteroids: sets the asteroids up on page 2 (P2_9561), forward speed $0100, fire_level from w4_level and diff_adder, timer and hit_said cleared, craft type 1, the part's tune while jedi_time is under $80 and a speech picked by GM_WAV (0, even, odd), then phase $2C"
+  },
+  "B0:713E": {
+   "desc": "phase $2C, the asteroid field wave: view LA5F9, shots, explosions, glow, shields, Jedi timer, asteroids moved and launched (P2_96E0), player twirled by twirl_asteroid and moved by S1MVBS. it lasts 300 frames in waves 0 and 1 and 400 in later waves, then phase $2D. 40 frames before the end it requests spk_cmd_20 and stops the asteroids (astrd_max = $FF). 60 frames in it shows the Jedi letters. shields gone goes to L73AA"
+  },
+  "B0:71D9": {
+   "desc": "phase $2E, the award after the asteroid field: view LA63E with message $4D (5,000 points and Jedi letter awarded), explosions, glow and shields still run. requests spk_cmd_0a at frame 50, shows the Jedi letters at frame 60 if they are hidden, and goes to phase $2F after 70 frames. shields gone goes to L73AA"
+  },
+  "B0:722D": {
+   "desc": "phase $31, init of the wave completed screen: pseudo vector ROM set 2, phase timer cleared, all messages off, speech request spk_cmd_0c, 2,500 points added (LB65D), then it falls into phase $32"
+  },
+  "B0:7274": {
+   "desc": "phase $33, first half of going on to the next set of four waves: objects and the player's ship reset, manual_on cleared, the four bonus quotas (probots, walkers, TIE fighters, quota_astrd) each one higher with 90 as the top, and the wave to continue from (GM_WAV + 1) with the score so far saved in pend_wave and pend_bonus. falls into phase $34"
+  },
+  "B0:72C4": {
+   "desc": "phase $34, second half: in waves 0 to 2 diff_step goes up by one and is added to diff_adder, then the wave number GM_WAV goes up by one (it stays at $FF) and PHASE = PHS_BGN starts the next set"
+  },
+  "B0:72E4": {
+   "name": "phi_probot_die",
+   "desc": "phase $35, init of the player's death in the probot part (the probot phases branch here when S_GAS goes minus), Star Wars' PHIS0D with a mute added: drops the waiting speech (spk_cmd_13), PHASE = $36, phase timer cleared, snd_mute = 1. falls into the execute half"
+  },
+  "B0:72F6": {
+   "desc": "phase $36, execute half of phi_probot_die, the death of the player in the probot wave (the probot phases branch to phi_probot_die when S_GAS goes minus): view vew_probot_die with the growing GAME OVER, shots still move, the glow is kept flashing, speech request spk_cmd_1a at frame 8, and after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:731F": {
+   "name": "phi_walker_die",
+   "desc": "phase $37 (PHS_G0D), init of the player's death in the walker part (the walker phases branch here when S_GAS goes minus), Star Wars' PHIG0D with a mute added: drops the waiting speech (spk_cmd_13), PHASE = $38, phase timer cleared, snd_mute = 1. falls into the execute half"
+  },
+  "B0:7331": {
+   "name": "phe_walker_die",
+   "desc": "phase $38, the death of the player in the walker part, Star Wars' PHEG0D: view vew_walker_die with the growing GAME OVER, shots still move, the glow is kept flashing, speech request spk_cmd_1a at frame 8, and after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:735A": {
+   "name": "phi_tie_die",
+   "desc": "phase $39, init of the player's death in the TIE fighter part (the TIE fighter phases branch here when S_GAS goes minus): drops the waiting speech (spk_cmd_13), PHASE = $3A, phase timer cleared, snd_mute = 1. falls into the execute half"
+  },
+  "B0:736C": {
+   "name": "phe_tie_die",
+   "desc": "phase $3A, the death of the player in the TIE fighter part, Star Wars' PHES0D: view vew_tie_die with the growing GAME OVER, shots still move, the glow is kept flashing, the aliens' glow and the explosions run, and the craft rolls 4.48 degrees a frame. speech request spk_cmd_1b at frame 8, after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:73AA": {
+   "desc": "phase $3B, init of the death of the player in the asteroid field (reached by branch from phases $2C and $2E): speech request spk_cmd_13, PHASE = $3C, asteroids stopped (astrd_max = $FF), phase timer cleared, snd_mute = 1 which mutes the sound effects sent through LC4DA. falls into the execute half"
+  },
+  "B0:73C1": {
+   "desc": "phase $3C, the death in the asteroid field: view LA66A with the growing GAME OVER, glow kept flashing, explosions, the asteroids still move, and the craft rolls 4.48 degrees a frame as in phe_tie_die. speech request spk_cmd_1b at frame 8, after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:73FC": {
+   "desc": "phase $3D, init of a fifth dying phase: speech request spk_cmd_13, PHASE = $3E, phase timer cleared, snd_mute = 1, falls into the execute half. reached only through the phase table and no instruction was found that sets phase $3D"
+  },
+  "B0:740E": {
+   "desc": "phase $3E: view vew_die_plain (score, Jedi letters, shields and the growing GAME OVER, no scene), glow kept flashing, speech request spk_cmd_1a at frame 8, after 40 frames PHASE = PHS_EGM"
+  },
+  "B0:7434": {
+   "name": "PHIEGM",
+   "desc": "phase $3F (PHS_EGM), Star Wars' PHIEGM without its farewell speech: drops the waiting speech (spk_cmd_13) and falls into PHEEGM"
+  },
+  "B0:7439": {
+   "name": "PHEEGM",
+   "desc": "phase $40, Star Wars' PHEEGM with the continue offer added: math box, parameters and stars restored, Jedi letters shown, jedi_blink and snd_mute cleared, then bank 1 does the accounting (EEACCT) and looks for a new high score. with one it goes to phase $41, the initials. else, if the Jedi bonus was earned, the pending offer becomes the continue offer, and an offer of wave 4 or higher goes to phase $11. else a speech (only when the game ended in the probot or walker part) and a tune are sent and the phase is the banner"
+  },
+  "B0:74BC": {
+   "name": "PHEENT",
+   "desc": "phase $42, Star Wars' PHEENT with the continue offer added: the initials entry. score, coin lines, the high score table and the messages, bank 1's GETINT takes the initials. the test switch or $280 frames end it. when it is done the pending offer becomes the continue offer if the Jedi bonus was earned, and the phase is $11 for an offer of wave 4 or higher, else $09, the high score table"
+  },
+  "B0:751F": {
+   "name": "phi_manual",
+   "desc": "phase $43, init of a training manual page, entered from the init of a part when manual_on is set: new parameters and ground stars, the ship facing forward ($40 in s1_ax and s1_by), the page of section wave_type set up (manual_page_init), timer and man_done cleared, man_running bumped"
+  },
+  "B0:7542": {
+   "desc": "phase $44, execute half of phi_manual, one page of the rebel training manual shown before a wave when instructions were chosen: view LA697, then LB189 runs the page's script and the demonstration of part wave_type. when the script ends (man_done) or after 400 frames PHASE is taken from manual_next_ph for the wave type ($45 probots, $46 walkers, $47 TIE fighters, $48 asteroids, each the wave's own set-up) and the glow, the hit and man_running are cleared"
+  },
+  "B0:75AC": {
+   "desc": "sets the four bonus quotas (quota_probot, quota_walker, quota_tie, quota_astrd) from the starting wave number GM_WAV: 6, 8, 10 from quota_tab for waves 0 to 2, GM_WAV + 9 for later waves. called by PHISG2 when a game starts"
+  },
+  "B0:75E1": {
+   "name": "PHESTS",
+   "desc": "phase $4A, Star Wars' PHESTS: the statistics page, drawn by bank 1 (K712B). the aux switch goes on to the option page (phase $4B), the test switch off goes back to the banner"
+  },
+  "B0:7619": {
+   "name": "PHEOPT",
+   "desc": "phase $4C, Star Wars' PHEOPT: the option page, drawn and changed by bank 1 (K76AD, K773E). the aux switch jumps to HANG, so the watchdog resets the machine, the test switch off goes back to the banner"
+  },
+  "B0:766C": {
+   "desc": "star movement of the high score table phase, called by PHEHIS: ST_UX $80 further, forward. the same instructions as Star Wars' SMVHIS, which the matcher missed"
+  },
+  "B0:76A3": {
+   "desc": "twirls the player while the TIE fighters run away (phase $28): the roll after a hit, then AIMDTH aims at the far object, pitch and yaw. instruction for instruction Star Wars' STWSP2"
+  },
+  "B0:7750": {
+   "desc": "no caller found, dead code: adds the low byte of GD_ROL to the roll residue, runs the residue routine L7BB1 on the roll block and rolls the ship (S1RL) when it asks. this is the end of Star Wars' S1TWGD, which ESB's S1TWGD no longer runs into"
+  },
+  "B0:779A": {
+   "name": "twirl_asteroid",
+   "desc": "twirls the player in the asteroid part (phase $2C): Star Wars' STWSP1 once more - the roll after a hit while S_ROL counts back to zero, AIM, pitch and yaw from the yoke - with 12 tics of roll the other way added every frame through s1_roll_add"
+  },
+  "B0:7B3E": {
+   "desc": "Star Wars' S1RHPT, ship 1 rheostat pitch: RHTRIG and RHRSDU on the pitch block RHEOP, and S1PT pitches the ship when a magic step is due"
+  },
+  "B0:7B4D": {
+   "desc": "Star Wars' S1RHYW, ship 1 rheostat yaw: RHTRIG and RHRSDU on the yaw block RHEOY, and S1YW yaws the ship when a magic step is due"
+  },
+  "B0:7B6E": {
+   "name": "VGTOSITE",
+   "desc": "Star Wars' VGTOSITE, which the matcher missed: with interrupts off it copies the IRQ's rheostat values VG_RSY, VG_RSX, VG_CY and VG_CX into the sight values SI_RSY, SI_RSX, SI_CY and SI_CX that the mainline uses"
+  },
+  "B0:A39D": {
+   "name": "vew_probot",
+   "desc": "view of the probot part (phases $18, $1A and $1C): downloads the ship's vectors and turns them by the residues and the bank (bank_roll_u1), then score, Jedi letters, shields, page 1 P1_9A0E, sight and cockpit (VWSITE), ground stars, the lazar test (TSTLAZ) and its ground splash, gun shots, the transmissions (page 3 P3_9B6D), the probots (page 2 P2_8FB7), their lazar collision test (page 3 P3_9838), the lazars (page 3 P3_95D3), explosions and glow"
+  },
+  "B0:A3DC": {
+   "name": "vew_probot_end",
+   "desc": "view of the flight out of the probot part (phase $1E): call for call the same as vew_probot"
+  },
+  "B0:A41B": {
+   "name": "vew_probot_die",
+   "desc": "view of the player dying in the probot part (phase $36): score, Jedi letters, shields, ground stars, gun shots, the transmissions (page 3 P3_9B6D), the probots (page 2 P2_8FB7), the growing GAME OVER message (VWMOVR) and glow, no sight and no lazars"
+  },
+  "B0:A448": {
+   "desc": "view of the walker wave (phases $20 and $22). As vew_probot, which views the probot wave, with the walker views (page 1 P1_88FD, page 0 P0_891A, page 0 P0_969D) and their lazar collision test (page 3 P3_97CB) in place of the probot ones"
+  },
+  "B0:A4E8": {
+   "name": "vew_walker_die",
+   "desc": "view of the player dying in the walker part (phase $38): score, Jedi letters, shields, ground stars, gun shots, the walkers (page 1 P1_88FD, page 0 P0_891A), the growing GAME OVER message and glow"
+  },
+  "B0:A5CF": {
+   "desc": "view for phe_tie_die, the player dying in the TIE fighter wave: residue, score, shields, stars, explosions, alien ships, guns, the growing GAME OVER message and glow, no sight and no lazars. The ESB form of Star Wars VEWS0D"
+  },
+  "B0:A697": {
+   "desc": "view of the rebel training manual pages of the attract mode (phase after phi_manual): residue, score, shields, guns and LB20A, which shows 'REBEL TRAINING MANUAL SECTION' with its numbers and the objects of the wave being explained"
+  },
+  "B0:A711": {
+   "name": "vew_die_plain",
+   "desc": "view of phase $3E: score, Jedi letters, shields, the picture at the start of the pseudo ROM set and the growing GAME OVER message, no scene"
+  },
+  "B0:A729": {
+   "name": "vew_stars_only",
+   "desc": "no caller found: a view with score, Jedi letters, shields, sight and cockpit, stars and glow only, the shape of Star Wars' VEWHPB without its Death Star"
+  },
+  "B0:A843": {
+   "desc": "draws the Executor (the star destroyer picture at $298E in the pseudo ROM) coming in from the right near the end of the asteroid wave. nothing is drawn until PH_TIM reaches 260 (360 when GM_WAV is 2 or more), then the picture goes at y 200, x 530 - 7 * frames since then, at scale $7400. called by the view LA5F9. Y-->VG list"
+  },
+  "B0:B0E4": {
+   "desc": "starts one page of the rebel training manual, called by phi_manual. turns all messages off, calls the set-up routine of section wave_type (0 probot, 1 walkers, 2 TIE fighter, 3 asteroids) from manual_init_tab, then points the script pointer $4CB6 at the script of that section's page $4CB5, taken from manual_script_tab"
+  },
+  "B0:B189": {
+   "desc": "the per-frame work of a manual page, called by the phase routine at L7542. if the time word of the script record at $4CB6 has been reached by PH_TIM it runs the record's command (byte 2, 0-6, through the table at LAE14, with U at the record: end of page, message on, message off, store byte, store word, call routine, nothing) and steps the pointer on 8 bytes - one record a frame at most. then it calls the move routine of section wave_type from manual_move_tab. the task text gives this as LB18A"
+  },
+  "B0:B20A": {
+   "desc": "draws a manual page, called by the view routine at LA697 with Y at the display list. turns on message $53 (REBEL TRAINING MANUAL   SECTION), views the messages, writes the section and page numbers after the heading as n.n, then calls the view routine of section wave_type from manual_view_tab"
+  },
+  "B0:B214": {
+   "desc": "not a separate routine, the rest of manual_view (no call or jump to this address was found): colour, a move to the end of the heading, section number wave_type + 1, a period, page number man_page + 1, centre, then the section's view routine"
+  },
+  "B0:B266": {
+   "desc": "view routine of the asteroid pages: page 2 P2_9983 views the asteroid records"
+  },
+  "B0:B5D4": {
+   "desc": "adds the bonus for the level the game was started at, called once at frame $40 of the wave completed phase when $4C62 is set. GM_WAV 0 (easy) adds nothing, 1 adds 100000, 2 adds 250000 (the table at $B724, messages $4F-$51), 3 and up (continued play, message $52) adds the 8-digit bcd bonus carried over at $4BEF and shows it as the amount being added"
+  },
+  "B0:B72D": {
+   "name": "VWSITE",
+   "desc": "Star Wars' VWSITE with view_cockpit in the place of VWPLAN: the cursor in its normal colour (VWCURS), then the cockpit. Y = display list"
+  },
+  "B0:B734": {
+   "name": "VWSITC",
+   "desc": "Star Wars' VWSITC likewise: the cursor without a colour instruction (VWCURC), then the cockpit. no caller found"
+  },
+  "B0:C4DA": {
+   "desc": "send sound command A to the sound board through DOXMT, but only while snd_mute is zero - when it is set the command is dropped. the effect stubs from $32 up jump here, except $34, $36, $40, $44 and $52, so the dying phases, which set snd_mute to 1, silence the effects. bank 1 has its own copy at K6530"
+  },
+  "B0:C4EA": {
+   "name": "spk_cmd_03",
+   "desc": "sound stub: sends command $03 through DOXMT, which on ESB's sound board is speech, phrase 10 of its table. sent by page 0 (P0_8F5B) in the walker part when w2_spk_cnt reaches 20. the Star Wars name SPKALW was carried here by the command number, which meant another sound there"
+  },
+  "B0:C4EF": {
+   "name": "spk_cmd_04",
+   "desc": "sound stub: sends command $04 through DOXMT, which on ESB's sound board is speech, phrase 15 of its table. sent by DO1GAS when one shield is left in the probot and walker parts. the Star Wars name SPKELE was carried here by the command number, which meant another sound there"
+  },
+  "B0:C4F4": {
+   "name": "spk_cmd_05",
+   "desc": "sound stub: sends command $05 through DOXMT, which on ESB's sound board is speech, phrase 9 of its table. sent by page 2 (P2_92F3) at the first probot shot down in a game (foa_said). the Star Wars name SPKFOA was carried here by the command number, which meant another sound there"
+  },
+  "B0:C4F9": {
+   "name": "spk_cmd_06",
+   "desc": "sound stub: sends command $06 through DOXMT, which on ESB's sound board is speech, phrase 1 of its table. sent by S2VW (pages 2 and 3) when a ship starts a pass-by. the sound board says it only when no speech is under way. the Star Wars name SPKFOR was carried here by the command number, which meant another sound there"
+  },
+  "B0:C4FE": {
+   "name": "spk_cmd_07",
+   "desc": "sound stub: sends command $07 through DOXMT, which on ESB's sound board is speech, phrase 3 of its table. sent by page 1 (P1_95C3) when a Jedi letter is awarded, except the third. the Star Wars name SPKGRE was carried here by the command number, which meant another sound there"
+  },
+  "B0:C503": {
+   "name": "spk_cmd_08",
+   "desc": "sound stub: sends command $08 through DOXMT, which on ESB's sound board is speech, phrase 23 of its table. sent when the probot part ends in wave 2 (GM_WAV 1), and one of the four picked at random from wave 4 on (w1_end_spk). the Star Wars name SPKHAV was carried here by the command number, which meant another sound there"
+  },
+  "B0:C508": {
+   "name": "spk_cmd_09",
+   "desc": "sound stub: sends command $09 through DOXMT, which on ESB's sound board is speech, phrase 12 of its table. sent by page 0 (P0_9641) once in a walker part (hit_spk_done). the Star Wars name SPKHIT was carried here by the command number, which meant another sound there"
+  },
+  "B0:C50D": {
+   "name": "spk_cmd_0a",
+   "desc": "sound stub: sends command $0A through DOXMT, which on ESB's sound board is speech, phrase 17 of its table. sent by IFRAME when the first credit comes in and by phe_jedi_award at frame 50. the Star Wars name SPKI was carried here by the command number, which meant another sound there"
+  },
+  "B0:C512": {
+   "name": "spk_cmd_0b",
+   "desc": "sound stub: sends command $0B through DOXMT, which on ESB's sound board is the warm start of the speech chip, queued like a sentence (its SPKI). nothing calls this stub. the Star Wars name SPKIMO was carried here by the command number, which meant another sound there"
+  },
+  "B0:C517": {
+   "name": "spk_cmd_0c",
+   "desc": "sound stub: sends command $0C through DOXMT, which on ESB's sound board is speech, phrases 4, 2 and 5 of its table. sent by phi_set_done when a wave is completed. the Star Wars name SPKLET was carried here by the command number, which meant another sound there"
+  },
+  "B0:C51C": {
+   "name": "spk_cmd_0d",
+   "desc": "sound stub: sends command $0D through DOXMT, which on ESB's sound board is speech, phrase 6 of its table. sent by PHISG1 when the start switch is accepted. the Star Wars name SPKLOS was carried here by the command number, which meant another sound there"
+  },
+  "B0:C521": {
+   "name": "spk_cmd_0e",
+   "desc": "sound stub: sends command $0E through DOXMT, which on ESB's sound board is speech, phrase 19 of its table. sent by the probot part's setup in the waves with an even GM_WAV. the Star Wars name SPKR2N was carried here by the command number, which meant another sound there"
+  },
+  "B0:C526": {
+   "name": "spk_cmd_0f",
+   "desc": "sound stub: sends command $0F through DOXMT, which on ESB's sound board is speech, phrase 13 of its table. sent by the probot part's setup in the waves with an odd GM_WAV. the Star Wars name SPKR2T was carried here by the command number, which meant another sound there"
+  },
+  "B0:C52B": {
+   "name": "spk_cmd_10",
+   "desc": "sound stub: sends command $10 through DOXMT, which on ESB's sound board is speech, phrase 20 of its table. sent when the probot part ends in wave 3 (GM_WAV 2), and one of the four picked at random from wave 4 on (w1_end_spk). the Star Wars name SPKRED was carried here by the command number, which meant another sound there"
+  },
+  "B0:C530": {
+   "name": "spk_cmd_11",
+   "desc": "sound stub: sends command $11 through DOXMT, which on ESB's sound board is speech, phrase 22 of its table. one of the four speeches picked at random when the probot part ends from wave 4 on (w1_end_spk). the Star Wars name SPKREM was carried here by the command number, which meant another sound there"
+  },
+  "B0:C535": {
+   "name": "spk_cmd_12",
+   "desc": "sound stub: sends command $12 through DOXMT, which on ESB's sound board is speech, phrase 7 of its table. sent by page 1 (P1_9C4B) when the walkers' advance reaches its last mark (prog_count 0) in a wave with an even GM_WAV. the Star Wars name SPKSHK was carried here by the command number, which meant another sound there"
+  },
+  "B0:C53A": {
+   "name": "spk_cmd_13",
+   "desc": "sound stub: sends command $13 through DOXMT, which on ESB's sound board is the command that drops the speech still waiting in its queue (its SPKSKP). sent before a speech that must not wait: by the five dying phases, PHIEGM, the end of the probot part, DO1GAS and page 1 when a shot hits the ship. the Star Wars name SPKSIZ was carried here by the command number, which meant another sound there"
+  },
+  "B0:C53F": {
+   "name": "spk_cmd_14",
+   "desc": "sound stub: sends command $14 through DOXMT, which on ESB's sound board is speech, phrase 18 of its table. sent by page 1 (P1_95BE) when the third Jedi letter is awarded. the Star Wars name SPKSKP was carried here by the command number, which meant another sound there"
+  },
+  "B0:C544": {
+   "name": "spk_cmd_15",
+   "desc": "sound stub: sends command $15 through DOXMT, which on ESB's sound board is speech, phrase 14 of its table. sent by page 1 (P1_9C50) when the walkers' advance reaches its last mark in a wave with an odd GM_WAV. the Star Wars name SPKSTA was carried here by the command number, which meant another sound there"
+  },
+  "B0:C549": {
+   "name": "spk_cmd_16",
+   "desc": "sound stub: sends command $16 through DOXMT, which on ESB's sound board is speech, phrase 21 of its table. sent when the probot part ends in wave 1 (GM_WAV 0), and one of the four picked at random from wave 4 on (w1_end_spk). the Star Wars name SPKSTR was carried here by the command number, which meant another sound there"
+  },
+  "B0:C54E": {
+   "name": "spk_cmd_17",
+   "desc": "sound stub: sends command $17 through DOXMT, which on ESB's sound board is speech, phrase 11 of its table. sent by page 1 (P1_9C3C) when the walkers' advance passes its first mark (prog_count 3) while $4CD6 is 0. the Star Wars name SPKTHI was carried here by the command number, which meant another sound there"
+  },
+  "B0:C553": {
+   "name": "spk_cmd_18",
+   "desc": "sound stub: sends command $18 through DOXMT, which on ESB's sound board is speech, phrase 8 of its table. sent by the walker part's setup. the Star Wars name SPKTRU was carried here by the command number, which meant another sound there"
+  },
+  "B0:C558": {
+   "name": "spk_cmd_19",
+   "desc": "sound stub: sends command $19 through DOXMT, which on ESB's sound board is speech, phrase 24 of its table. sent by page 1 (P1_94E4), once a part, when a shot hits the ship while its shield still glows, in the probot and walker parts. the Star Wars name SPKUSE was carried here by the command number, which meant another sound there"
+  },
+  "B0:C55D": {
+   "name": "spk_cmd_1a",
+   "desc": "sound stub: sends command $1A through DOXMT, which on ESB's sound board is speech, phrase 16 of its table. sent at frame 8 of dying in the probot part, in the walker part and in the plain dying phase. the Star Wars name SPKYAU was carried here by the command number, which meant another sound there"
+  },
+  "B0:C562": {
+   "name": "spk_cmd_1b",
+   "desc": "sound stub: sends command $1B through DOXMT, which on ESB's sound board is speech, phrase 32 of its table. sent at frame 8 of dying in the TIE fighter and asteroid parts. the Star Wars name PMBEN was carried here by the command number, which meant another sound there"
+  },
+  "B0:C567": {
+   "name": "spk_cmd_1c",
+   "desc": "sound stub: sends command $1C through DOXMT, which on ESB's sound board is speech, phrase 26 of its table. sent by the asteroid part's setup in wave 1 (GM_WAV 0). the Star Wars name PMCNT was carried here by the command number, which meant another sound there"
+  },
+  "B0:C56C": {
+   "name": "spk_cmd_1d",
+   "desc": "sound stub: sends command $1D through DOXMT, which on ESB's sound board is speech, phrase 29 of its table. sent by page 1 (P1_94BD) at the first enemy shot that hits the ship in the TIE fighter part. the Star Wars name PMDAR was carried here by the command number, which meant another sound there"
+  },
+  "B0:C571": {
+   "name": "spk_cmd_1e",
+   "desc": "sound stub: sends command $1E through DOXMT, which on ESB's sound board is speech, phrases 35 and 36 of its table. sent by PHEEGM when a game without high score or continue offer ended in the probot or walker part. the Star Wars name PMDES was carried here by the command number, which meant another sound there"
+  },
+  "B0:C576": {
+   "name": "spk_cmd_1f",
+   "desc": "sound stub: sends command $1F through DOXMT, which on ESB's sound board is speech, phrase 34 of its table. sent by the asteroid part's setup, after command $22, in the waves with an even GM_WAV from 2 on. the Star Wars name PMEND was carried here by the command number, which meant another sound there"
+  },
+  "B0:C57B": {
+   "name": "spk_cmd_20",
+   "desc": "sound stub: sends command $20 through DOXMT, which on ESB's sound board is speech, phrase 27 of its table. sent by phe_asteroids 40 frames before the asteroid part ends. the Star Wars name PM4TH was carried here by the command number, which meant another sound there"
+  },
+  "B0:C580": {
+   "name": "spk_cmd_21",
+   "desc": "sound stub: sends command $21 through DOXMT, which on ESB's sound board is speech, phrase 30 of its table. sent by DO1GAS when the last shield is lost in the TIE fighter and asteroid parts. the Star Wars name PMREB was carried here by the command number, which meant another sound there"
+  },
+  "B0:C585": {
+   "name": "spk_cmd_22",
+   "desc": "sound stub: sends command $22 through DOXMT, which on ESB's sound board is speech, phrase 37 of its table. sent by the asteroid part's setup in the waves with an even GM_WAV from 2 on. the Star Wars name PMRRP was carried here by the command number, which meant another sound there"
+  },
+  "B0:C58A": {
+   "name": "spk_cmd_23",
+   "desc": "sound stub: sends command $23 through DOXMT, which on ESB's sound board is speech, phrase 31 of its table. sent by wave2_exit_init when the walker part is over. the Star Wars name PMSF2 was carried here by the command number, which meant another sound there"
+  },
+  "B0:C58F": {
+   "name": "spk_cmd_24",
+   "desc": "sound stub: sends command $24 through DOXMT, which on ESB's sound board is speech, phrase 25 of its table. sent by the TIE fighter part's setup. the Star Wars name PMTH5 was carried here by the command number, which meant another sound there"
+  },
+  "B0:C594": {
+   "name": "spk_cmd_25",
+   "desc": "sound stub: sends command $25 through DOXMT, which on ESB's sound board is speech, phrase 38 of its table. sent by page 1 (P1_94C9) at the first enemy shot that hits the ship in the asteroid part. the Star Wars name PMTHB was carried here by the command number, which meant another sound there"
+  },
+  "B0:C599": {
+   "name": "spk_cmd_26",
+   "desc": "sound stub: sends command $26 through DOXMT, which on ESB's sound board is speech, phrase 39 of its table. sent by the asteroid part's setup in the waves with an odd GM_WAV. the Star Wars name AUDCR was carried here by the command number, which meant another sound there"
+  },
+  "B0:C59E": {
+   "name": "spk_cmd_27",
+   "desc": "sound stub: sends command $27 through DOXMT, which on ESB's sound board is speech, phrase 33 of its table. sent by page 1 (P1_94E9), once a part, when a shot hits the ship while its shield still glows, in the TIE fighter and asteroid parts. the Star Wars name AUDDF was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5A3": {
+   "name": "spk_cmd_28",
+   "desc": "sound stub: sends command $28 through DOXMT, which on ESB's sound board is speech, phrase 40 of its table. nothing calls this stub. the sound board says it only when no speech is under way. the Star Wars name AUDDR was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5A8": {
+   "name": "tune_cmd_29",
+   "desc": "sound stub: sends command $29 through DOXMT, which on ESB's sound board is a tune (the sound board's tunes 35-38, melody not identified). sent by the asteroid part's setup while jedi_time is under $80, and one of the five attract tunes of TMUSIC. the Star Wars name AUDNAY was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5AD": {
+   "name": "tune_cmd_2a",
+   "desc": "sound stub: sends command $2A through DOXMT, which on ESB's sound board is a tune, Ben's theme (tunes 7-10). sent by page 1 (P1_95E5) when the fourth Jedi letter is earned, and one of the five attract tunes of TMUSIC. the Star Wars name AUDPB was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5B2": {
+   "name": "tune_cmd_2b",
+   "desc": "sound stub: sends command $2B through DOXMT, which on ESB's sound board is a tune, the Imperial March (tunes 15-18). sent by the walker part's setup while jedi_time is under $80, and one of the five attract tunes of TMUSIC. the Star Wars name AUDPBZ was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5B7": {
+   "name": "tune_cmd_2c",
+   "desc": "sound stub: sends command $2C through DOXMT, which on ESB's sound board is a tune (tunes 23-26, melody not identified). sent by the TIE fighter part's setup while jedi_time is under $80. the Star Wars name AUDPF was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5BC": {
+   "name": "tune_cmd_2d",
+   "desc": "sound stub: sends command $2D through DOXMT, which on ESB's sound board is a tune, descending semitone scales (tunes 1-4). nothing calls this stub. the Star Wars name AUDPH was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5C1": {
+   "name": "tune_cmd_2e",
+   "desc": "sound stub: sends command $2E through DOXMT, which on ESB's sound board is a tune, the Star Wars main theme (tunes 27-30). sent by the probot part's setup, and one of the five attract tunes of TMUSIC. the Star Wars name AUDPS was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5C6": {
+   "name": "tune_cmd_2f",
+   "desc": "sound stub: sends command $2F through DOXMT, which on ESB's sound board is a tune, the rhythm figure of the Imperial March looped (tunes 43-46). sent by launch_init for the opening text. the Star Wars name AUDRC was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5CB": {
+   "name": "tune_cmd_30",
+   "desc": "sound stub: sends command $30 through DOXMT, which on ESB's sound board is a tune (tunes 39-42, by its notes perhaps Yoda's theme). sent by PHEEGM when a game ends without high score or continue offer. the Star Wars name AUDRD was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5D0": {
+   "name": "tune_cmd_31",
+   "desc": "sound stub: sends command $31 through DOXMT, which on ESB's sound board is a tune (tunes 31-34, melody not identified). sent by PHIENT when the initials entry starts, and one of the five attract tunes of TMUSIC. the Star Wars name AUDRS was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5D5": {
+   "name": "aud_cmd_32",
+   "desc": "sound stub: sends command $32 through doxmt_gated, which on ESB's sound board is the effect of Atari's table CR0, crash, which Star Wars' AUDCR requested. sent by pages 0 and 1 (P0_914F, P1_89AA) when the ship runs into a walker. the Star Wars name AUDRY was carried here by the command number, which meant another sound there"
+  },
+  "B0:C5DA": {
+   "name": "aud_cmd_33",
+   "desc": "sound stub: sends command $33 through doxmt_gated, which on ESB's sound board is the effect of Atari's table DF0, the final explosion, which Star Wars' AUDDF requested. sent by page 1 (P1_9C28) when the walkers' advance reaches its last mark (prog_count 0)"
+  },
+  "B0:C5DF": {
+   "name": "aud_cmd_34",
+   "desc": "sound stub: sends command $34 through DOXMT, which on ESB's sound board is the effect of Atari's table NAY0, nay - test failed, which Star Wars' AUDNAY requested. nothing calls this stub: the self test sends $34 itself as its error sound"
+  },
+  "B0:C5E4": {
+   "name": "aud_cmd_35",
+   "desc": "sound stub: sends command $35 through doxmt_gated, which on ESB's sound board is the effect of Atari's table PB0, pass-by, which Star Wars' AUDPB requested. sent by S2VW (pages 2 and 3) when a ship starts a pass-by"
+  },
+  "B0:C5E9": {
+   "name": "aud_cmd_36",
+   "desc": "sound stub: sends command $36 through DOXMT, which on ESB's sound board is the table PBZ0, which ends the pass-by sound, as Star Wars' AUDPBZ did. sent by XPSA (P3_8A3D) when the ship that explodes is the one passing by. not gated by snd_mute. the self test's sound test leaves it out"
+  },
+  "B0:C5EE": {
+   "name": "aud_cmd_37",
+   "desc": "sound stub: sends command $37 through doxmt_gated, which on ESB's sound board is the effect of Atari's table PF0, tower pfffts, which Star Wars' AUDPF requested. nothing calls this stub"
+  },
+  "B0:C5F3": {
+   "name": "aud_cmd_38",
+   "desc": "sound stub: sends command $38 through doxmt_gated, which on ESB's sound board is the effect of Atari's table PH0, port hole shot, which Star Wars' AUDPH requested. nothing in bank 0 or the pages calls this stub. bank 1's copy is called from the initials entry"
+  },
+  "B0:C5F8": {
+   "name": "aud_cmd_39",
+   "desc": "sound stub: sends command $39 through doxmt_gated, which on ESB's sound board is the effect of Atari's table PS0, short pass-by, which Star Wars' AUDPS requested. sent by S2VW (pages 2 and 3) when the ship passing by starts to move away"
+  },
+  "B0:C5FD": {
+   "name": "aud_cmd_3a",
+   "desc": "sound stub: sends command $3A through doxmt_gated, which on ESB's sound board is the effect of Atari's table SH0, shield, which Star Wars' AUDSH requested. sent by DO1GAS when a shield is lost, by page 1 (P1_94FE) when a shot hits the ship and by page 2 (P2_9AF3) when an asteroid does"
+  },
+  "B0:C602": {
+   "name": "aud_cmd_3b",
+   "desc": "sound stub: sends command $3B through doxmt_gated, which on ESB's sound board is the effect of Atari's table SS0, shoot shots, which Star Wars' AUDSS requested. sent by page 1 (P1_9527) when the lazar destroys an enemy shot and by page 3 (P3_9D23) when it hits a probot transmission"
+  },
+  "B0:C607": {
+   "name": "aud_cmd_3c",
+   "desc": "sound stub: sends command $3C through doxmt_gated, which on ESB's sound board is the effect of Atari's table SX0, small explosion, which Star Wars' AUDSX requested. sent by page 1 (P1_8E75) when an AT-ST is destroyed and by page 3 (CPHTSA, XPSA) when a TIE fighter is hit"
+  },
+  "B0:C60C": {
+   "name": "aud_cmd_3d",
+   "desc": "sound stub: sends command $3D through doxmt_gated, which on ESB's sound board is the effect of Atari's table XL0, which Star Wars' AUDTC requested for the TIE fighter cannon. sent by page 1 when a TIE fighter (P1_8F82) or a probot (P1_90C6) fires a shot"
+  },
+  "B0:C611": {
+   "name": "aud_cmd_3e",
+   "desc": "sound stub: sends command $3E through doxmt_gated, which on ESB's sound board is the table XLZ0, which ends the sound of command $3D, as Star Wars' AUDTCZ did. sent by page 1 (P1_9524) when the lazar destroys an enemy shot. the self test's sound test leaves it out"
+  },
+  "B0:C616": {
+   "name": "aud_cmd_3f",
+   "desc": "sound stub: sends command $3F through doxmt_gated, which on ESB's sound board is the effect of Atari's table BL0, the player's laser blast, which Star Wars' AUDXL requested. sent by TSTLAZ (P3_95BA) when the lazars fire in the TIE fighter and asteroid parts"
+  },
+  "B0:C61B": {
+   "name": "aud_cmd_40",
+   "desc": "sound stub: sends command $40 through DOXMT, which on ESB's sound board is the effect of Atari's table YEA0, yea - test successful, which Star Wars' AUDYEA requested. nothing calls this stub: the self test sends $40 itself as its no-error sound"
+  },
+  "B0:C620": {
+   "name": "aud_cmd_41",
+   "desc": "sound stub: sends command $41 through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, noise, about 0.4 s). sent by page 1 when an AT-AT (P1_8FEE) or an AT-ST (P1_905A) fires a shot"
+  },
+  "B0:C625": {
+   "name": "aud_cmd_42",
+   "desc": "sound stub: sends command $42 through doxmt_gated, which on ESB's sound board is an effect ESB added (1 channel, about 0.4 s). nothing calls this stub"
+  },
+  "B0:C62A": {
+   "name": "aud_cmd_43",
+   "desc": "sound stub: sends command $43 through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, pure tone, about 2.5 s). sent by page 3 (P3_995A) when a probot launches a transmission"
+  },
+  "B0:C62F": {
+   "name": "aud_cmd_44",
+   "desc": "sound stub: sends command $44 through DOXMT, which on ESB's sound board is a table of end marks that silences the two channels of commands $43 and $45. sent by page 3 (P3_9D20) when the lazar hits a transmission and no other transmission is live. not gated by snd_mute. the self test's sound test leaves it out"
+  },
+  "B0:C634": {
+   "name": "aud_cmd_45",
+   "desc": "sound stub: sends command $45 through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, noise, about 6.1 s). sent by wave2_exit_init when the walker part is over"
+  },
+  "B0:C639": {
+   "name": "aud_cmd_46",
+   "desc": "sound stub: sends command $46 through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, pure tone, about 0.8 s). sent by page 1 (P1_9A02) just before flash_fade is set to $7F, not while a training manual page is shown"
+  },
+  "B0:C63E": {
+   "name": "aud_cmd_47",
+   "desc": "sound stub: sends command $47 through doxmt_gated, which on ESB's sound board is an effect ESB added (3 channels, noise, about 4.8 s). sent by launch_init for the opening text"
+  },
+  "B0:C643": {
+   "name": "aud_cmd_48",
+   "desc": "sound stub: sends command $48 through doxmt_gated, which on ESB's sound board is an effect ESB added (1 channel, about 1.1 s). sent by page 1 (P1_9C2D) when the walkers' advance passes a mark that is not the last"
+  },
+  "B0:C648": {
+   "name": "aud_cmd_49",
+   "desc": "sound stub: sends command $49 through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, noise, about 0.9 s). sent by page 2 (P2_9AF6) when an asteroid hits the ship"
+  },
+  "B0:C64D": {
+   "name": "aud_cmd_4a",
+   "desc": "sound stub: sends command $4A through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, noise, about 4.5 s). sent by phi_jedi_award when the asteroid field is passed"
+  },
+  "B0:C652": {
+   "name": "aud_cmd_4b",
+   "desc": "sound stub: sends command $4B through doxmt_gated, which on ESB's sound board is an effect ESB added (1 channel, noise, about 2.8 s). sent by page 0 (P0_95BA) where $4BFE is counted down"
+  },
+  "B0:C657": {
+   "name": "aud_cmd_4c",
+   "desc": "sound stub: sends command $4C through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, pure tone, about 0.7 s). sent by scr_legs_bonus when the player flies through an AT-AT's legs"
+  },
+  "B0:C65C": {
+   "name": "aud_cmd_4d",
+   "desc": "sound stub: sends command $4D through doxmt_gated, which on ESB's sound board is an effect ESB added (1 channel, about 0.2 s). sent by TSTLAZ (P3_95B5) when the lazars fire in the probot and walker parts"
+  },
+  "B0:C661": {
+   "name": "aud_cmd_4e",
+   "desc": "sound stub: sends command $4E through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, about 0.9 s). sent by page 2 (P2_9327) when a probot is shot down"
+  },
+  "B0:C666": {
+   "name": "aud_cmd_4f",
+   "desc": "sound stub: sends command $4F through doxmt_gated, which on ESB's sound board is an effect ESB added (1 channel, about 0.9 s). sent by page 0 (P0_9927)"
+  },
+  "B0:C66B": {
+   "name": "aud_cmd_50",
+   "desc": "sound stub: sends command $50 through doxmt_gated, which on ESB's sound board is an effect ESB added (1 channel, about 6.1 s). sent by page 1 (P1_963F), once, when jedi_time falls under $60"
+  },
+  "B0:C670": {
+   "name": "aud_cmd_51",
+   "desc": "sound stub: sends command $51 through doxmt_gated, which on ESB's sound board is an effect ESB added (2 channels, noise, about 1.1 s). sent by page 0 (P0_904A) when an AT-AT is destroyed. the last command the self test's sound test plays"
+  },
+  "B0:C675": {
+   "name": "aud_cmd_52",
+   "desc": "sound stub: sends command $52 through DOXMT, which on ESB's sound board is a command it has no routine for: its command table ends at $51 and the word it takes for $52 is the ROM's checksum word. sent by page 1 (P1_962A) when jedi_time runs out. not gated by snd_mute. the self test's sound test leaves it out"
+  },
+  "B0:E779": {
+   "desc": "as mes_lines_scroll but each line's colour word takes only its high byte from mes_colour_tab and its brightness from ph_col_brt, so the whole text can be faded. Used by VWMES2"
+  },
+  "B0:F4E3": {
+   "name": "snd_test",
+   "desc": "self test state 2, the sound test, which ESB put where Star Wars has its checker board state: draws the screen boundary, the messages SOUND TEST and SOUND and the index of the chosen sound, and sends the command from sound_test_tab when snd_test_tmr runs out"
+  },
+  "B0:F56F": {
+   "name": "SCHKR",
+   "desc": "Star Wars' SCHKR, the checker board state of the self test, reached through the state table: the JSRL to the checker pattern, then GETBAK"
+  },
+  "B1:6530": {
+   "name": "doxmt_gated_b1",
+   "desc": "bank 1's copy of doxmt_gated: sends sound command A through DOXMT_B1 only while snd_mute is zero"
+  },
+  "B1:6540": {
+   "name": "spk_cmd_03_b1",
+   "desc": "bank 1's copy of spk_cmd_03: sends sound command $03 through DOXMT_B1"
+  },
+  "B1:6545": {
+   "name": "spk_cmd_04_b1",
+   "desc": "bank 1's copy of spk_cmd_04: sends sound command $04 through DOXMT_B1"
+  },
+  "B1:654A": {
+   "name": "spk_cmd_05_b1",
+   "desc": "bank 1's copy of spk_cmd_05: sends sound command $05 through DOXMT_B1"
+  },
+  "B1:654F": {
+   "name": "spk_cmd_06_b1",
+   "desc": "bank 1's copy of spk_cmd_06: sends sound command $06 through DOXMT_B1"
+  },
+  "B1:6554": {
+   "name": "spk_cmd_07_b1",
+   "desc": "bank 1's copy of spk_cmd_07: sends sound command $07 through DOXMT_B1"
+  },
+  "B1:6559": {
+   "name": "spk_cmd_08_b1",
+   "desc": "bank 1's copy of spk_cmd_08: sends sound command $08 through DOXMT_B1"
+  },
+  "B1:655E": {
+   "name": "spk_cmd_09_b1",
+   "desc": "bank 1's copy of spk_cmd_09: sends sound command $09 through DOXMT_B1"
+  },
+  "B1:6563": {
+   "name": "spk_cmd_0a_b1",
+   "desc": "bank 1's copy of spk_cmd_0a: sends sound command $0A through DOXMT_B1"
+  },
+  "B1:6568": {
+   "name": "spk_cmd_0b_b1",
+   "desc": "bank 1's copy of spk_cmd_0b: sends sound command $0B through DOXMT_B1"
+  },
+  "B1:656D": {
+   "name": "spk_cmd_0c_b1",
+   "desc": "bank 1's copy of spk_cmd_0c: sends sound command $0C through DOXMT_B1"
+  },
+  "B1:6572": {
+   "name": "spk_cmd_0d_b1",
+   "desc": "bank 1's copy of spk_cmd_0d: sends sound command $0D through DOXMT_B1"
+  },
+  "B1:6577": {
+   "name": "spk_cmd_0e_b1",
+   "desc": "bank 1's copy of spk_cmd_0e: sends sound command $0E through DOXMT_B1"
+  },
+  "B1:657C": {
+   "name": "spk_cmd_0f_b1",
+   "desc": "bank 1's copy of spk_cmd_0f: sends sound command $0F through DOXMT_B1"
+  },
+  "B1:6581": {
+   "name": "spk_cmd_10_b1",
+   "desc": "bank 1's copy of spk_cmd_10: sends sound command $10 through DOXMT_B1"
+  },
+  "B1:6586": {
+   "name": "spk_cmd_11_b1",
+   "desc": "bank 1's copy of spk_cmd_11: sends sound command $11 through DOXMT_B1"
+  },
+  "B1:658B": {
+   "name": "spk_cmd_12_b1",
+   "desc": "bank 1's copy of spk_cmd_12: sends sound command $12 through DOXMT_B1"
+  },
+  "B1:6590": {
+   "name": "spk_cmd_13_b1",
+   "desc": "bank 1's copy of spk_cmd_13: sends sound command $13 through DOXMT_B1"
+  },
+  "B1:6595": {
+   "name": "spk_cmd_14_b1",
+   "desc": "bank 1's copy of spk_cmd_14: sends sound command $14 through DOXMT_B1"
+  },
+  "B1:659A": {
+   "name": "spk_cmd_15_b1",
+   "desc": "bank 1's copy of spk_cmd_15: sends sound command $15 through DOXMT_B1"
+  },
+  "B1:659F": {
+   "name": "spk_cmd_16_b1",
+   "desc": "bank 1's copy of spk_cmd_16: sends sound command $16 through DOXMT_B1"
+  },
+  "B1:65A4": {
+   "name": "spk_cmd_17_b1",
+   "desc": "bank 1's copy of spk_cmd_17: sends sound command $17 through DOXMT_B1"
+  },
+  "B1:65A9": {
+   "name": "spk_cmd_18_b1",
+   "desc": "bank 1's copy of spk_cmd_18: sends sound command $18 through DOXMT_B1"
+  },
+  "B1:65AE": {
+   "name": "spk_cmd_19_b1",
+   "desc": "bank 1's copy of spk_cmd_19: sends sound command $19 through DOXMT_B1"
+  },
+  "B1:65B3": {
+   "name": "spk_cmd_1a_b1",
+   "desc": "bank 1's copy of spk_cmd_1a: sends sound command $1A through DOXMT_B1"
+  },
+  "B1:65B8": {
+   "name": "spk_cmd_1b_b1",
+   "desc": "bank 1's copy of spk_cmd_1b: sends sound command $1B through DOXMT_B1"
+  },
+  "B1:65BD": {
+   "name": "spk_cmd_1c_b1",
+   "desc": "bank 1's copy of spk_cmd_1c: sends sound command $1C through DOXMT_B1"
+  },
+  "B1:65C2": {
+   "name": "spk_cmd_1d_b1",
+   "desc": "bank 1's copy of spk_cmd_1d: sends sound command $1D through DOXMT_B1"
+  },
+  "B1:65C7": {
+   "name": "spk_cmd_1e_b1",
+   "desc": "bank 1's copy of spk_cmd_1e: sends sound command $1E through DOXMT_B1"
+  },
+  "B1:65CC": {
+   "name": "spk_cmd_1f_b1",
+   "desc": "bank 1's copy of spk_cmd_1f: sends sound command $1F through DOXMT_B1"
+  },
+  "B1:65D1": {
+   "name": "spk_cmd_20_b1",
+   "desc": "bank 1's copy of spk_cmd_20: sends sound command $20 through DOXMT_B1"
+  },
+  "B1:65D6": {
+   "name": "spk_cmd_21_b1",
+   "desc": "bank 1's copy of spk_cmd_21: sends sound command $21 through DOXMT_B1"
+  },
+  "B1:65DB": {
+   "name": "spk_cmd_22_b1",
+   "desc": "bank 1's copy of spk_cmd_22: sends sound command $22 through DOXMT_B1"
+  },
+  "B1:65E0": {
+   "name": "spk_cmd_23_b1",
+   "desc": "bank 1's copy of spk_cmd_23: sends sound command $23 through DOXMT_B1"
+  },
+  "B1:65E5": {
+   "name": "spk_cmd_24_b1",
+   "desc": "bank 1's copy of spk_cmd_24: sends sound command $24 through DOXMT_B1"
+  },
+  "B1:65EA": {
+   "name": "spk_cmd_25_b1",
+   "desc": "bank 1's copy of spk_cmd_25: sends sound command $25 through DOXMT_B1"
+  },
+  "B1:65EF": {
+   "name": "spk_cmd_26_b1",
+   "desc": "bank 1's copy of spk_cmd_26: sends sound command $26 through DOXMT_B1"
+  },
+  "B1:65F4": {
+   "name": "spk_cmd_27_b1",
+   "desc": "bank 1's copy of spk_cmd_27: sends sound command $27 through DOXMT_B1"
+  },
+  "B1:65F9": {
+   "name": "spk_cmd_28_b1",
+   "desc": "bank 1's copy of spk_cmd_28: sends sound command $28 through DOXMT_B1"
+  },
+  "B1:65FE": {
+   "name": "tune_cmd_29_b1",
+   "desc": "bank 1's copy of tune_cmd_29: sends sound command $29 through DOXMT_B1"
+  },
+  "B1:6603": {
+   "name": "tune_cmd_2a_b1",
+   "desc": "bank 1's copy of tune_cmd_2a: sends sound command $2A through DOXMT_B1"
+  },
+  "B1:6608": {
+   "name": "tune_cmd_2b_b1",
+   "desc": "bank 1's copy of tune_cmd_2b: sends sound command $2B through DOXMT_B1"
+  },
+  "B1:660D": {
+   "name": "tune_cmd_2c_b1",
+   "desc": "bank 1's copy of tune_cmd_2c: sends sound command $2C through DOXMT_B1"
+  },
+  "B1:6612": {
+   "name": "tune_cmd_2d_b1",
+   "desc": "bank 1's copy of tune_cmd_2d: sends sound command $2D through DOXMT_B1"
+  },
+  "B1:6617": {
+   "name": "tune_cmd_2e_b1",
+   "desc": "bank 1's copy of tune_cmd_2e: sends sound command $2E through DOXMT_B1"
+  },
+  "B1:661C": {
+   "name": "tune_cmd_2f_b1",
+   "desc": "bank 1's copy of tune_cmd_2f: sends sound command $2F through DOXMT_B1"
+  },
+  "B1:6621": {
+   "name": "tune_cmd_30_b1",
+   "desc": "bank 1's copy of tune_cmd_30: sends sound command $30 through DOXMT_B1"
+  },
+  "B1:6626": {
+   "name": "tune_cmd_31_b1",
+   "desc": "bank 1's copy of tune_cmd_31: sends sound command $31 through DOXMT_B1"
+  },
+  "B1:662B": {
+   "name": "aud_cmd_32_b1",
+   "desc": "bank 1's copy of aud_cmd_32: sends sound command $32 through doxmt_gated_b1"
+  },
+  "B1:6630": {
+   "name": "aud_cmd_33_b1",
+   "desc": "bank 1's copy of aud_cmd_33: sends sound command $33 through doxmt_gated_b1"
+  },
+  "B1:6635": {
+   "name": "aud_cmd_34_b1",
+   "desc": "bank 1's copy of aud_cmd_34: sends sound command $34 through DOXMT_B1"
+  },
+  "B1:663A": {
+   "name": "aud_cmd_35_b1",
+   "desc": "bank 1's copy of aud_cmd_35: sends sound command $35 through doxmt_gated_b1"
+  },
+  "B1:663F": {
+   "name": "aud_cmd_36_b1",
+   "desc": "bank 1's copy of aud_cmd_36: sends sound command $36 through DOXMT_B1"
+  },
+  "B1:6644": {
+   "name": "aud_cmd_37_b1",
+   "desc": "bank 1's copy of aud_cmd_37: sends sound command $37 through doxmt_gated_b1"
+  },
+  "B1:6649": {
+   "name": "aud_cmd_38_b1",
+   "desc": "bank 1's copy of aud_cmd_38: sends sound command $38 through doxmt_gated_b1"
+  },
+  "B1:664E": {
+   "name": "aud_cmd_39_b1",
+   "desc": "bank 1's copy of aud_cmd_39: sends sound command $39 through doxmt_gated_b1"
+  },
+  "B1:6653": {
+   "name": "aud_cmd_3a_b1",
+   "desc": "bank 1's copy of aud_cmd_3a: sends sound command $3A through doxmt_gated_b1"
+  },
+  "B1:6658": {
+   "name": "aud_cmd_3b_b1",
+   "desc": "bank 1's copy of aud_cmd_3b: sends sound command $3B through doxmt_gated_b1"
+  },
+  "B1:665D": {
+   "name": "aud_cmd_3c_b1",
+   "desc": "bank 1's copy of aud_cmd_3c: sends sound command $3C through doxmt_gated_b1"
+  },
+  "B1:6662": {
+   "name": "aud_cmd_3d_b1",
+   "desc": "bank 1's copy of aud_cmd_3d: sends sound command $3D through doxmt_gated_b1"
+  },
+  "B1:6667": {
+   "name": "aud_cmd_3e_b1",
+   "desc": "bank 1's copy of aud_cmd_3e: sends sound command $3E through doxmt_gated_b1"
+  },
+  "B1:666C": {
+   "name": "aud_cmd_3f_b1",
+   "desc": "bank 1's copy of aud_cmd_3f: sends sound command $3F through doxmt_gated_b1"
+  },
+  "B1:6671": {
+   "name": "aud_cmd_40_b1",
+   "desc": "bank 1's copy of aud_cmd_40: sends sound command $40 through DOXMT_B1"
+  },
+  "B1:6676": {
+   "name": "aud_cmd_41_b1",
+   "desc": "bank 1's copy of aud_cmd_41: sends sound command $41 through doxmt_gated_b1"
+  },
+  "B1:667B": {
+   "name": "aud_cmd_42_b1",
+   "desc": "bank 1's copy of aud_cmd_42: sends sound command $42 through doxmt_gated_b1"
+  },
+  "B1:6680": {
+   "name": "aud_cmd_43_b1",
+   "desc": "bank 1's copy of aud_cmd_43: sends sound command $43 through doxmt_gated_b1"
+  },
+  "B1:6685": {
+   "name": "aud_cmd_44_b1",
+   "desc": "bank 1's copy of aud_cmd_44: sends sound command $44 through DOXMT_B1"
+  },
+  "B1:668A": {
+   "name": "aud_cmd_45_b1",
+   "desc": "bank 1's copy of aud_cmd_45: sends sound command $45 through doxmt_gated_b1"
+  },
+  "B1:668F": {
+   "name": "aud_cmd_46_b1",
+   "desc": "bank 1's copy of aud_cmd_46: sends sound command $46 through doxmt_gated_b1"
+  },
+  "B1:6694": {
+   "name": "aud_cmd_47_b1",
+   "desc": "bank 1's copy of aud_cmd_47: sends sound command $47 through doxmt_gated_b1"
+  },
+  "B1:6699": {
+   "name": "aud_cmd_48_b1",
+   "desc": "bank 1's copy of aud_cmd_48: sends sound command $48 through doxmt_gated_b1"
+  },
+  "B1:669E": {
+   "name": "aud_cmd_49_b1",
+   "desc": "bank 1's copy of aud_cmd_49: sends sound command $49 through doxmt_gated_b1"
+  },
+  "B1:66A3": {
+   "name": "aud_cmd_4a_b1",
+   "desc": "bank 1's copy of aud_cmd_4a: sends sound command $4A through doxmt_gated_b1"
+  },
+  "B1:66A8": {
+   "name": "aud_cmd_4b_b1",
+   "desc": "bank 1's copy of aud_cmd_4b: sends sound command $4B through doxmt_gated_b1"
+  },
+  "B1:66AD": {
+   "name": "aud_cmd_4c_b1",
+   "desc": "bank 1's copy of aud_cmd_4c: sends sound command $4C through doxmt_gated_b1"
+  },
+  "B1:66B2": {
+   "name": "aud_cmd_4d_b1",
+   "desc": "bank 1's copy of aud_cmd_4d: sends sound command $4D through doxmt_gated_b1"
+  },
+  "B1:66B7": {
+   "name": "aud_cmd_4e_b1",
+   "desc": "bank 1's copy of aud_cmd_4e: sends sound command $4E through doxmt_gated_b1"
+  },
+  "B1:66BC": {
+   "name": "aud_cmd_4f_b1",
+   "desc": "bank 1's copy of aud_cmd_4f: sends sound command $4F through doxmt_gated_b1"
+  },
+  "B1:66C1": {
+   "name": "aud_cmd_50_b1",
+   "desc": "bank 1's copy of aud_cmd_50: sends sound command $50 through doxmt_gated_b1"
+  },
+  "B1:66C6": {
+   "name": "aud_cmd_51_b1",
+   "desc": "bank 1's copy of aud_cmd_51: sends sound command $51 through doxmt_gated_b1"
+  },
+  "B1:66CB": {
+   "name": "aud_cmd_52_b1",
+   "desc": "bank 1's copy of aud_cmd_52: sends sound command $52 through DOXMT_B1"
+  }
+ },
+ "comments": {
+  "B0:6247": "phase $07: design team page (message $01), init",
+  "B0:6263": "phase $15 (PHS_BGN): begin a wave, init - wave number for the display, the level of each of the four parts from GM_WAV, falls into phase $16",
+  "B0:6267": "phase $17: probot part, entry - display list set 1, wave_type = 0, then the training manual (phase $43) if it was selected, else falls into the setup of phase $45",
+  "B0:6277": "phase $1F: walker part, entry - display list set 1, wave_type = 1, then the training manual (phase $43) if selected, else into the setup of phase $46 past its parameter init",
+  "B0:6283": "phase $25: TIE fighter part, entry - display list set 2, wave_type = 2, then the training manual (phase $43) if selected, else falls into the setup of phase $47",
+  "B0:628F": "phase $2B: asteroid part, entry - display list set 2, wave_type = 3, then the training manual (phase $43) if selected, else into the setup of phase $48 past its parameter init",
+  "B0:62A1": "phase $34: next wave, execute - GM_WAV + 1, difficulty adder raised in the first three waves, back to phase $15",
+  "B0:62C1": "phase $44: rebel training manual, execute - $190 frames or until $4CB8 is set, then phase $45 + wave_type",
+  "B0:62ED": "first credit: send the sound command of spk_cmd_0a",
+  "B0:631F": "at the extreme left the attract mode goes to the scoring page",
+  "B0:6780": "sound command of spk_cmd_0d",
+  "B0:67F5": "the spk_cmd_05 sound has not been sent this game",
+  "B0:68B4": "the starting wave: 0, 1 or 2",
+  "B0:68F0": "colour 1 at brightness $80",
+  "B0:6921": "JSRL to the first of the two pictures, at $2ABE",
+  "B0:6926": "JSRL to the second, at $2B1C",
+  "B0:6A75": "normal scale",
+  "B0:6B5B": "wave number shown is GM_WAV + 1, at most 99",
+  "B0:6BC0": "and B y = -1: face backwards",
+  "B0:6BF3": "odd GM_WAV: one speech, even: another",
+  "B0:6CEB": "the four speeches one of which ends wave 1 from GM_WAV 3 up",
+  "B0:6CFC": "speech by GM_WAV: 0, 1, 2, else at random",
+  "B0:70CA": "quota_astrd is this wave's bonus quota",
+  "B0:752D": "set up the training manual page of part wave_type",
+  "B0:799F": "side axis y (unit vector B,Y), high byte",
+  "B0:79D5": "y speed into the universe y position",
+  "B0:7A35": "x speed = forward x / 32",
+  "B0:7A6B": "side axis y (unit vector B,Y), high byte",
+  "B0:7AA1": "y speed into the universe y position",
+  "B0:7B01": "x speed = forward x / 32",
+  "B0:7B19": "y speed into the universe y position",
+  "B0:A84D": "GM_WAV 0 and 1 start at frame 260, the others at 360",
+  "B0:A897": "scale of the Executor here",
+  "B0:A89C": "JSRL to the Executor picture at $298E in the pseudo ROM",
+  "B0:AAAA": "centre",
+  "B0:AAAF": "normal scale",
+  "B0:AACD": "x -394 in the 8 digit layout",
+  "B0:AAD2": "JSRL to the wider box, for 8 digits",
+  "B0:AB3C": "y 492",
+  "B0:AB41": "x 264",
+  "B0:AB46": "scale of the wave number",
+  "B0:AB84": "0 probots, 1 walkers, 2 TIE fighters, 3 asteroids",
+  "B0:ABC0": "x 288",
+  "B0:ABF0": "message numbers by wave_type: PROBOTS, WALKERS, TIES, blank, blank",
+  "B0:AC82": "the gauge animates the loss of a shield",
+  "B0:AE54": "training manual scripts, 8 byte records in time order. bytes 0-1 the frame (PH_TIM) at which the record is due, byte 2 the opcode 0-6 (7 and up count as 6), then for 1 and 2 the message number in byte 4, for 3 the value in byte 4 and a RAM address in bytes 5-6, for 4 a word in bytes 3-4 and a RAM address in bytes 5-6, for 5 a routine address in bytes 3-4, byte 7 unused. LB189 runs at most one record a frame from the pointer $4CB6, so records with the same time run on successive frames. LB169 holds the script addresses: four sections (wave_type) of three pages ($4CB5). this one is probots page 1: the probot's parts",
+  "B0:B133": "the B.Y term of the player's matrix - phi_manual stores $40 in the same two bytes just before calling here",
+  "B0:B214": "red",
+  "B0:C4E0": "nothing calls this stub or the next one: the sound test sends $01 and $02 from its table",
+  "B0:C512": "nothing calls this stub",
+  "B0:C5A3": "nothing calls this stub",
+  "B0:C5BC": "nothing calls this stub",
+  "B0:C5DF": "nothing calls this stub",
+  "B0:C5E9": "not gated by snd_mute",
+  "B0:C5EE": "nothing calls this stub or the next one",
+  "B0:C61B": "nothing calls this stub",
+  "B0:C625": "nothing calls this stub",
+  "B0:CC0A": "message_tab, 3 bytes per message",
+  "B0:EC80": "the same colour with brightness gs_fade",
+  "B0:F399": "state 2: the sound test, where Star Wars has its checker board state",
+  "B0:F39F": "state 5: SCHKR",
+  "B0:F4E3": "JSRL to the screen boundary picture",
+  "B0:F522": "the $4D commands the sound test plays, in its order: $01, $02, $0B (the speech chip's warm start), then $03-$51 without $13, $36, $3E and $44"
+ },
+ "esb_notes": {
+  "B0:631B": "the sight at the extreme left goes to the scoring page (phases $03 and $04), at the extreme right to the high score table. free play gives 2 credits",
+  "B0:6C5F": "phase $1A, wave 1 play: views with vew_probot, ends the game through phi_probot_die when the shields are gone, moves shots, transmissions, glow, the shield gauge, explosions and the wave 1 objects (page 2 P2_877C), runs the Jedi time, turns and moves the player. at frame 20 it shows the Jedi letters. once the quota is met or 100 frames have passed the level climbs (wave1_level_up), and when prog_count reaches 4 it goes to phase $1B",
+  "B0:6D2B": "phase $1C: plays wave 1 on, as wave1_exec does without the level and indicator tests, until page 2 counts no live object record (w1_active 0), then goes to phase $1D",
+  "B0:70E3": "phase $48, the rest of the asteroid part's init, entered from the training manual phase (manual_next_ph) with new parameters and stars, and at L70E9 from phi_asteroids: sets the asteroids up on page 2 (P2_9561), forward speed $0100, fire_level from w4_level and diff_adder, timer and hit_said cleared, craft type 1, the part's tune while jedi_time is under $80 and a speech picked by GM_WAV (0, even, odd), then phase $2C",
+  "B0:72E4": "phase $35, init of the player's death in the probot part (the probot phases branch here when S_GAS goes minus), Star Wars' PHIS0D with a mute added: drops the waiting speech (spk_cmd_13), PHASE = $36, phase timer cleared, snd_mute = 1. falls into the execute half",
+  "B0:731F": "phase $37 (PHS_G0D), init of the player's death in the walker part (the walker phases branch here when S_GAS goes minus), Star Wars' PHIG0D with a mute added: drops the waiting speech (spk_cmd_13), PHASE = $38, phase timer cleared, snd_mute = 1. falls into the execute half",
+  "B0:7331": "phase $38, the death of the player in the walker part, Star Wars' PHEG0D: view vew_walker_die with the growing GAME OVER, shots still move, the glow is kept flashing, speech request spk_cmd_1a at frame 8, and after 40 frames PHASE = PHS_EGM",
+  "B0:735A": "phase $39, init of the player's death in the TIE fighter part (the TIE fighter phases branch here when S_GAS goes minus): drops the waiting speech (spk_cmd_13), PHASE = $3A, phase timer cleared, snd_mute = 1. falls into the execute half",
+  "B0:736C": "phase $3A, the death of the player in the TIE fighter part, Star Wars' PHES0D: view vew_tie_die with the growing GAME OVER, shots still move, the glow is kept flashing, the aliens' glow and the explosions run, and the craft rolls 4.48 degrees a frame. speech request spk_cmd_1b at frame 8, after 40 frames PHASE = PHS_EGM",
+  "B0:749C": "the page is message $31 (message from rebel command post, shoot your initials) and the tune of command $31 is started",
+  "B0:751F": "phase $43, init of a training manual page, entered from the init of a part when manual_on is set: new parameters and ground stars, the ship facing forward ($40 in s1_ax and s1_by), the page of section wave_type set up (manual_page_init), timer and man_done cleared, man_running bumped",
+  "B0:7676": "the twirl of the TIE fighter part (phase $26): Star Wars' STWSP1 with 8 tics of roll added every frame through s1_roll_add",
+  "B0:76A3": "the twirl of phase $28, while the TIE fighters run away: AIMDTH aims at the far object, the Executor",
+  "B0:76D5": "the routine ends once the limited step is in GD_ACT. the roll is not put into the ship's own vectors any more: bank_roll_u1 rolls the view by GD_ACT, and gd_unroll enters at L7728 to take the roll back",
+  "B0:7823": "the far object is the Executor, which VWDTHB draws straight ahead along +x",
+  "B0:78D0": "the player movement of the asteroid part: forward at MS_VX, sideways and up or down by the sight's x and y, and the star field viewer position moves with the ship",
+  "B0:7A2F": "the player movement of the walker part, the same code as smv_probot: x and y speed from the ship's forward axis / 32 plus a side slip by the sight's x, then smv_walker_adv",
+  "B0:7A38": "the y speed and side slip of the walker part's movement, the second half of SMVG0B",
+  "B0:A36F": "on a buffer overrun it also loads the pseudo vector ROM set again (load_vg_set)",
+  "B0:A3DC": "view of the flight out of the probot part (phase $1E): call for call the same as vew_probot",
+  "B0:A41B": "view of the player dying in the probot part (phase $36): score, Jedi letters, shields, ground stars, gun shots, the transmissions (page 3 P3_9B6D), the probots (page 2 P2_8FB7), the growing GAME OVER message (VWMOVR) and glow, no sight and no lazars",
+  "B0:A4E8": "view of the player dying in the walker part (phase $38): score, Jedi letters, shields, ground stars, gun shots, the walkers (page 1 P1_88FD, page 0 P0_891A), the growing GAME OVER message and glow",
+  "B0:A711": "view of phase $3E: score, Jedi letters, shields, the picture at the start of the pseudo ROM set and the growing GAME OVER message, no scene",
+  "B0:A729": "no caller found: a view with score, Jedi letters, shields, sight and cockpit, stars and glow only, the shape of Star Wars' VEWHPB without its Death Star",
+  "B0:A8A5": "views the Executor in the TIE fighter part: the far point straight ahead along +x is projected, its screen position kept in exec_y and exec_x, and the picture at $298E of the pseudo ROM drawn there at scale $7600",
+  "B0:AC7A": "takes one shield off S_GAS when a glow has been counted in GS_GLW and the last loss has finished, starts the loss animation (GS_HIT, gs_fade), sends the shield effect (aud_cmd_3a) and, at the last shield and at none, a speech that depends on wave_type",
+  "B0:ACD8": "the shield display: SHIELDS GONE flashing when S_GAS is gone and no loss is being shown, else one segment picture for each shield on either side of the top edge (shield_segs_left, shield_segs_right) in a colour from shield_colors, the segment just lost fading, then the word SHIELDS and the number",
+  "B0:B767": "only the first part of Star Wars' VWPLAN is left: the sideways shift of the cockpit from the sight's x, stored in LZ_GX and returned in U as the x word of a position vector. it is the first step of the cockpit list for craft type 0"
+ },
+ "ram_notes": {
+  "Q_FRC": "which of the four parts of a wave is being played: 0 probots, 1 walkers, 2 TIE fighters, 3 asteroid field (named wave_type by this file, which drops the symbol)",
+  "SWNEW": "in the game the first byte counts interrupts: the IRQ increments it and vw_wave_left shows it beyond the right screen limit and clears it. the self test uses the word as its edge catcher",
+  "SP_WAV": "level of the TIE fighter part: a copy of GM_WAV made by begin_act_init when a wave begins. twice it plus diff_adder is that part's fire_level",
+  "WV_LVL": "the starting wave select and the continue screen use it as the cursor flag: minus when the sight is on no target, else the wave the target stands for",
+  "S_GAS": "the shields left: 2 to 5 from the option switches at game start, one less for every hit that gets through, minus when the game is lost",
+  "BN_CNT": "counted up by bank 1's banner view (K66D0). PHEBNR leaves the banner phase when it reaches $200",
+  "WV_BGP": "the self test uses the same byte as DBNC3, the listing shows the game's name there (LF313)",
+  "WV_LP": "in the self test the same byte holds the pot channel 0 reading (LF27E, LF315, LF4A4)",
+  "WV_LIV": "in the self test the same byte is the debounce and auto repeat counter for stepping to the next sound (LF31F-LF362)"
+ },
+ "questions": [
+  "the names GM_DIF ($4C49), GM_BMP ($4C58) and Q_RTHV ($4CCA) that the b0 notes use are not symbols of the listing: the three addresses were bare. by the code $4C49 is Star Wars' GM_WAV (PHESDS stores the selected wave in it, PHIBGN makes the BCD wave number from it, PHENXT bumps it - B0:68B4, B0:6B5B, B0:72D7), so this file names it GM_WAV, drops the false GM_WAV = $508A and names $508A s1_by. $4C58 and $4CCA are ESB's own (quota_astrd, snd_mute). every text of the b0 files that used the three names is overridden here with the new names",
+  "by the same reasoning $4C5A is Star Wars' GM_DIF and $4C59 its GM_BMP (B0:6809 takes the difficulty option into $4C5A as PHESG1 does, B0:72CB-72D4 is PHENXT's LDA GM_BMP / INCA ... ADDA GM_BMP / STA GM_DIF), $4C4A is GM_DWAV and $4CD0 COINSP. they keep the annotators' lower-case names diff_adder, diff_step, wave_bcd and coin_spoken here, because the b0 texts used GM_DIF and GM_BMP for other addresses - the maintainer may want the Atari names",
+  "Q_FRC = $4C4F rests on one matched line, P3:95AE, where Star Wars' TSTLAZ has LDA Q_FRC / BNE / DEC Q_FRC and ESB has LDA $4C4F / CMPA #$02 / BCC to pick the laser sound. nothing else of the force flag is left, so this file drops the symbol and names the byte wave_type. if the maintainer keeps Q_FRC, remove it from sw_drop_symbols and the ram entry 4C4F - the ram_notes line for Q_FRC then applies, but the texts overridden here say wave_type",
+  "GS_LEN = $488B is dropped for the same kind of reason: its one vote is B0:AC84, which is Star Wars' STA GS_HIT (GAS NOW HANDLING BEING HIT), ESB having no GS_LEN store there",
+  "generator: a voted label symbol whose routine head was not matched is not placed, and a notes name equal to a voted symbol is refused. so B0:7B3E and B0:7B4D, which are S1RHPT and S1RHYW (4 votes each from their callers), have a description here but no name. the same holds for UNTWGD (B0:7728), TDTHZ (B0:684E), TINTZ (B0:6856), TRHTIC (B0:7CE3, inside the JSR at L7CE2) and XPSA (P3:8A31)",
+  "generator: PHIHIS and SCHKR are in sw_drop_symbols only to free the two names for the routines that really are Star Wars' PHIHIS (B0:66E9) and SCHKR (B0:F56F). if a dropped symbol cannot be given again by a notes file, B0:66E9 and B0:F56F lose their names and need hiscore_init and a lower-case name back",
+  "generator: the self test shares RAM with the game, and the listing prints the game's voted names there: $48C7 as WV_BGP at B0:F313 (it is DBNC3), $48C9 as WV_LP at B0:F27E, F315, F4A4 (pot channel 0 reading), $48CB as WV_LIV at B0:F31F-F362 (repeat counter for the next sound). the three symbols are right in the pages and must not be dropped, a RAM hint cannot override a voted name, so this needs a per-range alias. ram_notes say so for now",
+  "sound stubs: named by command number as asked (spk_cmd_03 .. aud_cmd_52, the bank 1 copies with _b1). by the sound board's tables the stubs for $32-$40 request the same effects as Star Wars' AUDCR, AUDDF, AUDNAY, AUDPB, AUDPBZ, AUDPF, AUDPH, AUDPS, AUDSH, AUDSS, AUDSX, AUDTC, AUDTCZ, AUDXL, AUDYEA in that order, $0B is its SPKI and $13 its SPKSKP, so those Atari names could be given to B0:C5D5-C61B, B0:C512 and B0:C53A in their place. AUDTST (B0:C4E0, $01) and PMTST (B0:C4E5, $02) are right and are kept. the constants IDSxxx, IDPxxx and IDAxxx of the dropped stubs are in sw_drop_symbols, IDANAY, IDAYEA, IDATST and IDPTST are kept",
+  "what the speech commands say is not known: the sound annotation gives phrase numbers only. the stub descriptions say when each is sent",
+  "B0:C675 aud_cmd_52 is sent when jedi_time runs out (P1:962A), but the sound board's command table ends at $51 and the word it uses for $52 is its ROM checksum ($9CA7, no ROM there). what the sound CPU does then is not settled",
+  "B0:6623: the two bytes $20 $0A are an unreachable BRA L662F (Star Wars has the same at its L6402). it has a header of its own in the listing, which it should not have",
+  "$4813: cleared once in PHISG2 (B0:67F1) next to S_BCCNT and not seen as a bare operand anywhere else. probably coin routine state reached by indexing, not named",
+  "$4D7B, read as a bare address at B0:6427, 64F8, 67A4, 6809 (and P1:95CD): the option byte the b0 notes call OPTS1 - bits 1-0 shields, bits 3-2 difficulty, bit 4 tested by the Jedi letter code, bit 6 attract music. it lies in the NVRAM image at EEROM and is left for the bank 1 annotation to name",
+  "$4C5C (written at B0:6C51) and $4C5E (written at B0:6E14) have no other use in any listing, not named. $4CD6, $4CDD, $4BFE, $4C81, $4C7C, $4CA5, $4CA7 are used by the pages only and are left for their annotation",
+  "phases $3D/$3E (B0:73FC, B0:740E) and phase $30 (second table entry of B0:7229): no code found that sets PHASE to them. B0:7750 gd_roll_apply, B0:77C7 gd_act_by_stick, B0:A729 vew_stars_only and B0:B734 VWSITC have no caller either",
+  "B0:75C0 loads $90 where the limit tested just before is $5A: it looks like a slip (decimal 90 written as hex), reached only for a starting wave above 81",
+  "the b0_6800 and b0_7000 notes disagree in their words, not in the facts: b0_6800 calls the four parts wave 1 to wave 4 and the whole a set of four waves, b0_7000 calls them wave types and the whole a wave, as the screen does (WAVE n). names from both are in the listing (w1_level, wave2_exec, phi_set_done, wave_type). this file says wave for GM_WAV and part for one of the four in what it writes, and leaves the others' prose alone",
+  "which objects page 2's wave 1 records and the two kinds of wave 2 records stand for is settled only by b0_b000's reading of the manual scripts (probots on page 2, AT-STs at $4A54 on page 1, AT-ATs at $4A87 on page 0). the b0_6800 descriptions that say 'the objects page 0 handles' are left as they are",
+  "B0:AC99 and B0:ACAC: DO1GAS speaks at zero shields only when wave_type is 2 or more and at one shield only when it is under 2. why the two tests are opposite is not settled",
+  "the far object of the TIE fighter part is taken to be the Executor (exec_x, exec_y): its display list at pseudo ROM $298E in set 2 (ROM $C202) is, after one colour word, the same data as the picture at $2B70 in set 0 (ROM $BCEC) that is shown with message $2C. what the seven-piece picture at vector ROM $34A2-$3646 (vw_shrink_pic) shows is not settled",
+  "B0:A342: the fourth entry of the set pointer table at LB97A is labelled DOXMT in the listing, a data word that happens to equal that address (set 3, never loaded with game data). B0:CCDD LDX #LCB39+2: the operand is TSPMAL - 2 * $D8, the alarm table indexed by story message number, not an address inside MESSOFF",
+  "B0:7DD2-7DD9, B0:A316-A31B, B0:7FFF, B0:C7D6: bytes no code was found to read (see the b0_7800 and b0_c4ca questions). whether the signature words of the self test are also what trims each ROM's checksum is not verified",
+  "bytes that are code but listed as data, and data listed as code, as the b0 notes report them: B0:B2FC (three LSRA RORB pairs), B0:B69E-B6B1 (four score routines), B0:F56F and B0:F9D2 are in hints.ENTRIES_MAIN now. B0:B365 is the real entry of TRANU1 (PSHS U), two bytes before the label. B0:B214, B0:B40B, B0:B453 and B0:B46B have routine headers though nothing enters there - this file drops the carried headers, the b0_b000 descriptions remain",
+  "GD_TWL = $4D78 has one vote and lies in the NVRAM image: bank 1 uses it (K716B, K7447-K744C) where the highest wave reached is kept. it looks like another false match and is left for the bank 1 annotation",
+  "the slapstic pages hold copies of the DOVG part of the IRQ handler (for example P0_9E2D-P0_9EDC). whether they ever run is not settled",
+  "regions: the RESET vector at $FFFE-$FFFF is a ROM address too, but a region cannot end at $10000 in four hex digits"
+ ]
+}

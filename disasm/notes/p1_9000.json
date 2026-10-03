@@ -1,0 +1,315 @@
+{
+ "about": "slapstic page 1 $9000-$97FF: the AT-ST's and the probot's shot starters with their fire tables, the enemy gun shots (move, view, draw, hit - Star Wars' WSGUNS changed), a dead remnant of Star Wars' S2VW, and the Jedi letters: award, force timer and display",
+ "routines": {
+  "P1:9011": {
+   "name": "atst_fire_try",
+   "desc": "decides whether the AT-ST at U fires, for P1_8FF7 in play. takes the gun_fire_tab entry of fire_level (held at 16), stores its first byte in byte 3 of the walker record - the count the caller tests for zero before it asks to fire again - and gives up with carry clear unless the random byte is above the entry's second byte. else gun_find_free looks for a free gun record from the entry's record downwards and the code falls into atst_shot_start. with no free record gun_find_free returns straight to this routine's caller, carry clear"
+  },
+  "P1:9031": {
+   "name": "atst_shot_start",
+   "desc": "starts an AT-ST shot in the gun record at X: timer $70, type $41 (live, and bit 6 that marks a walker's shot), move routine 3, aim offsets from gun_aim_error, position = the firing point the caller left in M_XT2, M_YT2, M_ZT2 minus the player's position, and the sound of aud_cmd_41. returns carry set. the training manual calls it with X = GUN to fire at once. the AT-AT's copy at P1_8FC5 differs only in move routine 2"
+  },
+  "P1:9063": {
+   "name": "probot_fire",
+   "desc": "the probot at U asks to fire a shot: called through maze entry MZ_8295 by page 2 (P2_9171, when byte 3 of the probot is 0) and by the training manual script of bank 0 (LB1D2). it begins with the slapstic's alternate sequence, so that the page select of the maze's return path selects page 2, the page of its caller. while a manual page is shown it starts the shot in the first gun record at once, else probot_fire_try decides. carry set if a shot was fired. a close copy of P1_8F16, P1_8F8B and P1_8FF7"
+  },
+  "P1:907D": {
+   "name": "probot_fire_try",
+   "desc": "decides whether the probot at U fires: as atst_fire_try, but with the probots' own table probot_fire_tab, 16 entries, fire_level held at 15. stores the entry's first byte in byte 3 of the probot record, needs the random byte above the entry's second byte and a free gun record from the entry's record downwards, then falls into probot_shot_start"
+  },
+  "P1:909D": {
+   "name": "probot_shot_start",
+   "desc": "starts a probot shot in the gun record at X: timer $70, type $01 (live), move routine 4, aim offsets from gun_aim_error, position = the firing point in M_XT2, M_YT2, M_ZT2 minus the player's position, and the sound of aud_cmd_3d. returns carry set"
+  },
+  "P1:90D2": {
+   "name": "gun_find_free",
+   "desc": "finds a free gun record: starts at X and goes down one 8 byte record at a time to GUN, returns with X and GN_PTR at the first record whose type byte is 0. if there is none it drops its return address and returns to the caller's caller with carry clear. Star Wars' TSTAVAIL searched upwards from X to GUNZ, here the start record is the highest one a level may use, so it limits how many shots can be in flight"
+  },
+  "P1:9168": {
+   "name": "gun_aim_error",
+   "desc": "sets the two aim offset bytes 6 and 7 of the gun record at X: when a 5 bit random number is below fire_level both get the random byte P_RND1, else both are 0 and the shot homes on the player exactly. gun_mov_home adds six times each byte, signed, to the y and z of the point it steers for"
+  },
+  "P1:9185": {
+   "name": "MVGUN",
+   "desc": "Star Wars' MVGUN, move guns, not matched because two instructions differ: for every gun record in use it calls the move routine of byte 4 through the table at P1_8EF2 (0 gun_mov_stay, 1 to 4 gun_mov_home). called every frame by the phases of all four parts through maze entry MZ_84CC. where Star Wars has SWI for a routine number out of range this code loads index 1, an odd offset into the table"
+  },
+  "P1:91A6": {
+   "name": "gun_timer",
+   "desc": "counts down the timer of the gun record at X, the common start of both move routines. when it runs out a shot that is neither hurt nor glowing becomes a hurt one (type bit $20 set, live and pretty bits cleared) with 8 frames left, so a shot that timed out bursts like one the player hit, and a hurt or glowing one is freed (type and timer 0). returns Z set only when the record was freed"
+  },
+  "P1:91C2": {
+   "name": "gun_mov_stay",
+   "desc": "move routine 0 (MOVS_ST, stay in place), reached through the table at P1_8EF2: only gun_timer. Star Wars' MOVST freed the record when the timer ran out"
+  },
+  "P1:91C5": {
+   "name": "gun_mov_home",
+   "desc": "move routines 1 to 4, reached through the table at P1_8EF2: after gun_timer it puts a point in the scratch block - the player's position from M_XT1, M_YT1, M_ZT1 with six times the aim offset bytes 6 and 7 added to y and z - runs matrix program $2A on it and moves the shot one eighth of the way from where it is to the result in M_XP, M_YP, M_ZP. it takes the place of Star Wars' MOVAM, which moved the shot one eighth of the way to 0,0,0"
+  },
+  "P1:952B": {
+   "name": "s2vw_remnant",
+   "desc": "not a routine: $952B-$9560 is the same on all four pages and is the end of Star Wars' S2VW (its L79E5 to L7A1B) from the middle of an instruction - the glow colour from TVWCL, the object's points and lines - followed by the first ten words of the table TVWCL and one stray byte. nothing refers to it and each page's own code ends just before it and starts again at $9561, so it looks like a leftover in the ROM image. the first four bytes $08 $ED $88 $15 are the operand of a cut-off ORA and STD $15,X, which the listing shows as ASL and EORA"
+  },
+  "P1:9561": {
+   "name": "jedi_clear",
+   "desc": "clears the Jedi letters: display state, animation scale and fade, the letter bits and the warning flag. called through maze entry MZ_842D by bank 0 at L63A8 and L6797, and by jedi_draw when the animation of the fourth letter has ended"
+  },
+  "P1:9573": {
+   "name": "jedi_award",
+   "desc": "awards a Jedi letter, called through maze entry MZ_81E4 by the kill that brings bonus_left to 0 in each part (pages 0, 1, 2, 3 and bank 0 L71D1). with bit 5 of the option byte $4D7B set the letters come in order, else it is the letter of the part played (J probots, E walkers, D TIE fighters, I asteroids). starts the letter's animation (jedi_show 1) and a speech, another one for the third letter. when all four are held it scores scr_jedi, starts the tune of tune_cmd_2a, sets jedi_done and, unless option bit 4 is set, starts the force period: jedi_time = $01C0 and jedi_count one up"
+  },
+  "P1:95F1": {
+   "name": "jedi_time_run",
+   "desc": "runs the Jedi force time down, called every frame by the playing phases through maze entry MZ_8403: takes the rate of jedi_rate_tab for jedi_count (held at 3) off the 24 bit time jedi_time, jedi_time_lo, jedi_frac, and at the end clears it and sends aud_cmd_52. once the time is under $60 it sends the warning sound aud_cmd_50, once. falls into jedi_on_update"
+  },
+  "P1:9645": {
+   "name": "jedi_on_update",
+   "desc": "makes jedi_on for this frame - 1 while jedi_time is not zero or a letter is growing into place (jedi_show 1), else 0 - and steps jedi_blink. the end of jedi_time_run, and called alone through maze entry MZ_8157 by the phases that do not run the time down"
+  },
+  "P1:9663": {
+   "name": "jedi_draw",
+   "desc": "draws the Jedi letters, called through maze entry MZ_816C by the playing phases and by the bank 0 screens from LA3AE on. with letters held and jedi_show not 0 it draws the four letters (jedi_letter_draw) and in state 1 steps the animation: jedi_scale up by 5 to $F0, then state 2, and if all four letters were held they are cleared, jedi_fade down by 3. while jedi_time runs it also draws the word JEDI (jedi_word_draw), blinking in the last $60 units and left out while GS_HIT is set, and the time frame (jedi_frame_draw)"
+  },
+  "P1:96D0": {
+   "name": "jedi_word_draw",
+   "desc": "draws the word JEDI at half size in the flash colour, 464 units above the centre, one letter at a time through P1_98E5: shown while the force time runs"
+  },
+  "P1:970B": {
+   "name": "jedi_frame_draw",
+   "desc": "draws the force time as a frame 448 wide and 180 high around the word JEDI, from its top left corner at y 550, x -224: the left side and the first jedi_time units of the bottom and top edges in the flash colour, the rest of the edges and the right side in colour 0, so the frame gets shorter from the right as the time runs out. jedi_time above $01C0 is cut to that. if $4C87 is not zero it draws the whole frame in green with that brightness on odd values and nothing on even ones"
+  },
+  "P1:97DA": {
+   "name": "jedi_letter_draw",
+   "desc": "draws Jedi letter jedi_idx. the beam goes to the home point (y 648, x 416), then the letter's strokes are drawn by P1_98E5 from absolute points at a scale, so a smaller scale pulls the letter towards the upper right corner. state 2: scale $7428, an earned letter in the flash colour, the others in colour 1 at brightness $80. state 1: the new letter jedi_new in the flash colour at scale $7200 + jedi_scale (held at $C8), shrinking into place, with lines from six of its points to the home point, the other letters full size in colour 1 at brightness jedi_fade. ends with centre and the default scale. runs on to $98E4"
+  }
+ },
+ "labels": {
+  "P1:90E4": "gun_fire_tab",
+  "P1:9128": "probot_fire_tab",
+  "P1:95ED": "jedi_bit_tab",
+  "P1:965B": "jedi_rate_tab",
+  "P1:97D6": "jedi_home_x",
+  "P1:97D8": "jedi_home_y"
+ },
+ "comments": {
+  "P1:9004": "manual page: fire from the first gun record at once",
+  "P1:9017": "levels above 16 use entry 16",
+  "P1:901D": "4 bytes an entry",
+  "P1:9021": "entry byte 0: the count the AT-ST must wait before it asks again",
+  "P1:9028": "entry byte 1: fire only when the random byte is above it",
+  "P1:902C": "entry word: the highest gun record this level may use",
+  "P1:902E": "free record from there down, or out to the caller with carry clear",
+  "P1:9031": "$70 frames to live",
+  "P1:9035": "live, bit 6: a walker's shot",
+  "P1:9039": "move routine 3",
+  "P1:9040": "the shot's block in math RAM",
+  "P1:9042": "firing point minus the player's position: the shot is kept relative to the player",
+  "P1:905D": "carry set: a shot was fired",
+  "P1:9060": "carry clear: none",
+  "P1:9065": "$9B5C+2: page 2",
+  "P1:9070": "manual page: fire from the first gun record at once",
+  "P1:9083": "levels above 15 use entry 15",
+  "P1:908D": "entry byte 0: the count the probot must wait before it asks again",
+  "P1:9094": "entry byte 1: fire only when the random byte is above it",
+  "P1:9098": "entry word: the highest gun record this level may use",
+  "P1:909D": "$70 frames to live",
+  "P1:90A1": "live",
+  "P1:90A5": "move routine 4",
+  "P1:90AE": "firing point minus the player's position",
+  "P1:90C9": "carry set: a shot was fired",
+  "P1:90CC": "carry clear: none",
+  "P1:90CF": "LDX #$4928, the last gun record: a way into gun_find_free that nothing uses",
+  "P1:90D4": "type 0: free",
+  "P1:90D8": "next lower record",
+  "P1:90DF": "none free: drop the return address, the caller's caller gets carry clear",
+  "P1:90E4": "17 entries of 4 bytes for fire_level 0-16, to $9127: wait count, random threshold, highest gun record. used for the TIE fighters, the AT-ATs and the AT-STs",
+  "P1:9128": "16 entries of the same form for the probots, fire_level 0-15, to $9167",
+  "P1:916B": "5 bit random number",
+  "P1:9172": "not below the level: no offset, the shot homes exactly",
+  "P1:917A": "below it: both offsets from the random byte",
+  "P1:918C": "record not in use",
+  "P1:9190": "move routine number * 2",
+  "P1:9195": "number above 4: index 1, an odd offset into the table. Star Wars has SWI here",
+  "P1:91A8": "timer still running",
+  "P1:91AC": "hurt or glowing already: free the record",
+  "P1:91B0": "else it becomes a hurt shot, no longer live",
+  "P1:91B6": "for 8 more frames",
+  "P1:91C7": "record freed",
+  "P1:91C9": "the shot's block in math RAM",
+  "P1:91CB": "point x: the player's",
+  "P1:91D1": "6 * offset byte 6, signed",
+  "P1:91E0": "point y: the player's plus that",
+  "P1:91E6": "6 * offset byte 7, signed",
+  "P1:91F5": "point z: the player's plus that",
+  "P1:91FB": "the scratch block",
+  "P1:9201": "matrix program $2A (MS_PSUB in Star Wars)",
+  "P1:9206": "x = x + (result x - x) / 8",
+  "P1:9212": "the same for y",
+  "P1:921E": "and z",
+  "P1:92AE": "ESB: the Jedi force destroys shots that come near",
+  "P1:92B0": "hurt already",
+  "P1:92B4": "force not on",
+  "P1:92B9": "|y| / 2 + x",
+  "P1:92C7": "above $7000: not near enough yet",
+  "P1:92CD": "make the shot hurt, not live",
+  "P1:92D5": "stay in place",
+  "P1:92D9": "fade timer",
+  "P1:92DF": "bit 6, a walker's shot: 7 points, else 3",
+  "P1:92EB": "bank 1 OBJCEN: process centre of gunshot",
+  "P1:9389": "CL_GDS still at its preset $FF: no shot in the sights this frame, so no kill",
+  "P1:939F": "bank 1 KD8AC: object centre back to its default, JSRL to scale and centre",
+  "P1:93FB": "colour 4 (red), full brightness",
+  "P1:9400": "a walker's shot?",
+  "P1:9406": "JSRL $001A: the gun shot picture the IRQ changes every fourth frame",
+  "P1:9430": "a walker's shot?",
+  "P1:9442": "walker's shot: half as bright",
+  "P1:9444": "purple as well",
+  "P1:9448": "JSRL $0022",
+  "P1:944D": "bank 1 KD8AC: object centre back to its default, JSRL to scale and centre",
+  "P1:9470": "a walker's shot?",
+  "P1:9476": "JSRL $001E: the shot explosion picture the IRQ changes every fourth frame",
+  "P1:9480": "bank 1 KD8AC: object centre back to its default, JSRL to scale and centre",
+  "P1:948E": "glowing, no longer live or pretty, the other type bits kept",
+  "P1:949E": "manual page: no speech",
+  "P1:94A3": "shield glowing from an earlier hit?",
+  "P1:94A7": "no shield left: no speech",
+  "P1:94AB": "first hit of this part: said once",
+  "P1:94B6": "TIE fighter part",
+  "P1:94C2": "asteroid part",
+  "P1:94CE": "hit while the shield glows, with shields left",
+  "P1:94D2": "said once a part",
+  "P1:94E0": "probots and walkers one phrase, TIE fighters and asteroids another",
+  "P1:950A": "no longer live or pretty, the other type bits kept",
+  "P1:9518": "a walker's shot: 7 points, else 3",
+  "P1:952B": "really $08, the last byte of a cut-off ORA #, then ED 88 15 = STD $15,X (Star Wars L79E4, L79E6)",
+  "P1:9531": "Star Wars: LDB AS_GLW,X",
+  "P1:9560": "stray byte, the table is cut off after ten words",
+  "P1:9575": "option byte",
+  "P1:9578": "bit 5: letters are given in order",
+  "P1:957C": "shift one more letter bit in",
+  "P1:9581": "index of the highest bit held: the new letter",
+  "P1:958F": "else the letter of the part played: 0 J, 1 E, 2 D, 3 I",
+  "P1:95A0": "the new letter starts at full size",
+  "P1:95A5": "the other letters start at brightness $80",
+  "P1:95AA": "state 1: a letter is growing into place",
+  "P1:95AF": "count the letters held",
+  "P1:95BA": "the third letter has its own phrase",
+  "P1:95C9": "all four?",
+  "P1:95CD": "option bit 4: no force period",
+  "P1:95D4": "448 units of force time",
+  "P1:95DA": "each period runs down faster than the one before",
+  "P1:95DD": "warning sound not yet sent",
+  "P1:95ED": "letter bit by index: J, E, D, I",
+  "P1:95F1": "nothing to do while the 24 bit time is 0",
+  "P1:9604": "rate index held at 3",
+  "P1:960F": "low byte and fraction minus the rate",
+  "P1:9617": "borrow into the high byte",
+  "P1:961F": "below 0: the time is up",
+  "P1:9634": "under $60 left",
+  "P1:963A": "warning sound, once",
+  "P1:964D": "or a letter growing into place",
+  "P1:965B": "time taken off per frame, 8.8 fixed point, by jedi_count: 1.5, 1.75, 2, 2.25",
+  "P1:966F": "the four letters",
+  "P1:967F": "state 1: step the animation",
+  "P1:968D": "the new letter shrinks by 5 a frame",
+  "P1:9694": "in place: if that was the fourth letter, clear them all",
+  "P1:969E": "state 2: letters shown",
+  "P1:96A3": "the other letters fade by 3 a frame",
+  "P1:96B4": "last $60 units: the word blinks, left out while bit 3 of the time is set",
+  "P1:96BE": "not while the loss of a shield is shown",
+  "P1:96D0": "JSRL VRMFL: the flash colour",
+  "P1:96DA": "464 up from the centre",
+  "P1:96DF": "pen position for the strokes: 0,0",
+  "P1:96EA": "half size",
+  "P1:96EF": "strokes of letter jedi_idx",
+  "P1:96F5": "centre",
+  "P1:970B": "to y 550, x -224: top left corner of the frame",
+  "P1:9715": "not 0: the whole frame in green instead, on odd values only",
+  "P1:9722": "colour 2 (green)",
+  "P1:9726": "down 180",
+  "P1:9735": "right 448",
+  "P1:973C": "up 180",
+  "P1:974B": "left 448",
+  "P1:975D": "held at 448",
+  "P1:9769": "JSRL VRMFL: the flash colour",
+  "P1:9773": "left side: down 180",
+  "P1:9782": "bottom edge: jedi_time units to the right",
+  "P1:9789": "colour 0 for what is used up",
+  "P1:9793": "rest of the bottom edge",
+  "P1:979D": "right side: up 180",
+  "P1:97AC": "top edge: back by 448 - jedi_time",
+  "P1:97BB": "the flash colour again",
+  "P1:97C5": "top edge: back to the corner",
+  "P1:97D6": "home point x: 416",
+  "P1:97D8": "home point y: 648",
+  "P1:97DA": "beam to the home point, which is also the pen position for the strokes",
+  "P1:97EC": "state 2: letters shown small",
+  "P1:97F3": "about a fifth of full size",
+  "P1:97F8": "letter earned: flash colour, else colour 1 at brightness $80"
+ },
+ "ram": {
+  "4C51": {
+   "name": "jedi_time_lo",
+   "desc": "low byte of the word jedi_time. jedi_time_run takes its rate off the word made of this byte and jedi_frac and borrows from the high byte"
+  },
+  "4C52": {
+   "name": "jedi_frac",
+   "desc": "fraction byte below jedi_time: third byte of the 24 bit force time that jedi_time_run counts down by 1.5 to 2.25 a frame"
+  },
+  "4C7C": {
+   "name": "jedi_fade",
+   "desc": "brightness of the Jedi letters other than the new one while a letter is growing into place: $80 from jedi_award, down by 3 a frame in jedi_draw until it is below 8. cleared by jedi_clear"
+  },
+  "4C7E": {
+   "name": "jedi_idx",
+   "desc": "number of the Jedi letter being drawn, 0 to 3 for J, E, D, I: loop counter of jedi_draw and jedi_word_draw, read by jedi_letter_draw and by P1_98E5 to pick the letter's points and strokes"
+  },
+  "4C7F": {
+   "name": "jedi_new",
+   "desc": "number of the Jedi letter just earned, 0 to 3, set by jedi_award: the letter jedi_letter_draw shows in the flash colour, shrinking into place, in display state 1"
+  },
+  "4C81": {
+   "name": "jedi_scale",
+   "desc": "animation of a newly earned Jedi letter: 0 from jedi_award, up by 5 a frame in jedi_draw until it reaches $F0, which ends display state 1. held at $C8 it is the linear scale the new letter is drawn at, so the letter shrinks from full size into its place"
+  },
+  "4CDD": {
+   "name": "jedi_warned",
+   "desc": "set once the warning sound of aud_cmd_50 has been sent for a force period, when jedi_time falls under $60. cleared by jedi_award when a period starts and by jedi_clear"
+  }
+ },
+ "regions": [
+  ["P1", "965B", "9663", "words"],
+  ["P1", "97D6", "97DA", "words"]
+ ],
+ "no_header": [
+  "P1:90FD"
+ ],
+ "sw_drop_comments": [
+  "P1:93FB",
+  "P1:944B",
+  "P1:96F5",
+  "P1:9722",
+  "P1:9726",
+  "P1:972E",
+  "P1:9730"
+ ],
+ "esb_notes": {
+  "P1:922B": "ESB adds the Jedi force: while jedi_on is set a shot that is not yet hurt and has |y| / 2 + x of $7000 or less is destroyed where it is and scored (3 points, 7 for a walker's shot). the lazar may kill a shot about to hit only if CL_GDS shows that a shot was in the sights this frame. the centre is processed and restored through bank 1 (OBJCEN at L60B4, KD8AC at L60BA)",
+  "P1:93D8": "ESB draws a live shot in red at full brightness and picks the picture by type bit 6: JSRL $001A, or $0020 for a walker's shot. a hurt shot is purple with JSRL $001E, or for a walker's shot half as bright with JSRL $0022. scale and centre are restored by bank 1 KD8AC",
+  "P1:9451": "ESB picks the picture by type bit 6: JSRL $001E, or $0022 for a walker's shot. scale and centre are restored by bank 1 KD8AC",
+  "P1:9484": "ESB keeps the other type bits when it sets the glow bit, and its speech is different: none on a manual page. on the first hit of a part with shields left (hit_said) spk_cmd_13 and a phrase in the TIE fighter part (spk_cmd_1d) or the asteroid part (spk_cmd_25). on a hit while the shield already glows (glow_said, once a part) spk_cmd_13 and spk_cmd_19 in the probot and walker parts or spk_cmd_27 in the other two. the hit sound is aud_cmd_3a",
+  "P1:9502": "ESB keeps the type bits other than live and pretty, and scores 3 points or, for a walker's shot (type bit 6), 7"
+ },
+ "questions": [
+  "P1:90FD-P1:9167 is data, not code: the listing disassembles the middle of gun_fire_tab ($90E4-$9127, 17 entries) and of probot_fire_tab ($9128-$9167, 16 entries) as BRA, LSR, NEG and so on, and puts a routine header at P1_90FD. each entry is byte, byte, word (wait count, random threshold, address of a gun record $4900-$4928), which none of the region kinds describes. i put P1:90FD under no_header as 00_start.json does, if page files cannot use that key the header needs removing another way",
+  "P1:90CF: the three bytes 8E 49 28 are LDX #$4928 falling into gun_find_free, an entry nothing calls (Star Wars' GNAVAIL was LDX #GUN in front of TSTAVAIL). shown as .byte, it is code",
+  "P1:952B-P1:9560: identical on all four pages, begins in the middle of an instruction and has no reference, described as a dead remnant of Star Wars' S2VW. the listing's ASL $48ED / EORA #$15 at P1:952B is a misreading of 08 / ED 88 15, so $48ED is not a RAM use and has no name here. the same holds for the copies on pages 0, 2 and 3",
+  "$4C87, read at P1:9715 only: no instruction in any listing writes it. when it is not zero jedi_frame_draw draws the full frame in green with brightness $4C87 * 16 on odd values and nothing on even ones. not named",
+  "$4D7B (option byte, left to the bank 1 annotation): jedi_award tests two more bits. bit 5 set = Jedi letters are awarded in order J, E, D, I whatever part is played, clear = each part gives its own letter. bit 4 set = completing JEDI starts no force period (jedi_time stays 0, jedi_count is not stepped), the 20000 points, the tune and jedi_done still happen",
+  "fire_level's description in the defines says the enemy gun code fires when a 5 bit random number is below it. that test (gun_aim_error, P1:916D) does not decide firing: it decides whether the shot gets random aim offsets. firing is decided by the tables gun_fire_tab and probot_fire_tab: P_RND1 must be above the entry's second byte and a gun record must be free",
+  "P1:9201 matrix program $2A: the ESB defines have no name for it, in Star Wars $2A is MS_PSUB. the description of gun_mov_home only says what goes in (a point at the player's position plus the aim offsets, in block MS_X0BC) and that the shot moves an eighth of the way to the result",
+  "P1:9195: with a move routine number above 4 the code calls through the word at P1_8EF3 ($C291). gun records only ever get 0 to 4, so it cannot happen, but it is not a safe fallback",
+  "JSRL $0020 and $0022 (P1:940B, P1:9448, P1:947B): the pictures for a walker's shot and its burst. the IRQ code seen (LEBF4, LEBFE) keeps the slots $001A and $001E, i did not look for what fills $0020 and $0022",
+  "jedi_letter_draw (P1:97DA) runs to $98E4, past the end of this stretch, and its description covers all of it. the state 1 lines to the home point assume the beam is at the letter's point 5 ($14,X / $16,X) after P1_98E5, which i did not check against the stroke lists at P1_99A5",
+  "jedi_count is stepped before its first use, so the first force period of a game uses rate 1 (1.75 a frame) and entry 0 of jedi_rate_tab (1.5) is used only if a period runs with jedi_count 0, which i did not find"
+ ]
+}

@@ -1,0 +1,248 @@
+{
+ "about": "slapstic page 3 $9800-$9DCC: the end of the walker part's lazar collision test, the lazar collision tests of the probot part and of the two space parts, then the probot transmissions - records, launch, the four kinds of movement, view with the lazar test, and the hit - and a stale copy of part of the IRQ handler that fills the page up to the common tail",
+ "routines": {
+  "P3:9838": {
+   "name": "lz_hit_probot",
+   "desc": "lazar collision test of the probot part, called by vew_probot after everything is drawn, the ESB form of Star Wars' CLGLZ. does nothing while LZ_ON is 0. of the three things the cursor can be on - an enemy shot (CL_GDS), a probot (prob_hit_d) and a transmission (xmit_hit_d), each a view distance with a negative high byte for none - it takes the nearest: a shot goes to GNHTSG on page 1, a probot to page 2 P2_92EE, a transmission to xmit_hit, each with LZ_HIT = 4. when the record word that goes with the probot or the transmission is 0 the lazar only splashes at that distance (P3_9817). the call to xmit_hit is made through a slapstic decoy"
+  },
+  "P3:988C": {
+   "name": "lz_hit_space",
+   "desc": "lazar collision test of the TIE fighter and asteroid parts, called by their views, made from Star Wars' CLSLZ. does nothing while LZ_ON is 0. an enemy shot nearer than the alien ship and the asteroid goes to GNHTSG, else an alien ship nearer than the asteroid goes to CPHTSA (through a slapstic decoy), else an asteroid under the cursor: its record word astr_hit_rec is only ever written as 0, so the lazar splashes at its distance (P3_9817) and the call of page 2 P2_9C16 is never made"
+  },
+  "P3:98D3": {
+   "name": "xmit_init",
+   "desc": "set-up of the probot transmissions, called by the probot part's set-up and by man_init_probot: loads object 8, the hexagon a transmission is drawn with, into the math RAM (bank 1 KD868 through L60A8) and frees the three $28-byte records at xmit_atst"
+  },
+  "P3:98E8": {
+   "name": "xmit_launch",
+   "desc": "makes a probot launch a transmission: xmit_launch_do with X and U kept. called by page 2 (P2_919B) and by the training manual (bank 0 LB1D9) with the probot's position in M_XT2, M_YT2, M_ZT2. carry set when a transmission was launched, clear when all three records are in use"
+  },
+  "P3:98EF": {
+   "name": "xmit_launch_do",
+   "desc": "takes a free transmission record (xmit_find_free, which returns to this routine's caller with carry clear when there is none) and fills it: status 1, life timer $FF, kind 1 while a manual page is shown and else 1 to 3 at random (the square of a random byte times 3, so 1 is the most likely), climb speed $10, no sideways speed, and all five trail points at the probot's position M_XT2, M_YT2, M_ZT2 with x and y taken relative to the player. sends sound command $43 and returns carry set"
+  },
+  "P3:9960": {
+   "name": "xmit_find_free",
+   "desc": "finds a free transmission record: U = the first of the three records at xmit_atst whose byte 0 is 0. when all are in use it drops its own return address and returns to its caller's caller with carry clear"
+  },
+  "P3:9975": {
+   "name": "xmit_escape",
+   "desc": "removes the transmission at U that has got away: nothing if it is one the lazar has hit (status bit 2). else frees the record, clears its timer and, outside the training manual, calls page 1 xmit_got_through, which starts the flash of the next mark of the transmissions indicator"
+  },
+  "P3:9989": {
+   "name": "xmit_move_all",
+   "desc": "moves the probot transmissions, called every frame of the probot part and by man_move_probot. for each of the three records: a hit transmission that was not on screen in the last view is freed at once, and a record in use is moved by the routine xmit_move_tab gives for its kind (byte 2). keeps X and U"
+  },
+  "P3:99B9": {
+   "name": "xmit_mv_hit",
+   "desc": "move routine of kind 0, a transmission the lazar has hit: it stays where it is while its trail closes up (xmit_trail_shift) and its timer, set to $0F by xmit_hit, runs down, then the record is freed"
+  },
+  "P3:99C6": {
+   "name": "xmit_mv_straight",
+   "desc": "move routine of kind 1: shifts the trail, counts the life timer down and frees the record at 0, else moves the head (xmit_step) and raises the climb speed by $10 a frame up to $03F0. with no sideways speed the transmission rises straight up"
+  },
+  "P3:99E3": {
+   "name": "xmit_trail_shift",
+   "desc": "shifts the trail of the transmission at U: the four newest points (bytes $0A-$21) move one place down to $10-$27, so the head's position is in the first two places until the move routine steps it. then, if the transmission was not on screen in the last view, it is taken as got away (xmit_escape) when its oldest point is higher than the player's height plus its distance from the player in x and in y, that is out of the top of the view"
+  },
+  "P3:9A1A": {
+   "name": "xmit_above_tst",
+   "desc": "not a routine of its own: the second half of the test at the end of xmit_trail_shift (D = the oldest point's distance from the player in y), which falls into it. it has a header because of the JSR at P3_93C7, which is in code that nothing calls"
+  },
+  "P3:9A26": {
+   "name": "xmit_step",
+   "desc": "moves the head of the transmission at U: adds the three speed words (bytes 4, 6, 8) to the head's x, y and z (bytes $0A, $0C, $0E). a head that has climbed above $8000 is taken as got away (xmit_escape)"
+  },
+  "P3:9A42": {
+   "name": "xmit_mv_drift",
+   "desc": "move routine of kind 2: as xmit_mv_straight, and each frame two random words scaled by an eighth of the climb speed (MS_PERS) are added to the x and y speeds, so the transmission wanders sideways more and more as it climbs. xmit_vel_limit then keeps it in range"
+  },
+  "P3:9A93": {
+   "name": "xmit_mv_jitter",
+   "desc": "move routine of kind 3: as xmit_mv_drift, but the two random words are scaled by half the climb speed and replace the x and y speeds instead of adding to them, so the transmission jumps about a straight climb"
+  },
+  "P3:9AE0": {
+   "name": "xmit_vel_limit",
+   "desc": "keeps a transmission's sideways distance from the player in range: for x (head word $0A, speed word 4) and then y (head word $0C, speed word 6) the speed is set to 0 when the head is beyond $4000 and still moving away, or nearer than $0800 and moving towards the centre line, on either side. when the first test of an axis loads the speed, the second test compares that speed and not the position"
+  },
+  "P3:9B6D": {
+   "name": "xmit_view_all",
+   "desc": "view of the probot transmissions, called by the probot views and by man_view_probot. sets the ship 2 block to unit vectors (UNITV), then for each record in use and each of its five trail points, newest first: the point, with the player's x and y added back, goes through MS_PSB2 in the scratch block. a point in front of the player and inside the 45 degree view cone sets the on-screen flag (byte 1 bit 4), is tested against the lazar (xmit_lz_test, the head only) and drawn (xmit_draw_pt). keeps X and U"
+  },
+  "P3:9C11": {
+   "name": "xmit_draw_pt",
+   "desc": "draws one trail point of a transmission as object 8, a hexagon: the colour word by the point's place in the trail from xmit_col_tab (a hit transmission is drawn in colour 5 with xmit_brt, $10 less for each point), a blank vector to the point (bank 1 BJCNTR), the scale word from xmit_scal_tab, each older point smaller, MS_CNCT, then the object's points and lines (bank 1 JOBJBPNT, KDA2C) and back to the centre (KD8AC). Y is the display list"
+  },
+  "P3:9C74": {
+   "name": "xmit_lz_test",
+   "desc": "lazar test on the head of a transmission, called by xmit_view_all with the point's view coordinates in M_XT, M_YT, M_ZT. only for trail point 0 of a transmission that is live and not hit, and nearer than the nearest one found so far (xmit_hit_d). the cursor (LZ_CX, LZ_CY) has to be within 10 screen units plus a radius of the head's screen position: the radius is $3C at that distance across, and half the climb speed up and down. a transmission that passes is recorded by xmit_lz_take"
+  },
+  "P3:9CE8": {
+   "name": "xmit_lz_take",
+   "desc": "records the transmission at U as the nearest one under the lazar cursor: xmit_hit_rec = U, xmit_hit_d = its view distance M_XT"
+  },
+  "P3:9CF2": {
+   "name": "xmit_hit",
+   "desc": "the lazar has hit the transmission in xmit_hit_rec: reached from lz_hit_probot through the maze. if the record is still in use it is marked hit (status bit 2 set, bit 0 cleared), its timer is set to $0F and its kind to 0, so it fades out in place over 15 frames. sound command $44 silences the transmission tone when no other transmission is live, then the hit sound (aud_cmd_3b) and 5 points (scr_xmit_5). keeps U"
+  }
+ },
+ "labels": {
+  "P3:9B65": "xmit_move_tab",
+  "P3:9C60": "xmit_col_tab",
+  "P3:9C6A": "xmit_scal_tab"
+ },
+ "comments": {
+  "P3:9800": "no AT-ST under the cursor: nothing hit",
+  "P3:9805": "record word 0: the cursor is on the AT-ST's body, the lazar only splashes",
+  "P3:9809": "LZ_HIT = 4: display the hit for a while",
+  "P3:980F": "splash at the AT-AT's distance",
+  "P3:9814": "splash at the AT-ST's distance",
+  "P3:9817": "lazar splash against something that is not destroyed, A = high byte of its view distance",
+  "P3:981D": "splash scale = 4 * the distance, $D0 at most",
+  "P3:9828": "no hit, but splash",
+  "P3:982C": "all four quadrants of the splash",
+  "P3:9831": "splash colour: green, brightness $80 (yellow in Star Wars' CLGT)",
+  "P3:983D": "an enemy shot under the cursor?",
+  "P3:9841": "nearer than the probot",
+  "P3:9847": "and nearer than the transmission: the shot is hit",
+  "P3:9854": "a probot under the cursor?",
+  "P3:9859": "nearer than the transmission?",
+  "P3:9862": "no record: the lazar only splashes against it",
+  "P3:986B": "a transmission under the cursor?",
+  "P3:9873": "no record: splash",
+  "P3:9878": "slapstic decoy: the read of $9548 above put the chip in its bitwise mode, so the page select of the maze entry jumped to below (written as a call of page 1) is not taken as one and the call lands on this page's xmit_hit",
+  "P3:987A": "LZ_HIT = 4: display the hit for a while",
+  "P3:9880": "splash at the transmission's distance",
+  "P3:9886": "splash at the probot's distance",
+  "P3:9891": "an enemy shot under the cursor?",
+  "P3:9895": "nearer than the alien ship",
+  "P3:989A": "and nearer than the asteroid: the shot is hit",
+  "P3:98A7": "an alien ship under the cursor? only A is loaded: the compare below uses B as the first test left it, the low byte of CL_GDS",
+  "P3:98AB": "nearer than the asteroid?",
+  "P3:98B4": "slapstic decoy: the read of $9540 above put the chip in its bitwise mode, so the page select of the maze entry jumped to below (written as a call of page 1) is not taken as one and the call lands on this page's CPHTSA",
+  "P3:98B6": "LZ_HIT = 4: display the hit for a while",
+  "P3:98BB": "an asteroid under the cursor?",
+  "P3:98C3": "always 0 (page 2 P2_9C0C is its only writer): splash",
+  "P3:98CD": "splash at the asteroid's distance",
+  "P3:98D3": "object 8, the transmission hexagon",
+  "P3:98DB": "free the three records",
+  "P3:98E5": "end of the third record",
+  "P3:98EF": "U = a free record, or out with carry clear",
+  "P3:98F8": "life timer: 255 frames",
+  "P3:98FC": "status: live",
+  "P3:9905": "the manual's transmission rises straight",
+  "P3:9909": "kind = 1 + 3 * (random byte squared / 256) / 256: 1, 2 or 3",
+  "P3:9915": "climb speed",
+  "P3:991A": "no x and y speed",
+  "P3:9921": "the probot's x relative to the player: all five trail points start there",
+  "P3:9935": "its y relative to the player",
+  "P3:9949": "its height",
+  "P3:995A": "the transmission tone",
+  "P3:995D": "carry set: launched",
+  "P3:9970": "none free: drop the return address",
+  "P3:9972": "and return to the caller's caller with carry clear",
+  "P3:9977": "shot down: it did not get away",
+  "P3:9990": "on screen in the last view?",
+  "P3:9996": "no: if it has been hit there is nothing to show, free it",
+  "P3:99A0": "kind 0-3",
+  "P3:99A7": "never taken: the kind is 3 at most (an odd index would read across two entries)",
+  "P3:99BC": "fade timer of the hit",
+  "P3:99C9": "life timer",
+  "P3:99D5": "climb faster",
+  "P3:99E3": "address of the head's place, the loop's end",
+  "P3:99EA": "move each point's three words 6 bytes down, oldest first",
+  "P3:99FC": "on screen in the last view: it has not got away",
+  "P3:9A00": "the oldest point's x distance from the player",
+  "P3:9A09": "plus the player's height, against the point's height",
+  "P3:9A11": "the same with its y distance",
+  "P3:9A38": "climbed above $8000: gone",
+  "P3:9A56": "climb faster, $03F0 at most",
+  "P3:9A63": "D = the climb speed, $10 at least",
+  "P3:9A6C": "an eighth of it is the multiplier",
+  "P3:9A72": "two random words",
+  "P3:9A7C": "MS_PERS: both times M_XP",
+  "P3:9A81": "added to the x speed",
+  "P3:9A88": "and to the y speed",
+  "P3:9ABD": "half the climb speed is the multiplier",
+  "P3:9ACD": "MS_PERS: both times M_XP",
+  "P3:9AD2": "the x speed is the first product",
+  "P3:9AD7": "the y speed the second",
+  "P3:9AE0": "the head's x relative to the player",
+  "P3:9AE4": "beyond $4000 and moving away: stop",
+  "P3:9AF3": "nearer than $0800 and moving in: stop",
+  "P3:9B04": "the same on the negative side",
+  "P3:9B22": "the head's y relative to the player, the same tests",
+  "P3:9B65": "move routines by kind: 0 hit, 1 straight, 2 drifting, 3 jittering",
+  "P3:9B6F": "ship 2 block: unit vectors, for the MS_CNCT of xmit_draw_pt",
+  "P3:9B7B": "clear the flags, bit 4 is set below when a point is on screen",
+  "P3:9B7D": "end of the loop over the trail points",
+  "P3:9B87": "trail point index * 2",
+  "P3:9B8C": "brightness from the timer's low four bits, used when the transmission has been hit",
+  "P3:9B97": "X = the head, the first trail point",
+  "P3:9B99": "the point in universe coordinates: the player's x and y added back",
+  "P3:9BAE": "scratch block",
+  "P3:9BBC": "behind the player: not drawn",
+  "P3:9BBE": "start the divide for the perspective",
+  "P3:9BD0": "|z| not less than x: outside the view",
+  "P3:9BE1": "|y| not less than x: outside the view",
+  "P3:9BE6": "flag: on screen in this view",
+  "P3:9BFA": "next trail point",
+  "P3:9C04": "next record",
+  "P3:9C15": "hit by the lazar?",
+  "P3:9C19": "yes: each point of the trail $10 dimmer than the one before",
+  "P3:9C25": "colour 5 (purple) with that brightness",
+  "P3:9C2B": "live: the colour word by the point's place in the trail",
+  "P3:9C32": "never taken: the index is 8 at most",
+  "P3:9C3B": "bank 1 BJCNTR: blank vector to the point",
+  "P3:9C3E": "the scale word by the point's place in the trail",
+  "P3:9C4E": "MS_CNCT: ship 2 (unit vectors) viewed from the player's ship",
+  "P3:9C53": "object 8: perspect its points",
+  "P3:9C58": "bank 1 KDA2C: draw the object",
+  "P3:9C5B": "bank 1 KD8AC: back to the screen centre",
+  "P3:9C60": "colour words of the five trail points: JSRL $0026 for the head, then white $A0, yellow $70, $50, $20",
+  "P3:9C6A": "scale words of the five trail points: binary scale 2, linear $00 for the head to $80 for the oldest",
+  "P3:9C74": "the head only",
+  "P3:9C79": "live",
+  "P3:9C7F": "and not hit already",
+  "P3:9C83": "nearer than the nearest transmission so far?",
+  "P3:9C8C": "start the divide: M_QUO = 1 / distance",
+  "P3:9C95": "radius across: $3C",
+  "P3:9CA6": "the head's screen x against the cursor",
+  "P3:9CB1": "within 10 plus the radius?",
+  "P3:9CBF": "radius up and down: half the climb speed",
+  "P3:9CDC": "within 10 plus the radius?",
+  "P3:9CF9": "record freed meanwhile: nothing",
+  "P3:9CFB": "status: hit, no longer live",
+  "P3:9D01": "15 frames to fade out",
+  "P3:9D0A": "kind 0: stays in place",
+  "P3:9D0E": "any transmission still live?",
+  "P3:9D20": "none: silence the transmission tone",
+  "P3:9D2B": "not reached: from here to the common tail the page holds a copy of the IRQ handler of bank 0 from $EB01 on (its CMPA operand, then IRQ_112 and DOVG), linked at another address. it differs from bank 0 only in this byte ($FF for $D3) and in three addresses of the handler's own module, which are $4DD6 lower. the copy runs on into the tail at $9DCD"
+ },
+ "ram": {
+  "4C05": {"name": "atat_hit_d", "desc": "word: view distance of the nearest AT-AT part the lazar cursor is on in this frame, written by page 0 (P0_8EE1 on) while the AT-ATs are drawn. the lazar start on page 3 (P3_95C9) sets the high byte to $FF for none, and page 3 P3_97CB compares it with the other distances under the cursor"},
+  "4C07": {"name": "atat_hit_rec", "desc": "word, goes with atat_hit_d: the AT-AT record that page 0 P0_9003 then works on, or 0 when the lazar only splashes against the walker"},
+  "4C09": {"name": "xmit_hit_d", "desc": "word: view distance of the nearest probot transmission the lazar cursor is on in this frame, written by xmit_lz_take while the transmissions are drawn. the lazar start (P3_95C6) sets the high byte to $FF for none, lz_hit_probot compares it with the distances of the shots and the probots"},
+  "4C0B": {"name": "xmit_hit_rec", "desc": "word, goes with xmit_hit_d: address of that transmission's record, which xmit_hit marks as hit"},
+  "4C0D": {"name": "prob_hit_d", "desc": "word: view distance of the nearest probot the lazar cursor is on in this frame, written by page 2 (P2_9272, P2_92B0) while the probots are drawn. the lazar start (P3_95C3) sets the high byte to $FF for none, lz_hit_probot compares it with the distances of the shots and the transmissions"},
+  "4C0F": {"name": "prob_hit_rec", "desc": "word, goes with prob_hit_d: the record of the probot that page 2 P2_92EE then destroys. lz_hit_probot splashes the lazar instead when it is 0"},
+  "4C15": {"name": "astr_hit_d", "desc": "word: view distance of the nearest asteroid the lazar cursor is on in this frame, written by page 2 P2_9BC3 while the asteroids are drawn. the lazar start (P3_95CF) sets the high byte to $FF for none, lz_hit_space compares it with the distances of the shots and the alien ships"},
+  "4C17": {"name": "astr_hit_rec", "desc": "word, goes with astr_hit_d: page 2 P2_9BC3 only ever writes 0 here, so lz_hit_space always splashes the lazar against the asteroid"},
+  "4C41": {"name": "xmit_cur", "desc": "word: address of the transmission record being worked on - the one xmit_launch_do has just taken, and the record of xmit_view_all's loop"},
+  "4C43": {"name": "xmit_pts_end", "desc": "word: end of xmit_view_all's loop over the five trail points of a record, the record's address + $26"},
+  "4C45": {"name": "xmit_brt", "desc": "brightness of the transmission being viewed: 16 times its timer + $0F. xmit_draw_pt uses it only for a transmission that has been hit, taking $10 off for each trail point"},
+  "4C46": {"name": "xmit_pt_ix", "desc": "twice the number (0-4) of the trail point xmit_view_all is on: the index into xmit_col_tab and xmit_scal_tab, and 0 for the head, the only point tested against the lazar"}
+ },
+ "regions": [
+  ["P3", "9C60", "9C6A", "avg"],
+  ["P3", "9C6A", "9C74", "avg"]
+ ],
+ "questions": [
+  "P3:9D2B-P3:9DCC (and on into the common tail): the bytes do decode as code from P3_9D2C, but nothing reaches them - no branch, call, maze entry or table on page 3 or in bank 0 points into $9D2C-$9DCC, and the routine before ends with PULS U,PC at P3_9D29. they are a byte copy of bank 0's IRQ handler $EB01-$EBA2 (the operand of CMPA at LEB00, IRQ_112, the GTIME and TIMER counting, DOVG) with only four differences: P3_9D2B is $FF where bank 0 has $D3, and JMP $9EE6, JSR $9F44, JSR $9FE2 stand for JMP DOVG_90 ($ECBC), JSR $ED1A, JSR $EDB8, each $4DD6 lower, while JSR load_vg_set ($A342) and the vector ROM addresses are the same. so it looks like what was left in the ROM image from a build in which that module sat at $9D2A, kept as fill. better left as .byte with a note than shown as code",
+  "P3:9A1A has a routine header only because of JSR P3_9A1A at P3_93C7, which is inside P3_9371 (no caller found, carried Star Wars alien set-up code where the call makes no sense: U is a math RAM block there). it is the middle of xmit_trail_shift. it could go in no_header",
+  "P3:98A7: lz_hit_space loads only A from CL_ADS before CMPD astr_hit_d, so the low byte compared is CL_GDS's. it looks like an oversight in the change from Star Wars' CLSLZ, harmless as the high bytes decide almost always",
+  "P3:9C74 leaves its own products in M_YP and M_ZP, and xmit_draw_pt's call of BJCNTR right after it perspects those again for the blank vector to the head: for the head of a transmission that passes the first distance test the vector to the 'centre' is therefore not the head's screen position. I did not work out whether the object's own first vector makes up for it (BJ_CX, BJ_CY are set from the same values)",
+  "$4C05/$4C07, $4C0D/$4C0F and $4C15/$4C17 belong to code on pages 0 and 2 outside my range. I named them after the pattern page 1's annotator used for $4C11/$4C13 (atst_hit_d, atst_hit_rec). if the annotators of those pages named them too, theirs should win",
+  "the brief asks for comments only on lines that have none: the decoy lines P3_9875, P3_987C, P3_98B1 and P3_98B8 already carry the generator's slapstic comments, so my explanation sits on the two lines between them in each place (P3_9878, P3_987A and P3_98B4, P3_98B6)"
+ ]
+}

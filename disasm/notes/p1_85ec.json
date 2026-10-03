@@ -1,0 +1,270 @@
+{
+ "about": "slapstic page 1 $85EC-$8C0C: the AT-ST walkers of wave part 1 - set-up for the game and for the training manual, per-frame spawning, head turning and movement, the view and crash test, the head, the gun aim test and the legs",
+ "routines": {
+  "P1:85EC": {
+   "name": "atst_init",
+   "desc": "wave 2 set-up of the AT-STs, called from wave2_setup: has the points of objects 17 and 18 (the AT-ST head) put in math RAM, fills the three $11-byte records at xmit_atst from atst_init_tab - all free, fire delay 8, height $0800, movement mode 6 (walk), each with its own head angle and leg set - and sets the spawn count w2_spawn_a to 3"
+  },
+  "P1:866F": {
+   "name": "man_atst_init",
+   "desc": "training manual set-up of the demo AT-ST, called from man_init_walker with B = manual page: fills the first record from the 10-byte entry of man_atst_tab for that page (entry 0 for a page above 2) with movement mode 0, so it stays put in front of the player, frees the other two records, has objects 17 and 18 put in math RAM and clears w2_spawn_a so that nothing is spawned or freed"
+  },
+  "P1:86E1": {
+   "name": "atst_move_all",
+   "desc": "per-frame movement of the AT-STs, called from wave2_exec, wave2_end_exec and man_move_walker. while w2_spawn_a is above 0 it spawns one AT-ST a frame (P1_8E99) in the first free record among the first w2_spawn_a, when it is minus it frees every record that was not in view in the last frame. then for each live record it counts it in w2_active_a, counts the fire delay down and calls atst_head_turn, atst_move and atst_walk_tick"
+  },
+  "P1:8747": {
+   "name": "atst_head_turn",
+   "desc": "swings the head of the AT-ST in U and turns its body after it. while the AT-ST is in view and its guns are not on the player the swing is reversed if its sign equals that of byte 16, the side the player was seen on. when the head is more than half way out and still swinging outwards the heading (byte 11) follows by 4 a frame, or by 1 when the player is ahead of the guns. the swing speed (byte 13) is added to the head angle (byte 12) and its size taken anew from one of three tables by the head angle: slow when the guns are on the player, medium when the player is ahead of them, else fast"
+  },
+  "P1:8801": {
+   "name": "atst_move",
+   "desc": "moves the AT-ST in U by its movement mode (byte 4, 0-6) through the routine table atst_move_tab. the game uses mode 6 and the manual mode 0, the only two this stretch stores besides the 0 and 3 that modes 2 and 5 end in"
+  },
+  "P1:8813": {
+   "name": "atst_mv_hold_rel",
+   "desc": "movement mode 0, reached through atst_move_tab: keeps the position relative to the player, so the AT-ST stays where it is on the screen. the mode of the manual's demo AT-ST"
+  },
+  "P1:8817": {
+   "name": "atst_mv_close_rel",
+   "desc": "movement mode 1, reached through atst_move_tab: with the position relative to the player, x and y each move an eighth of the way to zero every frame, so the AT-ST closes on the player"
+  },
+  "P1:8833": {
+   "name": "atst_mv_away_rel",
+   "desc": "movement mode 2, reached through atst_move_tab: with the position relative to the player, x and y each grow by an eighth every frame, so the AT-ST draws away. when either overflows the mode becomes 0"
+  },
+  "P1:8852": {
+   "name": "atst_mv_hold_uni",
+   "desc": "movement mode 3, reached through atst_move_tab: keeps the position in universe coordinates, so the AT-ST stands still on the ground"
+  },
+  "P1:8856": {
+   "name": "atst_mv_close_uni",
+   "desc": "movement mode 4, reached through atst_move_tab: with the position in universe coordinates, replaces x by (x - player x)/8 - x and y likewise. by its place between modes 3 and 5 it is the universe form of mode 1, but as written it does not subtract an eighth of the distance from the position"
+  },
+  "P1:8872": {
+   "name": "atst_mv_away_uni",
+   "desc": "movement mode 5, reached through atst_move_tab: with the position in universe coordinates, adds an eighth of the distance from the player to x and to y every frame, so the AT-ST draws away. when either overflows the mode becomes 3"
+  },
+  "P1:8897": {
+   "name": "atst_mv_walk",
+   "desc": "movement mode 6, reached through atst_move_tab, the mode of the game: with the position in universe coordinates, walks 180 units a frame along the heading (byte 11) - x plus 180 times the cosine, y minus 180 times the sine, multiplied by the math box"
+  },
+  "P1:88C5": {
+   "name": "atst_pos_to_rel",
+   "desc": "makes the position of the AT-ST in U relative to the player: if status bit $40 is set it clears it and subtracts the player's x and y (s1_tx, s1_ty) from bytes 5-8. called by the movement modes 0-2"
+  },
+  "P1:88DE": {
+   "name": "atst_pos_to_uni",
+   "desc": "puts the position of the AT-ST in U in universe coordinates: if status bit $40 is clear it sets it and adds the player's x and y (s1_tx, s1_ty) to bytes 5-8. called by the movement modes 3-6"
+  },
+  "P1:88F7": {
+   "name": "atst_walk_tick",
+   "desc": "steps byte 14 of the AT-ST in U, the walk counter that the leg drawing turns into the positions of the leg joints"
+  },
+  "P1:88FD": {
+   "name": "atst_view_all",
+   "desc": "view routine of the AT-STs, called from the walker views (vew_walker, the game over view and man_view_walker) with Y = display list: for each live record it leaves U in S2_PRM, clears the view flags of byte 1 - the crash flag $80 is kept while the AT-ST was in view - and calls atst_view"
+  },
+  "P1:891F": {
+   "name": "atst_view",
+   "desc": "views one AT-ST, U = record: transforms its position to the player's view and returns if it is nearer than $10, $4000 or more away or more than 45 degrees off the line of sight. otherwise sets the in-view flag $10, and if it is nearer than $380 with the player below height $0A76 it is a crash: flag $80, shield glow through BG1GLW, the crash sound and a roll of the ship, the Star Wars tower crash code. then draws the legs (atst_view_body) and the head (atst_view_head)"
+  },
+  "P1:89C4": {
+   "name": "atst_view_body",
+   "desc": "sets ship 2's matrix block to the unit matrix turned by the AT-ST's heading (byte 11) and concatenates it with the player's, writes the colour word - green, or a JSRL to the flash colour VRFLS once the AT-ST has been crashed into - and draws the legs with atst_draw_legs. U is reloaded from S2_PRM"
+  },
+  "P1:89F0": {
+   "name": "atst_view_head",
+   "desc": "transforms the AT-ST's own origin to the player's view with the body matrix and, if it is between $100 and $3C00 ahead and within 45 degrees of the line of sight, draws the head with atst_draw_head"
+  },
+  "P1:8A3F": {
+   "name": "atst_draw_head",
+   "desc": "draws the head of the AT-ST in U: turns ship 2's matrix further by half of byte 12, the head's angle from the body, and concatenates, writes the colour, has the 18 points of object 17 perspected and the object drawn, tests the lazar sight against it (P1_8D83), runs the aim test atst_aim, which leaves the colour for object 18, and draws object 18 from the same points"
+  },
+  "P1:8A77": {
+   "name": "atst_aim",
+   "desc": "aim test of the AT-ST in U, done only when its head faces the player (M_AX minus). works out where the player is as seen from the point between the two guns, in the head's axes, keeps the side in byte 16 for atst_head_turn and sets the colour word of object 18: dim green, red when the player is ahead of the guns (flag $04), bright red within 45 degrees, the medium flash colour when the guns are on the player (flag $02) - then, if status bit $20 is set and the fire delay has run out, the AT-ST fires (page 1 P1_8FF7). ends with the lazar test of the head (P1_8DD6) whenever the player is ahead of the guns"
+  },
+  "P1:8B8A": {
+   "name": "atst_draw_legs",
+   "desc": "draws the two legs of the AT-ST in U: writes the body colour, copies the walk counter (byte 14) to leg_phase and takes the pair of leg definitions for the record's leg set (byte 15, 0-2, set 0 if out of range) from atst_leg_sets"
+  },
+  "P1:8BB7": {
+   "name": "atst_leg_pair",
+   "desc": "X = pointer to two pointers to leg definitions: draws the two legs with atst_draw_leg"
+  },
+  "P1:8BC3": {
+   "name": "atst_draw_leg",
+   "desc": "draws one leg, X = pointer to the pointer to its 5-byte definition (joint track number, hip x word, hip y word). starts a new point list in BJ_PNT, has the four parts of the leg worked out by P1_8C0D, P1_8C22, P1_8C39 and P1_8C50 - each from the hip position and the next joint track of page 0 P0_93B4 at the walk time in leg_phase - and has the 18 points drawn as object 19. the walk counter is copied back from leg_phase to byte 14"
+  }
+ },
+ "labels": {
+  "P1:8633": "atst_init_tab",
+  "P1:86C3": "man_atst_tab",
+  "P1:87C3": "head_spd_aimed",
+  "P1:87D3": "head_spd_ahead",
+  "P1:87E3": "head_spd_search",
+  "P1:87F3": "atst_move_tab",
+  "P1:8B5A": "atst_leg_sets",
+  "P1:8B60": "atst_leg_pairs",
+  "P1:8B6C": "atst_leg_defs"
+ },
+ "comments": {
+  "P1:85EC": "object 17, the AT-ST head: its points into math RAM (bank 1 KD868)",
+  "P1:85F1": "object 18, which has the same 18 points",
+  "P1:85F6": "10 bytes per AT-ST: x, y, z words, a byte not used and the head angle, the leg set and the movement mode",
+  "P1:85FE": "byte 0, the status: 0 = free until atst_move_all spawns it",
+  "P1:8606": "byte 3, the fire delay: 8 frames",
+  "P1:860A": "bytes 5-10: x, y and z ($0800 for all)",
+  "P1:8616": "byte 11, the heading",
+  "P1:861A": "byte 12, the head angle (the first byte of the pair is not used)",
+  "P1:861E": "byte 15, the leg set, and byte 4, the movement mode (6 for all: walk)",
+  "P1:862D": "three AT-STs are kept in play",
+  "P1:8633": "six entries of 10 bytes, of which atst_init uses the first three",
+  "P1:8672": "B = manual page: 10 bytes per entry",
+  "P1:8675": "a page above 2 takes entry 0",
+  "P1:8683": "byte 3, the fire delay",
+  "P1:8693": "byte 11, the heading, and byte 12, the head angle",
+  "P1:8699": "byte 15, the leg set, and byte 0, the status",
+  "P1:869F": "movement mode 0: it stays where it is in front of the player",
+  "P1:86A6": "the other two records are free",
+  "P1:86BD": "spawn count 0: nothing is spawned and nothing freed",
+  "P1:86C3": "three entries of 10 bytes, one per manual page: x, y, z words, heading, head angle, leg set, status",
+  "P1:86E4": "spawn count 0 or minus: no spawning",
+  "P1:86EB": "a free record among the first w2_spawn_a: spawn an AT-ST in it, and no more this frame",
+  "P1:8705": "spawn count minus, the wave is over: free every AT-ST that is not in view",
+  "P1:8710": "view flag $10: it was in view in the last frame",
+  "P1:872E": "byte 3, the fire delay, counts down to 0",
+  "P1:874E": "view flag $10: in view",
+  "P1:8752": "view flag $02: the guns are on the player - the swing is left alone",
+  "P1:8756": "byte 13, the swing speed, against byte 16, the side the player was seen on",
+  "P1:875D": "same sign: reverse the swing",
+  "P1:8767": "head angle beyond +/-$40: the head is more than half way out (it is drawn at half this angle from the body)",
+  "P1:876B": "and still swinging outwards",
+  "P1:8771": "then the body turns after the head, 4 a frame",
+  "P1:877D": "view flag $04, the player is ahead of the guns: 1 a frame",
+  "P1:8783": "byte 11, the heading",
+  "P1:878B": "the head angle would overflow: it is not stored, and on a random bit the swing reverses",
+  "P1:879D": "the size of the swing speed: the slow table while the guns are on the player",
+  "P1:87A6": "the middle table while the player is ahead of the guns",
+  "P1:87AF": "else the fast table",
+  "P1:87B4": "index = the top four bits of the head angle: fastest facing forward, slowest facing backward",
+  "P1:87BA": "the speed keeps its sign",
+  "P1:8805": "byte 4, the movement mode, as a word offset",
+  "P1:880A": "out of range: offset 3, which is not an entry boundary of the word table (mode 3 would be 6)",
+  "P1:881A": "x and y each move an eighth of the way to 0, the player",
+  "P1:8836": "x and y each grow by an eighth",
+  "P1:884D": "overflow: mode 0, hold",
+  "P1:8859": "(x - player x)/8 - x is stored",
+  "P1:8875": "x and y each move away by an eighth of the distance from the player",
+  "P1:8892": "overflow: mode 3, hold",
+  "P1:889A": "the step: 180",
+  "P1:88A0": "byte 11, the heading",
+  "P1:88B1": "MS_PERS: M_YP = 180 * sine, M_ZP = 180 * cosine",
+  "P1:88C7": "status $40: the position is in universe coordinates",
+  "P1:88E0": "status $40: the position is in universe coordinates already",
+  "P1:8906": "byte 1, the view flags: all cleared, but the crash flag $80 stays while the AT-ST was in view ($10)",
+  "P1:8921": "status $40: the position is in universe coordinates already",
+  "P1:8936": "else relative to the player: add the player's x and y",
+  "P1:8946": "z is the same in both forms",
+  "P1:8951": "the AT-ST in the player's view: M_XP is the distance ahead",
+  "P1:895C": "not viewed nearer than $10",
+  "P1:8962": "or from $4000 away",
+  "P1:8974": "more than 45 degrees to the side: not viewed",
+  "P1:8985": "or more than 45 degrees up or down",
+  "P1:898C": "view flag $10: in view",
+  "P1:8993": "nearer than $380",
+  "P1:899B": "and the player's height under $0A76: a crash into the AT-ST",
+  "P1:89A3": "view flag $80: crashed into - drawn in the flash colour from now on",
+  "P1:89C4": "ship 2's matrix block = the unit matrix",
+  "P1:89CC": "block index 9: ship 2's matrix",
+  "P1:89D2": "turned by the heading",
+  "P1:89D7": "MS_CNCT: the AT-ST's matrix as the player sees it",
+  "P1:89E2": "crashed into: JSRL VRFLS, the flash colour",
+  "P1:89E7": "else green at brightness $80",
+  "P1:8A02": "MS_PAD: the AT-ST's origin in the player's view",
+  "P1:8A0D": "the head is drawn from $100",
+  "P1:8A13": "to $3C00 ahead",
+  "P1:8A45": "half of byte 12, the head's angle from the body: ship 2's matrix already holds the heading",
+  "P1:8A4B": "MS_CNCT",
+  "P1:8A56": "crashed into: JSRL VRFLS, the flash colour",
+  "P1:8A5B": "else green at brightness $C0",
+  "P1:8A60": "object 17: its 18 points perspected into BJ_PNT",
+  "P1:8A65": "and drawn",
+  "P1:8A68": "the lazar sight against two of its points",
+  "P1:8A6E": "object 18, from the same points, in the colour atst_aim left",
+  "P1:8A79": "green at brightness $40: the word that is replaced below when the player is ahead of the guns",
+  "P1:8A7E": "M_AX high byte from the MS_CNCT: plus, the head faces away - no aim test and no lazar test",
+  "P1:8A85": "the point between the two guns: 220, 0, -105 (points 0 and 1 of object 17 are 220, +/-50, -105)",
+  "P1:8A9F": "MS_PAD: the point in the player's view",
+  "P1:8AA2": "doubled",
+  "P1:8ABA": "block index $0C: M_XT2",
+  "P1:8AC0": "MS_S1UN: from the player's view to universe coordinates",
+  "P1:8AC5": "the guns' universe position becomes ship 2's position",
+  "P1:8AD7": "block index $13: s1_tx, the player's position",
+  "P1:8ADD": "the player as seen from the guns, in the head's axes: M_XP ahead, M_YP to the side, M_ZP up",
+  "P1:8AE0": "byte 16: the side the player is on, for atst_head_turn",
+  "P1:8AEC": "the player is not ahead of the guns: no more",
+  "P1:8AF0": "red at brightness $80 over the colour word stored at entry",
+  "P1:8AF5": "view flag $04: the player is ahead of the guns",
+  "P1:8B07": "more than 45 degrees to the side: no more",
+  "P1:8B18": "or more than 45 degrees up or down",
+  "P1:8B1D": "within 45 degrees: red at brightness $E0",
+  "P1:8B22": "1 / distance, from the divide started at P1_8AE9",
+  "P1:8B30": "the side offset over the distance under $100",
+  "P1:8B38": "and the height offset over the distance under $200: the guns are on the player",
+  "P1:8B3D": "JSRL VRMFL, the medium flash colour",
+  "P1:8B42": "view flag $02: the guns are on the player",
+  "P1:8B4A": "status $20: this AT-ST may fire",
+  "P1:8B4E": "byte 3, the fire delay, must have run out",
+  "P1:8B55": "the lazar sight against the head: this AT-ST may become the lazar's target",
+  "P1:8B5A": "one pointer per leg set, to its two leg pointers",
+  "P1:8B60": "two pointers per leg set, to the six 5-byte leg definitions from $8B6C: first joint track number for page 0 P0_93B4 ($2C-$40 in fours), hip x word (40), hip y word (+80 or -80)",
+  "P1:8B92": "crashed into: JSRL VRFLS, the flash colour",
+  "P1:8B97": "else green at brightness $80",
+  "P1:8B9C": "byte 14, the walk counter, to leg_phase for the joint routine",
+  "P1:8BA4": "byte 15: the leg set, 0-2",
+  "P1:8BA8": "out of range: set 0",
+  "P1:8BC5": "X = the leg definition",
+  "P1:8BC7": "start a new point list at BJ_PNT (bank 1 KD9EF)",
+  "P1:8BCA": "the hip's x and y, set again for each of the four parts",
+  "P1:8BFE": "object 19, the leg: drawn from the 18 points just made",
+  "P1:8C06": "the walk counter back to the record: the joint routine clears leg_phase when the walk cycle has gone round"
+ },
+ "ram": {
+  "5098": {
+   "name": "s1_tx",
+   "desc": "MS_TX+M_S1: the player's universe x position, word, the first of the position words $5098/$509A/$509C. the enemy code of the slapstic pages subtracts it from or adds it to an object's x to change between universe coordinates and coordinates relative to the player. math box block index $13"
+  },
+  "5006": {
+   "name": "M_AX",
+   "desc": "CONCAT RESULT (Atari's name, the same address in Star Wars): word, the A.X term of the matrix that MS_CNCT leaves. the walker aim tests of pages 0 and 1 (P0_8AA5, P1_8A77) read its high byte after the head has been concatenated and go on only when it is minus, the head facing the player"
+  },
+  "4C8B": {
+   "name": "leg_phase",
+   "desc": "walk cycle time of the walker whose legs are being drawn: the leg routines of pages 1 and 0 copy the record's walk counter here (AT-ST byte 14, AT-AT byte $15), page 0 P0_93B4 reads it to place each leg joint along its track and clears it when the track has gone round, and the leg routines copy it back to the record"
+  }
+ },
+ "regions": [
+  ["P1", "8B5A", "8B6C", "ptrs"]
+ ],
+ "sw_drop_comments": [
+  "P1:8948",
+  "P1:89F9",
+  "P1:8A91",
+  "P1:8A9F",
+  "P1:8ACE",
+  "P1:8AD4"
+ ],
+ "questions": [
+  "AT-ST record layout ($11 bytes at xmit_atst, three records) as read from this stretch: 0 status (0 free, $40 position in universe coordinates, $20 may fire, P1_8E99 sets $29 and the manual $01 or $09 - what $01 and $08 mean is not settled here), 1 view flags ($10 in view, $80 crashed into, $04 player ahead of the guns, $02 guns on the player), 2 not used in this stretch, 3 fire delay, 4 movement mode, 5-10 x y z words, 11 heading, 12 head angle (twice the angle from the body), 13 head swing speed, 14 walk counter, 15 leg set, 16 side the player is on",
+  "P1:880A: an out-of-range movement mode loads offset 3 into the word table atst_move_tab, which would call through the bytes at $87F6/$87F7 ($1788, not a routine) - looks like a slip for mode 3 (offset 6), never reached as long as byte 4 stays 0-6",
+  "P1:8856 (movement mode 4): stores (x - player x)/8 - x, where the pattern of the other modes suggests x - (x - player x)/8. no code in this stretch stores mode 1, 2, 4 or 5 - whether anything outside it does was not checked",
+  "P1:8633 atst_init_tab holds six 10-byte entries but atst_init only reads the first three (X starts at the table for three records) - the last three ($8651-$866E) look unused",
+  "the label atst_leg_defs at P1:8B6C falls inside the .byte row that starts at $8B68 in the snapshot, so the row has to be split there (the pointer region ends at the same address)",
+  "P1:8633, P1:86C3 and P1:8B6C are tables of mixed bytes and words, so no region kind fits them - only the pointer part $8B5A-$8B6B is given as a region",
+  "RAM $5098 (s1_tx), $5006 (M_AX) and $4C8B (leg_phase) are also used by page 0 (and $5098 by pages 2 and 3): the names given here should be reconciled with whatever those chunks chose",
+  "the colours are read as AVG colour 2 = green and colour 4 = red from the Star Wars colour bits - not checked against a running game",
+  "P1:8B55: the lazar test of the head (P1_8DD6) is skipped whenever the head faces away from the player or the player is not ahead of the guns, so as the code reads an AT-ST can only become the lazar's target from the front"
+ ]
+}

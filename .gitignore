@@ -1,0 +1,36 @@
+# ROM images are not distributed.  Supply your own MAME esb set and
+# regenerate everything with disasm/gen_from_roms.py (see disasm/README.md).
+roms/
+disasm/build/
+*.bin
+*.27256
+# test output: traces, screenshots and patched ROM images made from your set
+emu_src/tests/out/
+# the emulator's local settings and NOVRAM
+*.ini
+*.nv
+
+# Atari's Star Wars source archive is not distributed.
+star-wars-main/
+
+# Emulator driver sources (AAE / MAME), if kept here for reference
+/starwars.cpp
+/starwars.h
+/slapstic.cpp
+/slapstic.h
+
+# Build output; the emulator itself is published (it holds no ROM data)
+*.exe
+!emu_src/esb_emu.exe
+*.log
+*.obj
+*.pdb
+*.ilk
+
+# Python
+__pycache__/
+*.pyc
+
+# Local working files, kept out of the published tree
+docs/superpowers/
+.claude/

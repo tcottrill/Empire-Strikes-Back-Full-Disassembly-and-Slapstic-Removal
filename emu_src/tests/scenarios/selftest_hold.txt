@@ -1,0 +1,2 @@
+# the self test left on its first screen (the RAM and ROM test results)
+t0 test 1

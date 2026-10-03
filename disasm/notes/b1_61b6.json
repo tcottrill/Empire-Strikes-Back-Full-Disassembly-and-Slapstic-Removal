@@ -1,0 +1,315 @@
+{
+ "about": "bank 1 $6018-$6FFF: bank 1's side of the cross-bank table, a copy of bank 0's library (math box set-up, shifts, unit vector helpers, sine, BCD, random, sound command stubs), the view routine of the title logo and the logo's outline data",
+ "routines": {
+  "B1:61FD": {
+   "name": "asrd12_b1",
+   "desc": "bank 1's copy of asrd12: arithmetic shift right of D by 12 bits, done as a byte move, sign extension and 4 shifts of B. first of five such entries (12 to 8 bits) in front of Atari's ASRD chain. no caller found in bank 1, unused as far as can be seen"
+  },
+  "B1:6205": {
+   "name": "asrd11_b1",
+   "desc": "bank 1's copy of asrd11: arithmetic shift right of D by 11 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:620C": {
+   "name": "asrd10_b1",
+   "desc": "bank 1's copy of asrd10: arithmetic shift right of D by 10 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:6212": {
+   "name": "asrd9_b1",
+   "desc": "bank 1's copy of asrd9: arithmetic shift right of D by 9 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:6217": {
+   "name": "asrd8_b1",
+   "desc": "bank 1's copy of asrd8: arithmetic shift right of D by 8 bits, A to B and sign extend. no caller found, unused as far as can be seen. the two bytes after its RTS are the ASRD7 entry of the chain that follows"
+  },
+  "B1:6227": {
+   "desc": "entry point: arithmetic shift D right 1 bit, then the RTS at ASRD0_B1. called at KE8BE"
+  },
+  "B1:622A": {
+   "name": "lsrd12_b1",
+   "desc": "bank 1's copy of lsrd12: logical shift right of D by 12 bits, A to B, clear A, 4 shifts of B. first of the logical shift right library (12 to 8 bits as short routines, then the chain at lsrd7_b1). no caller found for any of them in bank 1"
+  },
+  "B1:6232": {
+   "name": "lsrd11_b1",
+   "desc": "bank 1's copy of lsrd11: logical shift right of D by 11 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:6239": {
+   "name": "lsrd10_b1",
+   "desc": "bank 1's copy of lsrd10: logical shift right of D by 10 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:623F": {
+   "name": "lsrd9_b1",
+   "desc": "bank 1's copy of lsrd9: logical shift right of D by 9 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:6244": {
+   "name": "lsrd8_b1",
+   "desc": "bank 1's copy of lsrd8: logical shift right of D by 8 bits, A to B and clear A. no caller found, unused as far as can be seen"
+  },
+  "B1:6248": {
+   "name": "lsrd7_b1",
+   "desc": "logical shift right of D by 7 bits: seven LSRA RORB pairs and an RTS, the fall-through chain whose 4 bit entry is lsrd4 in bank 0 (there the first three pairs are listed as data at LB2FC). the entries for 6 to 1 bits are every two bytes inside it. no caller of any of them was found in bank 1"
+  },
+  "B1:6257": {
+   "name": "lsld12_b1",
+   "desc": "bank 1's copy of lsld12: shift D left 12 bits, B to A, clear B, 4 shifts of A. first of five such entries (12 to 8 bits) in front of Atari's LSLD chain. no caller found, unused as far as can be seen"
+  },
+  "B1:625F": {
+   "name": "lsld11_b1",
+   "desc": "bank 1's copy of lsld11: shift D left 11 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:6266": {
+   "name": "lsld10_b1",
+   "desc": "bank 1's copy of lsld10: shift D left 10 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:626C": {
+   "name": "lsld9_b1",
+   "desc": "bank 1's copy of lsld9: shift D left 9 bits. no caller found, unused as far as can be seen"
+  },
+  "B1:6271": {
+   "name": "lsld8_b1",
+   "desc": "bank 1's copy of lsld8: shift D left 8 bits, B to A and clear B. no caller found, unused as far as can be seen. the ten bytes after its RTS are the LSLD7 to LSLD3 entries of the chain that follows"
+  },
+  "B1:62B1": {
+   "name": "tranu1_entry_b1",
+   "desc": "bank 1's copy of tranu1_entry, the real entry of ESB's TRANU1: it saves U, which the transpose uses as its second scratch register, and the code ends with PULS U,PC. the TRANU1_B1 label two bytes further on must not be called by itself. no call to either address was found in bank 1"
+  },
+  "B1:62D9": {
+   "name": "store_u1_blk_b1",
+   "desc": "bank 1's copy of store_u1_block: copies the ship 1 download block of the math box (the nine matrix terms, the three spare words and the position) into the unit vector block whose middle U points at. no caller found in bank 1"
+  },
+  "B1:633D": {
+   "name": "presub_via_u2_b1",
+   "desc": "bank 1's copy of presub_via_u2: swaps the ship 1 and ship 2 download blocks, runs math box program $67 for the block index in M_BIC and waits, then swaps the blocks back. no caller found in bank 1"
+  },
+  "B1:6349": {
+   "name": "swap_u1_u2_b1",
+   "desc": "bank 1's copy of swap_u1_u2: exchanges the ship 1 download block with the ship 2 block word by word, the nine matrix terms and the position. U is saved and used as the second scratch register. the three headers that follow are parts of this one routine. called only by presub_via_u2_b1"
+  },
+  "B1:6357": {
+   "name": "swap_u1_u2_b1_b",
+   "desc": "not a separate routine and not TRANU1: swap_u1_u2_b1 continues here with the A.Y word. no call or jump to this address was found"
+  },
+  "B1:639F": {
+   "name": "swap_u1_u2_b1_c",
+   "desc": "not a separate routine: swap_u1_u2_b1 continues here with the C.Y word. no call or jump to this address was found"
+  },
+  "B1:63B7": {
+   "name": "swap_u1_u2_b1_d",
+   "desc": "not a separate routine: swap_u1_u2_b1 ends here with the three position words and PULS U,PC. no call or jump to this address was found"
+  },
+  "B1:63FE": {
+   "name": "roll_by_angle_b1",
+   "desc": "bank 1's copy of roll_by_angle: B = angle (256 to the full turn), block index already in M_BIC. sets M_SIN and M_COS from the sine table and runs math box program MS_ROLL. no caller found in bank 1"
+  },
+  "B1:6406": {
+   "name": "pitch_by_angle_b1",
+   "desc": "bank 1's copy of pitch_by_angle: as roll_by_angle_b1 with math box program MS_PTCH. no caller found in bank 1"
+  },
+  "B1:640E": {
+   "name": "yaw_by_angle_b1",
+   "desc": "bank 1's copy of yaw_by_angle: as roll_by_angle_b1 with math box program MS_YAW. no caller found in bank 1"
+  },
+  "B1:6416": {
+   "name": "set_sin_cos_b1",
+   "desc": "bank 1's copy of set_sin_cos: B = angle (256 to the full turn), writes its sine to M_SIN and its cosine to M_COS for the math box rotate programs. X is saved, D returns the cosine. used only by the three unused rotate entries in front of it"
+  },
+  "B1:642E": {
+   "name": "sine_b1",
+   "desc": "bank 1's copy of sine: B = angle (256 to the full turn), returns D = sine as a signed fraction with $4000 = 1.0. looks the first quadrant up in the 65-word table sine_tab_b1, reads the table backwards for the second quadrant and negates the value for angles $80-$FF. uses X"
+  },
+  "B1:6511": {
+   "name": "rnd_set_b1",
+   "desc": "bank 1's copy of rnd_set, ESB's form of the Star Wars RND8: moves RND_S1 and RND_S2 down to RND_S3 and the byte after it, then reads two new bytes from the pokey random register P_RND1 into RND_S2 and RND_S1. called by the star code at K7D0F and K7D50"
+  },
+  "B1:66D0": {
+   "name": "view_title_logo",
+   "desc": "ESB's VWBNNR, rewritten: views the title of the banner phase, called once a frame by PHEBNR through the cross-bank entry L60F0 with Y = display list pointer. counts BN_CNT up. for the first $20 frames the logo brightens in place (bn_brite up 5 a frame, linear scale $20), then it dims by 2 a frame and shrinks (linear scale up 3 a frame) towards a point 358 units above the screen centre, and from frame $68 it is not drawn. the logo is 27 outlines listed in ttl_outline_tab, each drawn by title_outline: the first six, STAR WARS, in colour 1 and the others, THE EMPIRE STRIKES BACK and two bars, in colour 3. where Star Wars called six vector ROM pictures, ESB builds the vectors from point lists. ends by jumping to bank 0's spmess_entry, the special messages part of the Star Wars routine"
+  },
+  "B1:6791": {
+   "name": "title_outline",
+   "desc": "draws one outline of the title logo: U = list of 5-byte records (flag byte, x word, y word, a flag of 0 ends the list), Y = display list pointer. the pen starts at x 0, y $198. for each record it writes a long vector from the last point to this one, blank when bit 0 of the flag is set (flag 1) and at intensity 7 otherwise (flag 2). called only by view_title_logo"
+  }
+ },
+ "sw_drop_names": [
+  "B1:6357"
+ ],
+ "labels": {
+  "B1:644A": "sine_tab_b1",
+  "B1:675B": "ttl_outline_tab",
+  "B1:6767": "ttl_tab_esb",
+  "B1:67C9": "ttl_sw_st",
+  "B1:6856": "ttl_sw_w",
+  "B1:68B6": "ttl_sw_a1",
+  "B1:68F8": "ttl_sw_a2",
+  "B1:693A": "ttl_sw_r",
+  "B1:69CC": "ttl_sw_rs",
+  "B1:6A8B": "ttl_the_th",
+  "B1:6AEB": "ttl_the_e",
+  "B1:6B2D": "ttl_the_bar",
+  "B1:6B47": "ttl_emp_e1",
+  "B1:6B89": "ttl_emp_m",
+  "B1:6BCB": "ttl_emp_p",
+  "B1:6C3F": "ttl_emp_i",
+  "B1:6C59": "ttl_emp_r",
+  "B1:6CF5": "ttl_emp_e2",
+  "B1:6D37": "ttl_str_s1",
+  "B1:6DA1": "ttl_str_t",
+  "B1:6DCF": "ttl_str_r",
+  "B1:6E5C": "ttl_str_i",
+  "B1:6E76": "ttl_str_k",
+  "B1:6EC7": "ttl_str_e",
+  "B1:6F09": "ttl_str_s2",
+  "B1:6F73": "ttl_bck_b"
+ },
+ "comments": {
+  "B1:601B": "the JMP of this entry is in bank 0. three SWI opcodes fill its place here, as in every entry of the table",
+  "B1:609F": "from here on the entries are bank 1 routines: the JSR xbank_call is in bank 0 and the JMP is here",
+  "B1:60A5": "JINOBJ with X saved: clear the object list of the math box and reset its fill pointers",
+  "B1:60AB": "B = object number: copy that object's points into math RAM unless they are there already (BJ_ID = B, then JADOBJ)",
+  "B1:60B1": "the same for the object already in BJ_ID. no call through this entry was found",
+  "B1:60B7": "perspective of the object's centre and a blank vector to it from the screen centre",
+  "B1:60BD": "object draw position to 0,$68 and a JSRL $32AC into the display list",
+  "B1:60C3": "visible line from the current object draw position to the point just divided",
+  "B1:60C9": "the same as a blank line",
+  "B1:60CF": "reset the pointer for perspected points to the start of BJ_PNT",
+  "B1:60D5": "B = object number: transform and perspect all its points into BJ_PNT",
+  "B1:60DB": "the same for the object already in BJ_ID. no call through this entry was found",
+  "B1:60E1": "one more point: MS_PAD with block index $0F, reciprocal and perspective, stored at the BJ_PNT pointer, which moves on 5 bytes",
+  "B1:60E7": "draw the object in BJ_ID through its draw routine in the table KD6CD",
+  "B1:60ED": "B = object number: draw that object (BJ_ID = B, then KDA2C)",
+  "B1:60F3": "view_title_logo: the title of the banner phase, then bank 0's special messages",
+  "B1:60F9": "view the high score table, Star Wars' VWHSCR (called by PHEHIS and PHEENT)",
+  "B1:60FF": "step the player's place in the high score table up when the score has reached the next entry (called by IFRAME)",
+  "B1:6105": "end of game: look for the score's place in the high score table and make room for it, Star Wars' UPDATE",
+  "B1:610B": "take the player's initials with the sight",
+  "B1:6111": "high scores and initials from the EEROM image to INITLS, then the check at KE400",
+  "B1:6117": "check the high score table for reasonableness, defaults (DOINTS) when it fails",
+  "B1:611D": "copy the default high score table into the EEROM image at $4D04. no call through this entry was found",
+  "B1:6123": "draw the statistics page of the self test (PHESTS), Star Wars' EEACC",
+  "B1:6129": "coin counter accounting, called by COINS: Star Wars' EEACCU",
+  "B1:612F": "end of game accounting: game time and counts into the EEROM image",
+  "B1:6135": "update the total time on, the second half of Star Wars' EEUTIM (called by PHIBNR)",
+  "B1:613B": "set the checksum of EEROM area A and write the area to the NVRAM as nibbles. no call through this entry was found",
+  "B1:6141": "checksum of EEROM area A: Z set when it matches the stored one. no call through this entry was found",
+  "B1:6147": "called once by RESET: builds the EEROM image from the NVRAM nibbles and recalls the non-volatile memory, descends from Star Wars' EEINIT",
+  "B1:614D": "check EEROM area A and restore it when its checksum is bad, Star Wars' CHKEE. no call through this entry was found",
+  "B1:6153": "check EEROM area 3 and re-init it when its checksum is bad (called by PHIOPT)",
+  "B1:6159": "draw the option page of the self test (PHEOPT), Star Wars' EEOPT",
+  "B1:615F": "option page input (PHEOPT): carries out the resets chosen in RESETS, then Star Wars' EEOPT1, select and change an option with the sight and the left fire button",
+  "B1:6165": "A = option number: display its value. no call through this entry was found",
+  "B1:616B": "copy 4 bytes from X to U (in Star Wars it moved EEROM nibbles to bytes)",
+  "B1:6171": "set up the stars",
+  "B1:6177": "set up the ground stars",
+  "B1:617D": "view the stars",
+  "B1:6183": "view the ground stars",
+  "B1:6189": "clear byte 13 of every 14-byte slot of the explosion queue XPQUE, called by the setup of each part of a wave and of a manual page",
+  "B1:618F": "X = alien parms: clear its byte 3 and begin the alien explosion BGAXP (called by CPHTSA on page 3)",
+  "B1:6195": "BGTWXP with X and U saved: begin a three-piece explosion (called by page 0 P0_9006)",
+  "B1:619B": "BGBKXP with X and U saved: begin a three-piece explosion (called by page 2 P2_92EE)",
+  "B1:61A1": "KE59C is an RTS: an entry with nothing behind it. no call through it was found",
+  "B1:61A7": "KE718 with X and U saved: begin a three-piece explosion with piece types 3, 4 and 5 (called by page 1 P1_8E33)",
+  "B1:61AD": "process the explosions in progress",
+  "B1:61B3": "view the explosions",
+  "B1:621B": "really code: ASRA RORB, the ASRD7 entry of Atari's chain, falling into ASRD6_B1. nothing calls it",
+  "B1:6275": "really code: LSLB ROLA five times, the LSLD7 to LSLD3 entries of Atari's chain, falling into LSLD2. nothing calls them",
+  "B1:62A4": "MS_CX,U",
+  "B1:6340": "MS_PSB2, the 15-bit pre-subtract, for the block index in M_BIC",
+  "B1:6401": "MS_ROLL",
+  "B1:6409": "MS_PTCH",
+  "B1:6411": "MS_YAW",
+  "B1:6418": "the angle is parked in the high byte of M_COS",
+  "B1:6424": "a quarter turn on: the cosine",
+  "B1:6431": "second or fourth quadrant?",
+  "B1:6435": "then count back from 90 degrees",
+  "B1:643A": "word index, and bit 7 of the angle goes to carry",
+  "B1:643D": "carry set, angle $80-$FF: the sine is negative",
+  "B1:644A": "sine table: 65 words, 0 to 90 degrees in steps of 1/256 turn, $4000 = 1.0",
+  "B1:6511": "the last two bytes move down to RND_S3 and $4855",
+  "B1:6515": "two new random bytes",
+  "B1:66D2": "frames of banner so far, counted here",
+  "B1:66DB": "from frame $68 on the title is gone: only the special messages are left",
+  "B1:66E1": "first $20 frames: the title brightens in place",
+  "B1:66EA": "brightness up 5 a frame",
+  "B1:66EF": "linear scale $20 while it brightens",
+  "B1:66F3": "after that it dims by 2 a frame, not below 0",
+  "B1:6701": "and it shrinks: linear scale up 3 a frame, $F8 at most",
+  "B1:670C": "$72xx: scale instruction, binary scale 2",
+  "B1:6711": "brightness 0: nothing to draw",
+  "B1:6716": "$61bb: colour 1, blue, for STAR WARS",
+  "B1:671A": "X = table of the 27 outlines",
+  "B1:671D": "per outline: blank vector 358 up from the screen centre, to the point the title shrinks towards",
+  "B1:6727": "the title's scale",
+  "B1:672C": "blank vector dy -660, dx -425 at that scale, to x 0, y $198 of the outline coordinates",
+  "B1:6736": "U = the next outline's records",
+  "B1:673B": "back to the normal scale and the centre",
+  "B1:6745": "after the sixth outline: colour 3, turquoise, for THE EMPIRE STRIKES BACK",
+  "B1:6751": "until X reaches the end of the table, which is the address of the code after it",
+  "B1:6758": "bank 0 spmess_entry: the special messages that go with the banner",
+  "B1:675B": "the 27 outlines of the title logo, in drawing order. first the six of STAR WARS",
+  "B1:6767": "the 21 of THE EMPIRE STRIKES BACK: TH, E, bar, EMPIRE, STRIKES, BACK, underline. the last four lists are past $7000",
+  "B1:6791": "pen position: $4803 = last y, starts at $198",
+  "B1:6796": "tmp_scal = last x, starts at 0",
+  "B1:679B": "flag byte of the record",
+  "B1:679D": "bit 0 set (flag 1): move without drawing",
+  "B1:67A4": "else (flag 2) intensity 7",
+  "B1:67A8": "dy = y - last y, 13 bits",
+  "B1:67B0": "dx = x - last x, with the intensity bits",
+  "B1:67C2": "next 5-byte record, a flag of 0 ends the outline",
+  "B1:67C9": "title logo outlines: 5-byte records - flag (1 move, 2 draw, 0 end of outline), x word, y word. x runs 0 to 850, y 18 to 906. this one: the ST of STAR, the S drawn out down the left edge of the logo",
+  "B1:6856": "the W of WARS, drawn out to the left along the bottom of the logo",
+  "B1:68B6": "the A of STAR, outline and hole",
+  "B1:68F8": "the A of WARS, outline and hole",
+  "B1:693A": "the R of STAR, drawn out along the top and down the right edge of the logo",
+  "B1:69CC": "the RS of WARS at the lower right",
+  "B1:6A8B": "TH of THE, one outline",
+  "B1:6AEB": "E of THE",
+  "B1:6B2D": "the bar to the right of THE, 4 corners",
+  "B1:6B47": "EMPIRE: E",
+  "B1:6B89": "M",
+  "B1:6BCB": "P, outline and hole",
+  "B1:6C3F": "I",
+  "B1:6C59": "R, outline and hole",
+  "B1:6CF5": "E",
+  "B1:6D37": "STRIKES: S",
+  "B1:6DA1": "T",
+  "B1:6DCF": "R, outline and hole",
+  "B1:6E5C": "I",
+  "B1:6E76": "K",
+  "B1:6EC7": "E",
+  "B1:6F09": "S",
+  "B1:6F73": "BACK: B, outline and two holes. the list runs on to $7013"
+ },
+ "ram": {
+  "4C03": {
+   "name": "bn_scale",
+   "desc": "word: scale instruction of the title logo drawn by bank 1's view_title_logo, $72 and the linear scale. Star Wars' BN_SCL at a new address"
+  },
+  "4C04": {
+   "name": "bn_scale_lo",
+   "desc": "low byte of bn_scale, the logo's linear scale: $20 while the logo brightens, then up 3 a frame to $F8 at most, which shrinks it away"
+  },
+  "4803": {
+   "name": "tmp_prev_y",
+   "desc": "temp of title_outline in bank 1 (word): y of the last point of the outline being drawn. the address is a shared temp of many routines (TMPDY, TMPOCT, TMPSIZ, TMPTP3 in Star Wars)"
+  },
+  "4805": {
+   "name": "tmp_inten",
+   "desc": "temp of title_outline in bank 1: intensity bits for the vector being written, $E0 to draw or 0 to move. the address is a shared temp (TMPXD in Star Wars)"
+  }
+ },
+ "regions": [
+  ["B1", "644A", "64CC", "words"],
+  ["B1", "675B", "6791", "ptrs"]
+ ],
+ "questions": [
+  "B1:67C9-$712A - this block is not a script like the rebel training manual: it is the 27 point lists of the title logo that view_title_logo (K66D0) draws through the pointer table at K675B. the records are 5 bytes (flag, x word, y word), so no region kind fits and the listing will keep them as .byte rows of 8. it would read better as one record per line. the block ends at $712A, past my range: the lists at K7014 (A of BACK), K7056 (C), K70C0 (K) and K7111 (the underline bar, 4 corners) and the tail of the B at K6F73-K7013 belong to the next stretch and have no labels from me",
+  "which outline is which letter i took from a plot of the points and from the point counts, not from running the game. the six STAR WARS outlines are the least certain: by position 0 is ST, 1 W, 2 and 3 the two As, 4 the R of STAR and 5 the RS of WARS, with three of them drawn out into the frame around the other words",
+  "B1:66D0 has no routine header in the snapshot (it follows aud_cmd_52_b1 without a break) although it is the target of the table entry K60F3. i gave it a routines entry",
+  "B1:621B - the two bytes $47,$56 shown as data are code: ASRA RORB, the ASRD7 entry. B1:6275 - the ten bytes $58,$49 x5 are code: LSLB ROLA five times, the LSLD7 to LSLD3 entries. nothing calls them, as in bank 0 (B0:B2FC)",
+  "B1:6357, B1:639F, B1:63B7 - these headers split swap_u1_u2_b1 at addresses nothing refers to, as B0:B40B, B0:B453 and B0:B46B do in bank 0, where 00_start lists them under no_header. the name TRANU1_B1_2 at B1:6357 is a false match (i put it in sw_drop_names): the code swaps the ship 1 and ship 2 blocks, it does not transpose. B1:62B3 TRANU1_B1 is the real transpose but its entry is K62B1 (PSHS U)",
+  "most of this library has no caller in bank 1 and cannot be called from bank 0 or the slapstic pages: IPGEN_B1, IMATH_B1, IS1UV_B1, S1RL_B1, S1PT_B1, S1YW_B1, BCDBIN_B1, AUDTST_B1, PMTST_B1, all the spk_cmd and tune_cmd stubs and all aud_cmd stubs but $38, $3B and $3F (called at KE325-KE360). what bank 1 does call: MGOWT_B1, UNITV_B1, IS2UV_B1, BINBCD, rnd_set_b1 (K6511), ASRD6_B1, ASRD5, ASRD4, ASRD1_B1 and LSLD2. it looks like the same library source assembled into both banks",
+  "the table comments at B1:60A5-B1:61B3 describe routines outside my range from a short look at each and at their bank 0 callers. the annotators of $7000-$7FFF and $D000-$EFFF should correct them where they know better. entries with no call found through them from bank 0 or the slapstic pages: L60AE, L60D8, L611A, L6138, L613E, L614A, L6162, L619E",
+  "$4803 and $4805 are shared temps with several Star Wars aliases in esb_defines.asm but show as bare operands. i named them after their use in title_outline. the reconciler may prefer one general name",
+  "the 22 outline labels from B1:6856 to B1:6F73 and their comments sit at addresses that are in the middle of an 8-byte .byte row in the snapshot. they rely on the generator starting a new row at a label",
+  "B1:6751 - the loop of view_title_logo ends when X reaches K6791, the address of the code after the table, so the table has exactly 27 entries"
+ ]
+}

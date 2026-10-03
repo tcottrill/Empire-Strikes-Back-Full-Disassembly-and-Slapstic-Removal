@@ -1,0 +1,356 @@
+{
+ "about": "bank 0 $61B6-$67FF: the main loop, the phase dispatcher with its 77-entry phase table, and the reset, attract mode and game start phase routines",
+ "routines": {
+  "B0:61B6": {
+   "name": "WAITFRAME",
+   "desc": "the main loop, Star Wars's WAITFRAME and MAIN which the matcher missed. waits for the IRQ to set GMSYNC, once per game frame. if the stack is not at its top a phase routine has called this loop to wait a frame and it returns into that routine. otherwise it reads the gun switches and their edges (this part was in IFRAME in Star Wars), handles the freeze option, where holding left fire steps frames at a growing rate, calls IFRAME and then the routine of the current phase through TPHASE"
+  },
+  "B0:62D3": {
+   "name": "IFRAME",
+   "desc": "Star Wars's IFRAME, init game frame, without the switch reading that moved into the main loop: steps the 16-bit frame counter, sends the coin sound command once when the first credit appears, has bank 1 move the player's place in the high score table (KE209) and pulls the cursor position from the IRQ's pot values"
+  },
+  "B0:630A": {
+   "name": "init_parms",
+   "desc": "Star Wars's IPARM, whose name the listing has given to another routine: init the general parameters (init_general) and the player's ship (NW1SHP)"
+  },
+  "B0:6311": {
+   "name": "init_general",
+   "desc": "the three parts of Star Wars's IPGEN, now in three places: random generator check and math box constants (IPGEN), bank 1's clear of the object list (JINOBJ) and page 1's init of the gun shot blocks (P1_8EFC)"
+  },
+  "B0:63D6": {
+   "desc": "adjust one saved pot limit for PHERES: X points at the saved byte, A returns the value to use. a saved value of $40 or more gives $40, a lower one is moved up by an eighth of its distance to $40 plus 1"
+  },
+  "B0:63E5": {
+   "name": "PHIBNR",
+   "desc": "phase $01, Star Wars's PHIBNR which the matcher missed: init of the banner (title) phase. loads display list set 0, turns the messages off, starts the banner, restores the math box and the ship, and about every 6.7 minutes, if the attract music option is on, starts one of the five tunes of TMUSIC at random"
+  },
+  "B0:6445": {
+   "name": "PHEBNR",
+   "desc": "phase $02, Star Wars's PHEBNR which the matcher missed: one frame of the banner phase. draws the stars, the banner (bank 1 K66D0), the special messages, the coin lines, the score line and the Jedi letters, moves the stars, flashes the Jedi letters and checks the start and test switches. new in this game: when the banner counter reaches $200 it goes on to the scoring page"
+  },
+  "B0:64DC": {
+   "name": "view_ins_page",
+   "desc": "view the flight instructions page for PHEINS, a copy of VWPAGE without the scroll: counts the phase timer up, turns on the next line every 8 frames, puts the shield count digit of the option switches into the line that names it, fades the messages out from frame $140 and sets the timer to $200 when they are dark, which ends the phase"
+  },
+  "B0:6538": {
+   "name": "PHISCR",
+   "desc": "phase $03, Star Wars's PHISCR which the matcher missed: init of the scoring page. the page starts $3C0 down and scrolls up, lines are messages $24 to $2A"
+  },
+  "B0:6592": {
+   "name": "VWPAGE",
+   "desc": "Star Wars's VWPAGE which the matcher missed, here used by the scoring page only: counts the phase timer up (it counted down in Star Wars), turns on the next line every 8 frames, scrolls the page up 8 units a frame until its offset is 0, fades the messages out from frame $140 and sets the timer to $200 when they are dark, which ends the phase"
+  },
+  "B0:65EB": {
+   "name": "VWCOIN",
+   "desc": "Star Wars's VWCOIN which the matcher missed: the two coin lines of the attract screens. first line: with no credit \"game over\" and \"insert coins\" alternate, with credit \"pull trigger to start\". second line: \"free play\" in free play mode (new in this game), else the cost of a game or the number of credits with a half sign for a partial credit. Y = display list pointer"
+  },
+  "B0:66E9": {
+   "name": "hiscore_init",
+   "desc": "phase $09 (PHS_HIS): init of the high score table display. this is Star Wars's PHIHIS, whose name the listing has given to the design team page at L6671. blue for the table, messages off, math box and ship restored, high scores checked for reasonableness by bank 1"
+  },
+  "B0:6713": {
+   "name": "hiscore_exec",
+   "desc": "phase $0A: one frame of the high score table display, Star Wars's PHEHIS with the timer counting up. draws the copyright message, stars, score line, coin lines, the table in the phase colour (faded from frame $B0) and the Jedi letters, moves the stars forward, and after $100 frames goes back to the banner. checks the start and test switches"
+  },
+  "B0:6776": {
+   "name": "CPYRGHT",
+   "desc": "Star Wars's CPYRGHT cut down to one message: draws message $00, the title and the three copyright lines. Y = display list pointer"
+  },
+  "B0:677B": {
+   "name": "PHISG1",
+   "desc": "phase $0B, Star Wars's PHISG1 cut down: entered when the start switch is accepted. loads display list set 0 and sends a sound command, then goes on to PHESG1"
+  },
+  "B0:678F": {
+   "name": "game_vars_init",
+   "desc": "reset the per-game variables, the second half of Star Wars's PHESG1: no attract music after the game, messages off, Jedi letters cleared, frame counter 0, shields from the option switches (2 to 5), Jedi time, difficulty adder and gas gauge flags cleared, cursor centred and the pot limits perturbed. PHESG1 falls into it and the continue offer (L69B0) calls it"
+  }
+ },
+ "labels": {
+  "B0:6239": "TPHASE"
+ },
+ "comments": {
+  "B0:61B6": "kept from Star Wars, where X and D talked to the development system",
+  "B0:61B9": "no IRQ or FIRQ while the direct page register is loaded",
+  "B0:61BE": "direct page $48",
+  "B0:61C4": "bit 0 of GMSYNC is set by the IRQ when a game frame is due",
+  "B0:61C8": "stack not at its top: a phase routine called this loop to wait for a frame",
+  "B0:61CE": "so return into it",
+  "B0:61E9": "pot filter still settling after power on: no freeze",
+  "B0:61ED": "freeze option: bit 7 set = run normally",
+  "B0:61F4": "frozen. left fire (bit 7, active low) up on the frame before?",
+  "B0:61FA": "then rearm: the next press steps at once",
+  "B0:61FF": "and its first repeat comes after 10 frame times",
+  "B0:6204": "count the delay down",
+  "B0:6207": "not run out, or fire not held: no game frame",
+  "B0:620B": "step one frame: reload the delay",
+  "B0:6211": "and shorten the next delay by 2, not below 2",
+  "B0:621A": "the stepped frame sees no left fire: clear its lasers-on bit",
+  "B0:6220": "and its edge",
+  "B0:6226": "frame counter, coin sound, high score place, cursor",
+  "B0:6229": "Star Wars's MAIN: run the routine of the current phase",
+  "B0:622B": "77 phases",
+  "B0:622D": "die on a bad phase",
+  "B0:6236": "next frame",
+  "B0:6239": "phase $00: reset - pot limits, attract mode variables, high scores from NVRAM",
+  "B0:623B": "phase $01 (PHS_BNR): banner (title), init",
+  "B0:623D": "phase $02: banner, execute - until the banner counter reaches $200",
+  "B0:623F": "phase $03: scoring page, init",
+  "B0:6241": "phase $04: scoring page, execute",
+  "B0:6243": "phase $05: flight instructions, init",
+  "B0:6245": "phase $06: flight instructions, execute",
+  "B0:6247": "phase $07: design team page (message $01), init - not the high score display its carried name says",
+  "B0:6249": "phase $08: design team page, execute",
+  "B0:624B": "phase $09 (PHS_HIS): high score table, init",
+  "B0:624D": "phase $0A: high score table, execute - then back to phase $01",
+  "B0:624F": "phase $0B: start game part 1, init - entered from STRTCK when the start switch is accepted",
+  "B0:6251": "phase $0C: start game part 1, execute - reset the per-game variables, then phase $0D",
+  "B0:6253": "phase $0D: select the starting wave, init - message $2B, three wave planets and two instructions planets",
+  "B0:6255": "phase $0E: select the starting wave, execute - cursor on a planet and fire, or the countdown ends, then phase $0F",
+  "B0:6257": "phase $0F: opening text, init - display list set 0, stars, sounds, falls into phase $10",
+  "B0:6259": "phase $10: opening text, execute - message $2C (Darth Vader's Executor is searching) for 100 frames, then phase $13",
+  "B0:625B": "phase $11: continue offer, shown when a continue wave of 4 or more is on record, init - message $2D, you may start your next game on wave n",
+  "B0:625D": "phase $12: continue offer, execute - fire on the planet with a credit starts at that wave (phase $13), after $200 frames back to phase $01",
+  "B0:625F": "phase $13: start game part 2, init - parameters, stars, score, bonus counts, falls into phase $14",
+  "B0:6261": "phase $14: start game part 2, execute - on to phase $15",
+  "B0:6263": "phase $15 (PHS_BGN): begin a wave, init - wave number for the display, the level of each of the four parts from GM_DIF, falls into phase $16",
+  "B0:6265": "phase $16: begin a wave, execute - on to phase $17",
+  "B0:6267": "phase $17: probot part, entry - display list set 1, Q_FRC = 0, then the training manual (phase $43) if it was selected, else falls into the setup of phase $45",
+  "B0:6269": "phase $18: probot part, fly in - 40 frames without shooting, then phase $19",
+  "B0:626B": "phase $19: probot part, init - enemy skill level from wave and difficulty adder, falls into phase $1A",
+  "B0:626D": "phase $1A: probot part, execute - until $4CA1 reaches 4, then phase $1B",
+  "B0:626F": "phase $1B: probot part, second stage, init - a speech line chosen by the wave, falls into phase $1C",
+  "B0:6271": "phase $1C: probot part, second stage, execute - until $4C69 is 0, then phase $1D",
+  "B0:6273": "phase $1D: probot part, exit, init",
+  "B0:6275": "phase $1E: probot part, exit, execute - 40 to 80 frames, then phase $1F",
+  "B0:6277": "phase $1F: walker part, entry - display list set 1, Q_FRC = 1, then the training manual (phase $43) if selected, else into the setup of phase $46 past its parameter init",
+  "B0:6279": "phase $20: walker part, execute - until $4CA3 reaches $190, then phase $21",
+  "B0:627B": "phase $21 (PHS_SP2): walker part, second stage, init - falls into phase $22",
+  "B0:627D": "phase $22: walker part, second stage, execute - until $4C6A and $4C6B are 0, then phase $23",
+  "B0:627F": "phase $23: walker part, exit, init - music, falls into phase $24",
+  "B0:6281": "phase $24: walker part, exit, execute - 40 frames, then phase $25",
+  "B0:6283": "phase $25: TIE fighter part, entry - display list set 2, Q_FRC = 2, then the training manual (phase $43) if selected, else falls into the setup of phase $47",
+  "B0:6285": "phase $26: TIE fighter part, execute - 440 frames, a new fighter whenever fewer than 3 are alive, then phase $27",
+  "B0:6287": "phase $27: TIE fighters leave, init - nothing to set up, falls into phase $28",
+  "B0:6289": "phase $28: TIE fighters leave, execute - until none is left and the player has turned, then phase $29",
+  "B0:628B": "phase $29: TIE fighter part, exit, init",
+  "B0:628D": "phase $2A: TIE fighter part, exit, execute - until $4CCC is down to -$208, then phase $2B",
+  "B0:628F": "phase $2B: asteroid part, entry - display list set 2, Q_FRC = 3, then the training manual (phase $43) if selected, else into the setup of phase $48 past its parameter init",
+  "B0:6291": "phase $2C: asteroid part, execute - 300 frames (400 from wave 3 on), then phase $2D",
+  "B0:6293": "phase $2D: asteroid field passed, init - awards a Jedi letter, falls into phase $2E",
+  "B0:6295": "phase $2E: asteroid field passed, execute - message $4D (5,000 points and Jedi letter awarded) for 70 frames, then phase $2F",
+  "B0:6297": "phase $2F: sets phase $31 and falls into its routine",
+  "B0:6299": "phase $30: the same routine as phase $2F, no code found that enters it",
+  "B0:629B": "phase $31: wave completed, init - messages off, wave completed score, falls into phase $32",
+  "B0:629D": "phase $32: wave completed, execute - $80 frames, in the first wave of a game the starting wave bonus at frame $40, then phase $33",
+  "B0:629F": "phase $33: next wave, init - parameters restored, the four shoot-for-bonus counts raised, wave and score saved for the continue offer, falls into phase $34",
+  "B0:62A1": "phase $34: next wave, execute - GM_DIF + 1, difficulty adder raised in the first three waves, back to phase $15",
+  "B0:62A3": "phase $35 (PHS_S0D): shields gone in the probot part, init - falls into phase $36",
+  "B0:62A5": "phase $36: shields gone in the probot part, execute - 40 frames with the growing game over message, then phase $3F",
+  "B0:62A7": "phase $37 (PHS_G0D): shields gone in the walker part, init - falls into phase $38",
+  "B0:62A9": "phase $38: shields gone in the walker part, execute - 40 frames, then phase $3F",
+  "B0:62AB": "phase $39 (PHS_B0D): shields gone in the TIE fighter part, init - falls into phase $3A",
+  "B0:62AD": "phase $3A: shields gone in the TIE fighter part, execute - the ship rolls for 40 frames, then phase $3F",
+  "B0:62AF": "phase $3B: shields gone in the asteroid part, init - falls into phase $3C",
+  "B0:62B1": "phase $3C: shields gone in the asteroid part, execute - the ship rolls for 40 frames, then phase $3F",
+  "B0:62B3": "phase $3D: game over over a plain screen, init - no code found that enters it",
+  "B0:62B5": "phase $3E: game over over a plain screen, execute - 40 frames, then phase $3F",
+  "B0:62B7": "phase $3F (PHS_EGM): end of game, init - falls into phase $40",
+  "B0:62B9": "phase $40: end of game, execute - bookkeeping, then phase $41 on a new high score, else phase $11 if a continue wave of 4 or more is on record, else phase $01",
+  "B0:62BB": "phase $41: enter initials, init",
+  "B0:62BD": "phase $42: enter initials, execute - then phase $11 if a continue wave of 4 or more is on record, else phase $09",
+  "B0:62BF": "phase $43: rebel training manual for the coming part, init",
+  "B0:62C1": "phase $44: rebel training manual, execute - $190 frames or until $4CB8 is set, then phase $45 + Q_FRC",
+  "B0:62C3": "phase $45: probot part setup after the training manual - also the tail of phase $17, ends in phase $18",
+  "B0:62C5": "phase $46: walker part setup after the training manual - phase $1F enters it part way, ends in phase $20",
+  "B0:62C7": "phase $47: TIE fighter part setup after the training manual - also the tail of phase $25, ends in phase $26",
+  "B0:62C9": "phase $48: asteroid part setup after the training manual - phase $2B enters it part way, ends in phase $2C",
+  "B0:62CB": "phase $49: statistics, init - entered from TSTCK when the self test switch is on",
+  "B0:62CD": "phase $4A: statistics, execute - aux switch goes to phase $4B, test switch off to phase $01",
+  "B0:62CF": "phase $4B: option settings, init",
+  "B0:62D1": "phase $4C: option settings, execute - aux switch resets the game, test switch off goes to phase $01",
+  "B0:62DB": "the frame word overflowed: its high byte restarts at $80",
+  "B0:62DF": "credits",
+  "B0:62E3": "none: the coin sound may be made again",
+  "B0:62E8": "sound already made for these credits?",
+  "B0:62ED": "first credit: send the sound command of SPKI",
+  "B0:62F0": "remember the credits it was made for",
+  "B0:62F7": "more credits than then?",
+  "B0:62FE": "then $FF: nothing more until the credits are gone",
+  "B0:6303": "bank 1 KE209: step the player's high score place up when the score has reached the next entry",
+  "B0:6306": "cursor position from the IRQ's pot values",
+  "B0:6311": "random generator check and math box constants",
+  "B0:6314": "bank 1 JINOBJ: clear the object list",
+  "B0:6321": "phase $04 here is the scoring page",
+  "B0:635B": "statistics phase",
+  "B0:6362": "the four pot limits saved in NVRAM",
+  "B0:6365": "16 bytes of stack to read them into",
+  "B0:6369": "bank 1 EETMP2: NVRAM nibbles at X to bytes at U",
+  "B0:6391": "attract mode starts at the high score table",
+  "B0:63A0": "display list set 0",
+  "B0:63A2": "copy that set from ROM to vector RAM",
+  "B0:63BC": "wave 1",
+  "B0:63BF": "wave number 1 for the display",
+  "B0:63C4": "bank 1 KE3E8: high scores and initials from NVRAM, checked",
+  "B0:63C7": "no initials being entered",
+  "B0:63D0": "place 25: the player's score is below the whole high score table",
+  "B0:63E7": "display list set 0",
+  "B0:6445": "wait for the display buffer, Y = display list pointer",
+  "B0:6448": "bank 1 JVWSTAR: view the stars",
+  "B0:644E": "special messages that go with the banner",
+  "B0:6454": "score line",
+  "B0:645D": "move the stars for the banner",
+  "B0:6463": "every 32 frames",
+  "B0:646A": "flash the Jedi letters: display state 2 (shown) or 0 (off)",
+  "B0:6475": "frames of banner so far",
+  "B0:647E": "$200: on to the scoring page",
+  "B0:6487": "phase timer counts up from 0",
+  "B0:6492": "one past the last line of the page",
+  "B0:64BB": "view_ins_page sets the timer to $200 when the page has faded",
+  "B0:64C4": "then on to the design team page",
+  "B0:64C9": "every 32 frames flash the Jedi letters",
+  "B0:64DC": "phase timer counts up",
+  "B0:64E5": "every 8 frames turn on the next line",
+  "B0:64F8": "shield option 0-3",
+  "B0:64FD": "messages $20-$23 are the digits 2-5 that go into that line",
+  "B0:650C": "$80: no more lines",
+  "B0:6514": "from frame $140 fade the page out",
+  "B0:651A": "brightness the message drawing uses",
+  "B0:651F": "below 8 is dark enough",
+  "B0:6523": "the timer value that ends the phase",
+  "B0:6538": "the page starts $3C0 down and scrolls up",
+  "B0:6546": "messages at full brightness",
+  "B0:6549": "first line of the page, \"rebel scoring\"",
+  "B0:654E": "one past its last line",
+  "B0:6571": "VWPAGE sets the timer to $200 when the page has faded",
+  "B0:657A": "then on to the flight instructions",
+  "B0:657F": "every 32 frames flash the Jedi letters",
+  "B0:6592": "phase timer counts up",
+  "B0:659B": "every 8 frames turn on the next line",
+  "B0:65C4": "from frame $140 fade the page out",
+  "B0:65D6": "the timer value that ends the phase",
+  "B0:65FB": "draw message B now",
+  "B0:6605": "second line. coin mode",
+  "B0:660C": "free play: say so, and no credit count",
+  "B0:6623": "an unreachable BRA L662F, the ELSE of the source macros",
+  "B0:6642": "position of the credit count: y 432",
+  "B0:6647": "x -128",
+  "B0:664E": "x -152 to leave room for the half sign",
+  "B0:6671": "in this game this entry starts the design team page",
+  "B0:6680": "messages at full brightness",
+  "B0:6685": "message $01: Atari's game design team",
+  "B0:66AE": "from frame $A0 fade the page out",
+  "B0:66B4": "brightness the message drawing uses",
+  "B0:66B7": "two steps a frame",
+  "B0:66BD": "dark: the timer value that ends the phase",
+  "B0:66D1": "on to the high score table",
+  "B0:66D6": "every 32 frames flash the Jedi letters",
+  "B0:6725": "from frame $B0 fade the table out",
+  "B0:674A": "move the stars forward",
+  "B0:6756": "$100 frames of table",
+  "B0:675C": "then back to the banner",
+  "B0:6763": "every 32 frames flash the Jedi letters",
+  "B0:6776": "message $00: title and copyright lines",
+  "B0:677B": "display list set 0",
+  "B0:6780": "sound command of SPKLOS",
+  "B0:6788": "kill counter of the walker part",
+  "B0:678B": "next: select the starting wave",
+  "B0:678F": "no attract music right after a game",
+  "B0:679A": "frame counter from 0",
+  "B0:67A1": "not a continued game",
+  "B0:67B0": "no Jedi time running",
+  "B0:67B3": "the Jedi letters have not been completed yet",
+  "B0:67B9": "difficulty adder and its step from 0",
+  "B0:67C3": "cursor to the centre",
+  "B0:67E3": "shoot-for-bonus counts of the parts, from the starting wave",
+  "B0:67F1": "a coin routine byte, see the questions",
+  "B0:67F5": "the SPKFOA sound has not been sent this game",
+  "B0:67F8": "score 0",
+  "B0:67FC": "Jedi letters not completed in this game",
+  "B0:67FF": "place 25: below the whole high score table"
+ },
+ "ram": {
+  "4C47": {
+   "name": "step_delay",
+   "desc": "freeze option: frame times left until the next single step. held at 2 while left fire is up, counted down in the main loop while it is held, reloaded from step_rate at each step"
+  },
+  "4C48": {
+   "name": "step_rate",
+   "desc": "freeze option: the delay to load after the next single step. 10 when left fire goes down, then 2 less at each step down to 2, so a held fire switch steps faster and faster"
+  },
+  "4C4A": {
+   "name": "wave_bcd",
+   "desc": "wave number in BCD as the score line shows it: 1 after reset, GM_DIF + 1 (at most 99) when a wave begins. bank 1's bookkeeping keeps the highest value"
+  },
+  "4C50": {
+   "name": "jedi_time",
+   "desc": "3 bytes, the last a fraction: time left of the state that follows the completion of the four Jedi letters. page 1 sets the top word to $01C0 when the fourth letter is earned and counts it down every frame (P1_95F1) at a rate picked by jedi_count. the game start clears the top word"
+  },
+  "4C59": {
+   "name": "diff_step",
+   "desc": "amount by which diff_adder grows after a wave: 0 at game start, one more after each of the first three waves"
+  },
+  "4C5A": {
+   "name": "diff_adder",
+   "desc": "difficulty adder: added to twice a part's wave level to give the enemy skill level $4C5B. set to the difficulty option (OPTS1 bits 3-2) when a game starts and raised by diff_step after each of the first three waves"
+  },
+  "4C72": {
+   "name": "rank_index",
+   "desc": "index of the high score table entry the player's score has to reach next: $18, the last of the 25, at reset and at game start, stepped down by bank 1 KE209 each frame the score has reached that entry, minus when the score is the best. the score line shows that entry and the place"
+  },
+  "4C7D": {
+   "name": "jedi_count",
+   "desc": "how many times the four Jedi letters have been completed in this game, held at 3. index of the rate at which jedi_time runs down. cleared at game start"
+  },
+  "4C82": {
+   "name": "jedi_show",
+   "desc": "state of the Jedi letters display that page 1 P1_9663 draws: 0 off, 1 a letter just earned is growing into place, 2 letters shown. the attract phases switch it between 0 and 2 every 32 frames to flash the letters of the last game"
+  },
+  "4C83": {
+   "name": "jedi_blink",
+   "desc": "frame counter stepped by page 1 P1_9645 on every frame a phase calls it. the attract phases flash the Jedi letters when its low 5 bits are 0. cleared at the end of a game"
+  },
+  "4C84": {
+   "name": "jedi_on",
+   "desc": "set again every frame by page 1 P1_9645: 1 while jedi_time is running or a letter is growing into place (jedi_show 1), else 0. the star and laser drawing take another colour while it is set. cleared at game start"
+  },
+  "4C85": {
+   "name": "jedi_done",
+   "desc": "1 once the four Jedi letters have been completed in this game, cleared at game start. the end of game and the initials phase then save the wave and score reached for the continue offer"
+  },
+  "4BF8": {
+   "name": "cont_used",
+   "desc": "set when a game is started from the continue offer (phase $12), cleared at a normal game start. bank 1's bookkeeping counts such a game and clears it"
+  },
+  "4CCB": {
+   "name": "kill_count",
+   "desc": "counted up, to 50 at most, by the page 1 kill routine P1_8E33 of the walker part. the next walker part setup (page 0 P0_9561) takes 4 + count/5, at most 9, from it into $4BFE and clears it. cleared at game start"
+  },
+  "4CD0": {
+   "name": "coin_spoken",
+   "desc": "Star Wars's COINSP: the credit count for which the coin sound was made. 0 with no credits, so the first credit sounds, then $FF once more credits have come in"
+  },
+  "4CDE": {
+   "name": "foa_said",
+   "desc": "set by page 2 P2_92EE once it has sent the sound command of SPKFOA, so that it is sent once in a game. cleared at game start"
+  },
+  "4CAE": {
+   "name": "ph_col_brt",
+   "desc": "PH_COL+1, the brightness byte of the phase colour, where the listing shows it as a bare address: the attract pages step it down to fade their messages and the message drawing (B0:E782) reads it"
+  }
+ },
+ "regions": [],
+ "questions": [
+  "B0:6671 PHIHIS and B0:668D PHEHIS carry the Star Wars high score names and descriptions, but here they are phases $07/$08, a page that shows message $01 (Atari's game design team) and fades it. the high score table phases, with Star Wars's PHIHIS/PHEHIS code, are B0:66E9/B0:6713 (phases $09/$0A, PHS_HIS = $09). i named those hiscore_init/hiscore_exec because the Atari names are taken - the carried names at 6671/668D should be dropped or moved",
+  "other carried names on phase table routines outside my range that do not fit what the routine is here: PHESP1/PHESP2 (probot part), PHISP2 at B0:6EBE (walker part), PHES0G at B0:70E3 (asteroid part setup, phase $48), PHES0D at B0:736C (death in the TIE fighter part, execute), PHINXT at B0:751F (training manual init, phase $43), IPARM at B0:A39D (a view routine - Star Wars's IPARM is B0:630A, named init_parms here)",
+  "B0:6623: the two bytes $20 $0A are code, an unreachable BRA L662F after the BRA at L6621 (Star Wars has the same dead BRA at its L6402)",
+  "$4813: cleared once in PHISG2 next to S_BCCNT (B0:67F1) and not seen as a bare operand anywhere else. it lies between S_CNCT ($4812) and S_BCCNT ($4814), where this game has one byte more than Star Wars, so it is probably coin routine state reached by indexing. not named",
+  "phases $3D/$3E (B0:73FC/B0:740E) and phase $30 (second table entry of B0:7229): no code found that sets PHASE to them - dead as far as i can tell",
+  "STRTCK: the carried comments say extreme left goes to the instruction phase, but the phase it sets here ($03) is the scoring page. free play here gives 2 credits (B0:6340)",
+  "the sound routine names SPKI (first coin, B0:62ED) and SPKLOS (start of game, B0:6780) are carried from Star Wars by command number - what they sound like in this game is for the sound annotation to say",
+  "kill_count ($4CCB): i take P1_8E33 to be the walker kill routine because it bumps $4C56, the walker part's bonus count - not checked further",
+  "jedi_time ($4C50): what the state after completing the letters gives the player (the scoring page says 10 x scoring after earning Jedi letter) i did not verify",
+  "several carried comments in PHERES, PHEBNR and PHISG2 sit one line off because of inserted instructions (for example NO HIGH SCORES YET on STA $4C4A at B0:63C1, ALLOW COIN ROUTINE TO INIT ITSELF on STA $4C72 at B0:63D2, SETUP VG PSUEDO-ROM on the banner view at B0:644B)",
+  "names taken from the other notes files where they had already named an address: cont_used, wave_bcd, jedi_time, diff_step, diff_adder, rank_index, jedi_show, jedi_blink, jedi_on, jedi_done. those files disagree with each other on $4C5A (diff_add in b0_6800, diff_adder in b0_7000), $4C72 (rank_index in b0_6800, hs_next in b0_a800), $4C85 (jedi_done in b0_6800, jedi_earned in b0_7000) and $4C50 (jedi_tim in b0_a800) - one name each has to be picked",
+  "$4CAE is PH_COL+1 - named ph_col_brt here only because the listing shows it bare, the generator may prefer to print PH_COL+1"
+ ]
+}

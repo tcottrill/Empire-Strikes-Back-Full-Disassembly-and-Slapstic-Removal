@@ -1,0 +1,1056 @@
+{
+ "about": "sound CPU $4000-$7FFF and $C000-$FFFF: speech phrase table and TMS5220 data, tune table and tune data, speech command stubs and the speech driver, POKEY music player, envelopes, sound effect sequences and tables, effect stubs, mainline, IRQ, init, self test, the command table PBX and the vectors",
+ "cpu": "sound",
+ "routines": {
+  "S:D937": {
+   "name": "spk_cmd_03",
+   "desc": "sound command $03: queues the word list that follows the routine (phrase 10 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D93F": {
+   "name": "spk_cmd_04",
+   "desc": "sound command $04: queues the word list that follows the routine (phrase 15 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D947": {
+   "name": "spk_cmd_05",
+   "desc": "sound command $05: queues the word list that follows the routine (phrase 9 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D94F": {
+   "name": "spk_cmd_06",
+   "desc": "sound command $06: says the word list that follows the routine (phrase 1 of the speech table at L4002) through SPITE, so only when nothing is being said and nothing is waiting, else the request is dropped"
+  },
+  "S:D957": {
+   "name": "spk_cmd_07",
+   "desc": "sound command $07: queues the word list that follows the routine (phrase 3 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D95F": {
+   "name": "spk_cmd_08",
+   "desc": "sound command $08: queues the word list that follows the routine (phrase 23 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D967": {
+   "name": "spk_cmd_09",
+   "desc": "sound command $09: queues the word list that follows the routine (phrase 12 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D96F": {
+   "name": "spk_cmd_0a",
+   "desc": "sound command $0A: queues the word list that follows the routine (phrase 17 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D977": {
+   "name": "spk_cmd_0c",
+   "desc": "sound command $0C: queues the word list that follows the routine (phrases 4, 2 and 5 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D981": {
+   "name": "spk_cmd_0d",
+   "desc": "sound command $0D: queues the word list that follows the routine (phrase 6 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D989": {
+   "name": "spk_cmd_0e",
+   "desc": "sound command $0E: queues the word list that follows the routine (phrase 19 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D991": {
+   "name": "spk_cmd_0f",
+   "desc": "sound command $0F: queues the word list that follows the routine (phrase 13 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D999": {
+   "name": "spk_cmd_10",
+   "desc": "sound command $10: queues the word list that follows the routine (phrase 20 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9A1": {
+   "name": "spk_cmd_11",
+   "desc": "sound command $11: queues the word list that follows the routine (phrase 22 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9A9": {
+   "name": "spk_cmd_12",
+   "desc": "sound command $12: queues the word list that follows the routine (phrase 7 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9B1": {
+   "name": "spk_cmd_14",
+   "desc": "sound command $14: queues the word list that follows the routine (phrase 18 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9B9": {
+   "name": "spk_cmd_15",
+   "desc": "sound command $15: queues the word list that follows the routine (phrase 14 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9C1": {
+   "name": "spk_cmd_16",
+   "desc": "sound command $16: queues the word list that follows the routine (phrase 21 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9C9": {
+   "name": "spk_cmd_17",
+   "desc": "sound command $17: queues the word list that follows the routine (phrase 11 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9D1": {
+   "name": "spk_cmd_18",
+   "desc": "sound command $18: queues the word list that follows the routine (phrase 8 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9D9": {
+   "name": "spk_cmd_19",
+   "desc": "sound command $19: queues the word list that follows the routine (phrase 24 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9E1": {
+   "name": "spk_cmd_1a",
+   "desc": "sound command $1A: queues the word list that follows the routine (phrase 16 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9E9": {
+   "name": "spk_cmd_1b",
+   "desc": "sound command $1B: queues the word list that follows the routine (phrase 32 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9F1": {
+   "name": "spk_cmd_1c",
+   "desc": "sound command $1C: queues the word list that follows the routine (phrase 26 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:D9F9": {
+   "name": "spk_cmd_1d",
+   "desc": "sound command $1D: queues the word list that follows the routine (phrase 29 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA01": {
+   "name": "spk_cmd_1e",
+   "desc": "sound command $1E: queues the word list that follows the routine (phrases 35 and 36 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA0A": {
+   "name": "spk_cmd_1f",
+   "desc": "sound command $1F: queues the word list that follows the routine (phrase 34 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA12": {
+   "name": "spk_cmd_20",
+   "desc": "sound command $20: queues the word list that follows the routine (phrase 27 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA1A": {
+   "name": "spk_cmd_21",
+   "desc": "sound command $21: queues the word list that follows the routine (phrase 30 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA22": {
+   "name": "spk_cmd_22",
+   "desc": "sound command $22: queues the word list that follows the routine (phrase 37 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA2A": {
+   "name": "spk_cmd_23",
+   "desc": "sound command $23: queues the word list that follows the routine (phrase 31 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA32": {
+   "name": "spk_cmd_24",
+   "desc": "sound command $24: queues the word list that follows the routine (phrase 25 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA3A": {
+   "name": "spk_cmd_25",
+   "desc": "sound command $25: queues the word list that follows the routine (phrase 38 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA42": {
+   "name": "spk_cmd_26",
+   "desc": "sound command $26: queues the word list that follows the routine (phrase 39 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA4A": {
+   "name": "spk_cmd_27",
+   "desc": "sound command $27: queues the word list that follows the routine (phrase 33 of the speech table at L4002) with SPKNEW, behind whatever is being said or waiting"
+  },
+  "S:DA52": {
+   "name": "spk_cmd_28",
+   "desc": "sound command $28: says the word list that follows the routine (phrase 40 of the speech table at L4002) through SPITE, so only when nothing is being said and nothing is waiting, else the request is dropped"
+  },
+  "S:FBAD": {
+   "name": "aud_tie_cannon",
+   "desc": "sound command $3D, Star Wars's AUDTC: starts the effect of table tab_xl (Atari's XL0, X-wing laser) with AUDNEW - chip 1 channel 2, chip 1 channel 3, about 3.3 s. Star Wars's AUDTC, the TIE fighter cannon, already used the X-wing laser data (switched for better effect, says Atari's comment)"
+  },
+  "S:FBB4": {
+   "name": "aud_tie_cannon_off",
+   "desc": "sound command $3E, Star Wars's AUDTCZ: starts the effect of table tab_xlz (Atari's XLZ0, end of the X-wing laser sound) with AUDNEW - chip 1 channel 3. the table's sequences are only end marks, so it silences that channel"
+  },
+  "S:FBBB": {
+   "name": "aud_small_expl",
+   "desc": "sound command $3C, Star Wars's AUDSX: starts the effect of table tab_sx (Atari's SX0, small explosion) with AUDNEW - chip 1 channel 1, about 0.8 s"
+  },
+  "S:FBC2": {
+   "name": "aud_final_expl",
+   "desc": "sound command $33, Star Wars's AUDDF: starts the effect of table tab_df (Atari's DF0, Death Star final explosion) with AUDNEW - chip 0 channel 2, chip 0 channel 4, chip 1 channel 1, chip 1 channel 2, chip 1 channel 4, about 2.3 s"
+  },
+  "S:FBD0": {
+   "name": "aud_crash",
+   "desc": "sound command $32, Star Wars's AUDCR: starts the effect of table tab_cr (Atari's CR0, crash into bridge or tower) with AUDNEW - chip 0 channel 3, chip 1 channel 2, chip 1 channel 4, about 0.7 s"
+  },
+  "S:FBC9": {
+   "name": "aud_passby_short",
+   "desc": "sound command $39, Star Wars's AUDPS: starts the effect of table tab_ps (Atari's PS0, short pass-by) with AUDNEW - chip 0 channel 3, chip 0 channel 4, about 1.0 s"
+  },
+  "S:FBD7": {
+   "name": "aud_shoot_shots",
+   "desc": "sound command $3B, Star Wars's AUDSS: starts the effect of table tab_ss (Atari's SS0, shoot shots) with AUDNEW - chip 1 channel 4, about 0.1 s"
+  },
+  "S:FBDE": {
+   "name": "aud_port_hole",
+   "desc": "sound command $38, Star Wars's AUDPH: starts the effect of table tab_ph (Atari's PH0, port hole shot) with AUDNEW - chip 0 channel 1, chip 0 channel 2, chip 0 channel 3, chip 1 channel 3, about 0.4 s"
+  },
+  "S:FBE5": {
+   "name": "aud_yea",
+   "desc": "sound command $40, Star Wars's AUDYEA: starts the effect of table tab_yea (Atari's YEA0, yea, test successful) with AUDNEW - chip 0 channel 1, about 0.2 s"
+  },
+  "S:FBEC": {
+   "name": "aud_nay",
+   "desc": "sound command $34, Star Wars's AUDNAY: starts the effect of table tab_nay (Atari's NAY0, nay, test failed) with AUDNEW - chip 0 channel 1, about 0.2 s"
+  },
+  "S:FBF3": {
+   "name": "aud_test_tones",
+   "desc": "sound command $01, Star Wars's AUDTST: starts the effect of table tab_tst (Atari's TST0, test tones) with AUDNEW - chip 0 channel 1, chip 0 channel 2, chip 0 channel 3, chip 0 channel 4, chip 1 channel 1, chip 1 channel 2, chip 1 channel 3, chip 1 channel 4, about 3.2 s"
+  },
+  "S:FBFA": {
+   "name": "aud_fx41",
+   "desc": "sound command $41, an effect ESB added: starts the effect of table tab_fx41 with AUDNEW - chip 0 channel 4, chip 1 channel 3, distortion $00, $20, $80 (noise), about 0.4 s"
+  },
+  "S:FC01": {
+   "name": "aud_fx42",
+   "desc": "sound command $42, an effect ESB added: starts the effect of table tab_fx42 with AUDNEW - chip 0 channel 1, distortion $60, about 0.4 s"
+  },
+  "S:FC08": {
+   "name": "aud_fx43",
+   "desc": "sound command $43, an effect ESB added: starts the effect of table tab_fx43 with AUDNEW - chip 0 channel 1, chip 0 channel 2, distortion $A0 (pure tone), about 2.5 s"
+  },
+  "S:FC0F": {
+   "name": "aud_fx44",
+   "desc": "sound command $44, an effect ESB added: loads table tab_fx44, whose sequences are only end marks, so it silences chip 0 channel 1, chip 0 channel 2 - the channels of commands $43 and $45. the main program's sound test leaves it out"
+  },
+  "S:FC16": {
+   "name": "aud_fx45",
+   "desc": "sound command $45, an effect ESB added: starts the effect of table tab_fx45 with AUDNEW - chip 0 channel 1, chip 0 channel 2, distortion $60, $80 (noise), about 6.1 s"
+  },
+  "S:FC1D": {
+   "name": "aud_fx46",
+   "desc": "sound command $46, an effect ESB added: starts the effect of table tab_fx46 with AUDNEW - chip 0 channel 4, chip 1 channel 3, distortion $A0 (pure tone), about 0.8 s"
+  },
+  "S:FC24": {
+   "name": "aud_fx47",
+   "desc": "sound command $47, an effect ESB added: starts the effect of table tab_fx47 with AUDNEW - chip 0 channel 4, chip 1 channel 1, chip 1 channel 2, distortion $80 (noise), about 4.8 s"
+  },
+  "S:FC2B": {
+   "name": "aud_fx48",
+   "desc": "sound command $48, an effect ESB added: starts the effect of table tab_fx48 with AUDNEW - chip 1 channel 1, distortion $00, about 1.1 s"
+  },
+  "S:FC32": {
+   "name": "aud_fx49",
+   "desc": "sound command $49, an effect ESB added: starts the effect of table tab_fx49 with AUDNEW - chip 0 channel 2, chip 1 channel 1, distortion $40, $80 (noise), about 0.9 s"
+  },
+  "S:FC39": {
+   "name": "aud_fx4a",
+   "desc": "sound command $4A, an effect ESB added: starts the effect of table tab_fx4a with AUDNEW - chip 0 channel 3, chip 0 channel 4, distortion $60, $80 (noise), about 4.5 s"
+  },
+  "S:FC40": {
+   "name": "aud_fx4b",
+   "desc": "sound command $4B, an effect ESB added: starts the effect of table tab_fx4b with AUDNEW - chip 1 channel 4, distortion $80 (noise), about 2.8 s"
+  },
+  "S:FC47": {
+   "name": "aud_fx4c",
+   "desc": "sound command $4C, an effect ESB added: starts the effect of table tab_fx4c with AUDNEW - chip 0 channel 1, chip 0 channel 2, distortion $A0 (pure tone), about 0.7 s"
+  },
+  "S:FC4E": {
+   "name": "aud_fx4d",
+   "desc": "sound command $4D, an effect ESB added: starts the effect of table tab_fx4d with AUDNEW - chip 0 channel 3, distortion $80 (noise), $A0 (pure tone), about 0.2 s"
+  },
+  "S:FC71": {
+   "name": "aud_fx51",
+   "desc": "sound command $51, an effect ESB added: starts the effect of table tab_fx51 with AUDNEW - chip 0 channel 4, chip 1 channel 1, distortion $00, $80 (noise), about 1.1 s"
+  }
+ },
+ "labels": {
+  "S:D93D": "spk_words_03",
+  "S:D945": "spk_words_04",
+  "S:D94D": "spk_words_05",
+  "S:D955": "spk_words_06",
+  "S:D95D": "spk_words_07",
+  "S:D965": "spk_words_08",
+  "S:D96D": "spk_words_09",
+  "S:D975": "spk_words_0a",
+  "S:D97D": "spk_words_0c",
+  "S:D987": "spk_words_0d",
+  "S:D98F": "spk_words_0e",
+  "S:D997": "spk_words_0f",
+  "S:D99F": "spk_words_10",
+  "S:D9A7": "spk_words_11",
+  "S:D9AF": "spk_words_12",
+  "S:D9B7": "spk_words_14",
+  "S:D9BF": "spk_words_15",
+  "S:D9C7": "spk_words_16",
+  "S:D9CF": "spk_words_17",
+  "S:D9D7": "spk_words_18",
+  "S:D9DF": "spk_words_19",
+  "S:D9E7": "spk_words_1a",
+  "S:D9EF": "spk_words_1b",
+  "S:D9F7": "spk_words_1c",
+  "S:D9FF": "spk_words_1d",
+  "S:DA07": "spk_words_1e",
+  "S:DA10": "spk_words_1f",
+  "S:DA18": "spk_words_20",
+  "S:DA20": "spk_words_21",
+  "S:DA28": "spk_words_22",
+  "S:DA30": "spk_words_23",
+  "S:DA38": "spk_words_24",
+  "S:DA40": "spk_words_25",
+  "S:DA48": "spk_words_26",
+  "S:DA50": "spk_words_27",
+  "S:DA58": "spk_words_28",
+  "S:C4F4": "march_v1",
+  "S:C6EC": "march_v2",
+  "S:C8DE": "march_v3",
+  "S:CA0E": "march_v4",
+  "S:CB1C": "tune_empty",
+  "S:CB1E": "tune2c_v1",
+  "S:CC42": "tune2c_v2",
+  "S:CDBE": "tune2c_v3",
+  "S:CEEA": "tune2c_v4",
+  "S:D04C": "theme_v1",
+  "S:D092": "theme_v1_sub",
+  "S:D0B5": "theme_v2",
+  "S:D0EB": "theme_v2_sub",
+  "S:D10A": "theme_v3",
+  "S:D1B4": "theme_run",
+  "S:D1C1": "theme_v4",
+  "S:D280": "tune29_v1",
+  "S:D3CD": "tune29_open",
+  "S:D40C": "tune29_scale",
+  "S:D421": "tune29_v2",
+  "S:D4AA": "tune29_v3",
+  "S:D588": "tune29_v4",
+  "S:D64A": "tune31_v1",
+  "S:D6AA": "tune31_v2",
+  "S:D706": "tune31_v3",
+  "S:D739": "tune31_sub",
+  "S:D774": "tune31_v4",
+  "S:D7AB": "tune30_v1",
+  "S:D7E3": "tune30_v2",
+  "S:D81D": "tune30_v3",
+  "S:D871": "tune30_v4",
+  "S:D89B": "vamp_v1",
+  "S:D8C1": "vamp_v2",
+  "S:D8E7": "vamp_v3",
+  "S:D90F": "vamp_v4",
+  "S:E0F3": "fenv_plus1",
+  "S:E1B3": "aenv_decay",
+  "S:FA58": "tab_xl",
+  "S:FA61": "tab_xlz",
+  "S:FA66": "tab_pb",
+  "S:FA6F": "tab_sh",
+  "S:FA78": "tab_pf",
+  "S:FA7D": "tab_sx",
+  "S:FA82": "tab_df",
+  "S:FA97": "tab_cr",
+  "S:FAA4": "tab_ps",
+  "S:FAAD": "tab_ss",
+  "S:FAB2": "tab_bl",
+  "S:FABB": "tab_ph",
+  "S:FACC": "tab_pbz",
+  "S:FAD5": "tab_yea",
+  "S:FADA": "tab_nay",
+  "S:FADF": "tab_tst",
+  "S:FB00": "tab_fx41",
+  "S:FB09": "tab_fx42",
+  "S:FB0E": "tab_fx43",
+  "S:FB17": "tab_fx44",
+  "S:FB20": "tab_fx45",
+  "S:FB29": "tab_fx46",
+  "S:FB32": "tab_fx47",
+  "S:FB3F": "tab_fx48",
+  "S:FB44": "tab_fx49",
+  "S:FB4D": "tab_fx4a",
+  "S:FB56": "tab_fx4b",
+  "S:FB5B": "tab_fx4c",
+  "S:FB64": "tab_fx4d",
+  "S:FB69": "tab_fx4e",
+  "S:FB72": "tab_fx4f",
+  "S:FB77": "tab_fx50",
+  "S:FB7C": "tab_fx51",
+  "S:FB85": "tab_fx_unused",
+  "S:EB1F": "fx41_4f",
+  "S:EB27": "fx41_4c",
+  "S:EB34": "fx41_7f",
+  "S:EB38": "fx41_7c",
+  "S:EB41": "fx42_1f",
+  "S:EB4D": "fx42_1c",
+  "S:EB62": "fx43_1f",
+  "S:EC6E": "fx43_1c",
+  "S:EC87": "fx43_2f",
+  "S:ED93": "fx43_2c",
+  "S:EDA8": "fx44_z",
+  "S:EDA9": "fx45_1f",
+  "S:EE11": "fx45_1c",
+  "S:EE42": "fx45_2f",
+  "S:EE86": "fx45_2c",
+  "S:EEDF": "fx47_4f",
+  "S:EEEB": "fx47_4c",
+  "S:EF48": "fx47_5f",
+  "S:EF54": "fx47_5c",
+  "S:EFB1": "fx47_6f",
+  "S:EFBD": "fx47_6c",
+  "S:F01A": "fx48_5f",
+  "S:F076": "fx48_5c",
+  "S:F09F": "fx46_4f",
+  "S:F0FF": "fx46_4c",
+  "S:F114": "fx46_7f",
+  "S:F17C": "fx46_7c",
+  "S:F1B5": "fx49_2f",
+  "S:F1B9": "fx49_2c",
+  "S:F1EE": "fx49_5f",
+  "S:F1FE": "fx49_5c",
+  "S:F21B": "fx4a_3f",
+  "S:F287": "fx4a_3c",
+  "S:F298": "fx4a_4f",
+  "S:F2F0": "fx4a_4c",
+  "S:F345": "fx4b_8f",
+  "S:F3B5": "fx4b_8c",
+  "S:F43E": "fx4d_3f",
+  "S:F452": "fx4d_3c",
+  "S:F45F": "fx4e_4f",
+  "S:F4B3": "fx4e_4c",
+  "S:F4D8": "fx4e_5f",
+  "S:F4F8": "fx4e_5c",
+  "S:F5AE": "fx4f_8f",
+  "S:F5FA": "fx4f_8c",
+  "S:F65F": "fx4c_1f",
+  "S:F663": "fx4c_1c",
+  "S:F67C": "fx4c_2f",
+  "S:F680": "fx4c_2c",
+  "S:F695": "fx50_8f",
+  "S:F7D5": "fx50_8c",
+  "S:F9B5": "fx_unused_z",
+  "S:F9B6": "fx51_4f",
+  "S:F9BA": "fx51_4c",
+  "S:F9D7": "fx51_5f",
+  "S:FA33": "fx51_5c",
+  "S:E95C": "df2f",
+  "S:E9F3": "bl1c",
+  "S:EA18": "bl2c",
+  "S:F505": "fx_spare_f",
+  "S:F551": "fx_spare_c"
+ },
+ "comments": {
+  "S:D937": "address of the word list below",
+  "S:D93D": "word list: phrase 10, $FF ends it",
+  "S:D93F": "address of the word list below",
+  "S:D945": "word list: phrase 15, $FF ends it",
+  "S:D947": "address of the word list below",
+  "S:D94D": "word list: phrase 9, $FF ends it",
+  "S:D955": "word list: phrase 1, $FF ends it",
+  "S:D957": "address of the word list below",
+  "S:D95D": "word list: phrase 3, $FF ends it",
+  "S:D95F": "address of the word list below",
+  "S:D965": "word list: phrase 23, $FF ends it",
+  "S:D967": "address of the word list below",
+  "S:D96D": "word list: phrase 12, $FF ends it",
+  "S:D96F": "address of the word list below",
+  "S:D975": "word list: phrase 17, $FF ends it",
+  "S:D977": "address of the word list below",
+  "S:D97D": "word list: phrases 4, 2 and 5, $FF ends it",
+  "S:D981": "address of the word list below",
+  "S:D987": "word list: phrase 6, $FF ends it",
+  "S:D989": "address of the word list below",
+  "S:D98F": "word list: phrase 19, $FF ends it",
+  "S:D991": "address of the word list below",
+  "S:D997": "word list: phrase 13, $FF ends it",
+  "S:D999": "address of the word list below",
+  "S:D99F": "word list: phrase 20, $FF ends it",
+  "S:D9A1": "address of the word list below",
+  "S:D9A7": "word list: phrase 22, $FF ends it",
+  "S:D9A9": "address of the word list below",
+  "S:D9AF": "word list: phrase 7, $FF ends it",
+  "S:D9B1": "address of the word list below",
+  "S:D9B7": "word list: phrase 18, $FF ends it",
+  "S:D9B9": "address of the word list below",
+  "S:D9BF": "word list: phrase 14, $FF ends it",
+  "S:D9C1": "address of the word list below",
+  "S:D9C7": "word list: phrase 21, $FF ends it",
+  "S:D9C9": "address of the word list below",
+  "S:D9CF": "word list: phrase 11, $FF ends it",
+  "S:D9D1": "address of the word list below",
+  "S:D9D7": "word list: phrase 8, $FF ends it",
+  "S:D9D9": "address of the word list below",
+  "S:D9DF": "word list: phrase 24, $FF ends it",
+  "S:D9E1": "address of the word list below",
+  "S:D9E7": "word list: phrase 16, $FF ends it",
+  "S:D9E9": "address of the word list below",
+  "S:D9EF": "word list: phrase 32, $FF ends it",
+  "S:D9F1": "address of the word list below",
+  "S:D9F7": "word list: phrase 26, $FF ends it",
+  "S:D9F9": "address of the word list below",
+  "S:D9FF": "word list: phrase 29, $FF ends it",
+  "S:DA01": "address of the word list below",
+  "S:DA07": "word list: phrases 35 and 36, $FF ends it",
+  "S:DA0A": "address of the word list below",
+  "S:DA10": "word list: phrase 34, $FF ends it",
+  "S:DA12": "address of the word list below",
+  "S:DA18": "word list: phrase 27, $FF ends it",
+  "S:DA1A": "address of the word list below",
+  "S:DA20": "word list: phrase 30, $FF ends it",
+  "S:DA22": "address of the word list below",
+  "S:DA28": "word list: phrase 37, $FF ends it",
+  "S:DA2A": "address of the word list below",
+  "S:DA30": "word list: phrase 31, $FF ends it",
+  "S:DA32": "address of the word list below",
+  "S:DA38": "word list: phrase 25, $FF ends it",
+  "S:DA3A": "address of the word list below",
+  "S:DA40": "word list: phrase 38, $FF ends it",
+  "S:DA42": "address of the word list below",
+  "S:DA48": "word list: phrase 39, $FF ends it",
+  "S:DA4A": "address of the word list below",
+  "S:DA50": "word list: phrase 33, $FF ends it",
+  "S:DA58": "word list: phrase 40, $FF ends it",
+  "S:4002": "no command says phrase 0, it has the same start and end as phrase 1",
+  "S:4006": "said by sound command $06, only when no speech is under way (SPITE)",
+  "S:400A": "said by sound command $0C (word 2 of 3)",
+  "S:400E": "said by sound command $07",
+  "S:4012": "said by sound command $0C (word 1 of 3)",
+  "S:4016": "said by sound command $0C (word 3 of 3)",
+  "S:401A": "said by sound command $0D",
+  "S:401E": "said by sound command $12",
+  "S:4022": "said by sound command $18",
+  "S:4026": "said by sound command $05",
+  "S:402A": "said by sound command $03",
+  "S:402E": "said by sound command $17",
+  "S:4032": "said by sound command $09",
+  "S:4036": "said by sound command $0F",
+  "S:403A": "said by sound command $15",
+  "S:403E": "said by sound command $04",
+  "S:4042": "said by sound command $1A",
+  "S:4046": "said by sound command $0A",
+  "S:404A": "said by sound command $14",
+  "S:404E": "said by sound command $0E",
+  "S:4052": "said by sound command $10",
+  "S:4056": "said by sound command $16",
+  "S:405A": "said by sound command $11",
+  "S:405E": "said by sound command $08",
+  "S:4062": "said by sound command $19",
+  "S:4066": "said by sound command $24",
+  "S:406A": "said by sound command $1C",
+  "S:406E": "said by sound command $20",
+  "S:4072": "no command's word list holds phrase 28",
+  "S:4076": "said by sound command $1D",
+  "S:407A": "said by sound command $21",
+  "S:407E": "said by sound command $23",
+  "S:4082": "said by sound command $1B",
+  "S:4086": "said by sound command $27",
+  "S:408A": "said by sound command $1F",
+  "S:408E": "said by sound command $1E (word 1 of 2)",
+  "S:4092": "said by sound command $1E (word 2 of 2)",
+  "S:4096": "said by sound command $22",
+  "S:409A": "said by sound command $25",
+  "S:409E": "said by sound command $26",
+  "S:40A2": "said by sound command $28, only when no speech is under way (SPITE)",
+  "S:C016": "TUNTAB goes on, 47 entries in all, a tune being one voice's part. tune 11: voice 3 of sound command $02 (PMTST)",
+  "S:C018": "tune 12: voice 4 of sound command $02 (PMTST)",
+  "S:C01A": "tune 13: voice 1 of sound command $02 (PMTST)",
+  "S:C01C": "tune 14: voice 2 of sound command $02 (PMTST)",
+  "S:C01E": "tune 15: voice 1 of sound command $2B (PMEND)",
+  "S:C020": "tune 16: voice 2 of sound command $2B (PMEND)",
+  "S:C022": "tune 17: voice 3 of sound command $2B (PMEND)",
+  "S:C024": "tune 18: voice 4 of sound command $2B (PMEND)",
+  "S:C026": "tune 19: voice 1 of PMREB, which no command reaches - the empty tune",
+  "S:C028": "tune 20: voice 2 of PMREB, which no command reaches - the empty tune",
+  "S:C02A": "tune 21: voice 3 of PMREB, which no command reaches - the empty tune",
+  "S:C02C": "tune 22: voice 4 of PMREB, which no command reaches - the empty tune",
+  "S:C02E": "tune 23: voice 1 of sound command $2C (PMRRP)",
+  "S:C030": "tune 24: voice 2 of sound command $2C (PMRRP)",
+  "S:C032": "tune 25: voice 3 of sound command $2C (PMRRP)",
+  "S:C034": "tune 26: voice 4 of sound command $2C (PMRRP)",
+  "S:C036": "tune 27: voice 1 of sound command $2E (PMTH5)",
+  "S:C038": "tune 28: voice 2 of sound command $2E (PMTH5)",
+  "S:C03A": "tune 29: voice 3 of sound command $2E (PMTH5)",
+  "S:C03C": "tune 30: voice 4 of sound command $2E (PMTH5)",
+  "S:C03E": "tune 31: voice 1 of sound command $31 (PM4TH)",
+  "S:C040": "tune 32: voice 2 of sound command $31 (PM4TH)",
+  "S:C042": "tune 33: voice 3 of sound command $31 (PM4TH)",
+  "S:C044": "tune 34: voice 4 of sound command $31 (PM4TH)",
+  "S:C046": "tune 35: voice 1 of sound command $29 (PMTHB)",
+  "S:C048": "tune 36: voice 2 of sound command $29 (PMTHB)",
+  "S:C04A": "tune 37: voice 3 of sound command $29 (PMTHB)",
+  "S:C04C": "tune 38: voice 4 of sound command $29 (PMTHB)",
+  "S:C04E": "tune 39: voice 1 of sound command $30 (PMDES)",
+  "S:C050": "tune 40: voice 2 of sound command $30 (PMDES)",
+  "S:C052": "tune 41: voice 3 of sound command $30 (PMDES)",
+  "S:C054": "tune 42: voice 4 of sound command $30 (PMDES)",
+  "S:C056": "tune 43: voice 1 of sound command $2F (PMDAR)",
+  "S:C058": "tune 44: voice 2 of sound command $2F (PMDAR)",
+  "S:C05A": "tune 45: voice 3 of sound command $2F (PMDAR)",
+  "S:C05C": "tune 46: voice 4 of sound command $2F (PMDAR)",
+  "S:C05E": "tune data from here to $D936. a step is two bytes: a note number (0 = rest, else the index into NOTTAB once the key offset is added) and a duration ($40 a quarter note, $80 a half, $20 an eighth, $16 $16 $14 a triplet, bit 0 set = tied to the note before, 0 = end of the tune) - or a function $80-$91 and its value (table PKDT: $80 .NRATE, $81 .CRATE, $82 .NVOL, $83 .CVOL, $84 .NKEY, $85 .CKEY, $86 frequency envelope, $87 .AENV, $8A .VC, $8B POKEY control, $8C .SYN, $8D .CALL tune number, $8E .LOOP count, $8F .ENDL), $90 .GOSUB with a two byte address, $91 .RETURN alone",
+  "S:C4F4": "tune 15: the Imperial March, voice 1, the melody (.NVOL 9, .NRATE 60, .AENV 3), from .NRATE 120 on the march rhythm in triplets. tunes 15-18 are the four voices sound command $2B starts",
+  "S:C6EC": "tune 16: the Imperial March, voice 2, the second part under the melody",
+  "S:C8DE": "tune 17: the Imperial March, voice 3: the rhythm figure on G3 switching between .NRATE 120 and 60, then a melody part",
+  "S:CA0E": "tune 18: the Imperial March, voice 4, the bass (.CKEY -12 at first)",
+  "S:CB1C": "tunes 19-22: an empty tune, only the end mark. the four voices of PMREB, which no command starts",
+  "S:CB1E": "tune 23: voice 1, the melody, of the music of sound command $2C (.NRATE 105, .CKEY 3, .AENV 3). tunes 23-26 are its four voices",
+  "S:CC42": "tune 24: voice 2 of the music of sound command $2C, a part under the melody",
+  "S:CDBE": "tune 25: voice 3 of the music of sound command $2C",
+  "S:CEEA": "tune 26: voice 4 of the music of sound command $2C: a bass figure in eighth notes with the volume switched between 10, 7 and 9",
+  "S:D04C": "tune 27: the Star Wars main theme, voice 1: a fanfare at .NRATE 72, then the theme at .NRATE 144 as two calls of the subphrase below. tunes 27-30 are the four voices sound command $2E starts",
+  "S:D092": "subphrase of tune 27 (.GOSUB): the main theme's melody, ends with .RETURN",
+  "S:D0B5": "tune 28: the Star Wars main theme, voice 2",
+  "S:D0EB": "subphrase of tune 28: the second part under the theme's melody",
+  "S:D10A": "tune 29: the Star Wars main theme, voice 3",
+  "S:D1B4": "subphrase of tunes 29 and 30: a figure of six triplet notes",
+  "S:D1C1": "tune 30: the Star Wars main theme, voice 4, the bass",
+  "S:D280": "tune 35: voice 1 of the music of sound command $29 (frequency envelope 1). tunes 35-38 are its four voices",
+  "S:D3CD": "subphrase of tunes 35 and 36: the opening, .NRATE 122, .AENV 2, broken chords in eighth notes",
+  "S:D40C": "subphrase of tune 35: a rising scale of ten sixteenth notes from C5",
+  "S:D421": "tune 36: voice 2 of the music of sound command $29",
+  "S:D4AA": "tune 37: voice 3 of the music of sound command $29 (frequency envelope 2)",
+  "S:D588": "tune 38: voice 4 of the music of sound command $29, the bass",
+  "S:D64A": "tune 31: voice 1, the melody, of the music of sound command $31 (.NRATE 75). tunes 31-34 are its four voices",
+  "S:D6AA": "tune 32: voice 2 of the music of sound command $31",
+  "S:D706": "tune 33: voice 3 of the music of sound command $31",
+  "S:D739": "subphrase of tunes 33 and 34: eighth notes in pairs with rests between, tune 34 plays it two octaves down (.NKEY -24)",
+  "S:D774": "tune 34: voice 4 of the music of sound command $31, the bass",
+  "S:D7AB": "tune 39: voice 1, the melody, of the music of sound command $30 (.NKEY -3, .NRATE 85, .AENV 2, .NVOL 5). tunes 39-42 are its four voices. the melody as written (C G C, A F#, G E C B, A) looks like Yoda's theme",
+  "S:D7E3": "tune 40: voice 2 of the music of sound command $30: the same melody with frequency envelope 2 and no amplitude envelope",
+  "S:D81D": "tune 41: voice 3 of the music of sound command $30: broken chords in eighth notes",
+  "S:D871": "tune 42: voice 4 of the music of sound command $30: one bass note, struck again every whole note",
+  "S:D89B": "tune 43: the Imperial March's rhythm figure on G4 with E flat, .LOOP 20. tunes 43-46 are the four voices sound command $2F starts, their loop counts are 20, 21, 22 and 23",
+  "S:D8C1": "tune 44: the march rhythm figure on G3 with B flat, .LOOP 21",
+  "S:D8E7": "tune 45: the march rhythm figure on G2 with F sharp, frequency envelope 1, .LOOP 22",
+  "S:D90F": "tune 46: the march rhythm figure on G2 with E flat, frequency envelope 2, .LOOP 23",
+  "S:4000": "checksum word of the first ROM, Star Wars's CKSUM0: with it TEST's sum of $4000-$5FFF and $C000-$DFFF comes out right",
+  "S:E0A9": "frequency envelope 2, which Star Wars does not have: the table of +1 steps after GLOCK",
+  "S:E0AD": "amplitude envelopes 1, 2 and 3: the table at $E1B3, EHARD and QKRIZE. Star Wars's fifth entry (TIES) is gone",
+  "S:E0F3": "not fill: frequency envelope 2, 64 steps of +1. a frequency envelope holds signed steps added to the note's divider (times 8 for the 16 bit music voices), indexed by half the voice's step count VSEQ, so POKSN can read 128 of them: envelope 1 (GLOCK, all -1) runs on into this table and this one into NULENV",
+  "S:E1B3": "amplitude envelope 1 (.AENV 1), where Star Wars has SDRUM: 32 signed bytes added to the voice's volume VVOL, one for each update of the voice (8 ms) from the start of an untied note, the last one held. this one starts at +10 and falls to -4",
+  "S:E1D3": "amplitude envelope 2 (.AENV 2), 32 bytes: +3, +7, then down to -1",
+  "S:E1F3": "amplitude envelope 3 (.AENV 3), 32 bytes: +7 falling to -1",
+  "S:FA58": "sound effect tables (Atari's OFFSET statements), read by AUDNEW: a mask byte, bit 7 = channel pair 0 down to bit 0 = pair 7 (pairs 0-3 are the four channels of POKEY chip 0, pairs 4-7 of chip 1), then for each set bit two addresses, the sequence for the frequency register and the sequence for the control register. Atari's XL0, X-wing laser: mask $06 = chip 1 channel 2, chip 1 channel 3, about 3.3 s",
+  "S:FA61": "Atari's XLZ0, end of the X-wing laser sound: mask $02 = chip 1 channel 3, both sequences are just an end mark, so the channel is silenced",
+  "S:FA66": "Atari's PB0, pass-by: mask $30 = chip 0 channel 3, chip 0 channel 4, about 1.6 s",
+  "S:FA6F": "Atari's SH0, shield: mask $05 = chip 1 channel 2, chip 1 channel 4, about 0.4 s",
+  "S:FA78": "Atari's PF0, tower pfffts: mask $10 = chip 0 channel 4, about 0.1 s",
+  "S:FA7D": "Atari's SX0, small explosion: mask $08 = chip 1 channel 1, about 0.8 s",
+  "S:FA82": "Atari's DF0, Death Star final explosion: mask $5D = chip 0 channel 2, chip 0 channel 4, chip 1 channel 1, chip 1 channel 2, chip 1 channel 4, about 2.3 s",
+  "S:FA97": "Atari's CR0, crash into bridge or tower: mask $25 = chip 0 channel 3, chip 1 channel 2, chip 1 channel 4, about 0.7 s",
+  "S:FAA4": "Atari's PS0, short pass-by: mask $30 = chip 0 channel 3, chip 0 channel 4, about 1.0 s",
+  "S:FAAD": "Atari's SS0, shoot shots: mask $01 = chip 1 channel 4, about 0.1 s",
+  "S:FAB2": "Atari's BL0, player's laser blast: mask $C0 = chip 0 channel 1, chip 0 channel 2, about 0.4 s",
+  "S:FABB": "Atari's PH0, port hole shot: mask $E2 = chip 0 channel 1, chip 0 channel 2, chip 0 channel 3, chip 1 channel 3, about 0.4 s",
+  "S:FACC": "Atari's PBZ0, end of the pass-by sound: mask $30 = chip 0 channel 3, chip 0 channel 4, both sequences are just an end mark, so the channel is silenced",
+  "S:FAD5": "Atari's YEA0, yea, test successful: mask $80 = chip 0 channel 1, about 0.2 s",
+  "S:FADA": "Atari's NAY0, nay, test failed: mask $80 = chip 0 channel 1, about 0.2 s",
+  "S:FADF": "Atari's TST0, test tones: mask $FF = chip 0 channel 1, chip 0 channel 2, chip 0 channel 3, chip 0 channel 4, chip 1 channel 1, chip 1 channel 2, chip 1 channel 3, chip 1 channel 4, about 3.2 s",
+  "S:FB00": "effect of sound command $41: mask $12 = chip 0 channel 4, chip 1 channel 3, about 0.4 s",
+  "S:FB09": "effect of sound command $42: mask $80 = chip 0 channel 1, about 0.4 s",
+  "S:FB0E": "effect of sound command $43: mask $C0 = chip 0 channel 1, chip 0 channel 2, about 2.5 s",
+  "S:FB17": "effect of sound command $44: mask $C0 = chip 0 channel 1, chip 0 channel 2, both sequences are just an end mark, so the channel is silenced",
+  "S:FB20": "effect of sound command $45: mask $C0 = chip 0 channel 1, chip 0 channel 2, about 6.1 s",
+  "S:FB29": "effect of sound command $46: mask $12 = chip 0 channel 4, chip 1 channel 3, about 0.8 s",
+  "S:FB32": "effect of sound command $47: mask $1C = chip 0 channel 4, chip 1 channel 1, chip 1 channel 2, about 4.8 s",
+  "S:FB3F": "effect of sound command $48: mask $08 = chip 1 channel 1, about 1.1 s",
+  "S:FB44": "effect of sound command $49: mask $48 = chip 0 channel 2, chip 1 channel 1, about 0.9 s",
+  "S:FB4D": "effect of sound command $4A: mask $30 = chip 0 channel 3, chip 0 channel 4, about 4.5 s",
+  "S:FB56": "effect of sound command $4B: mask $01 = chip 1 channel 4, about 2.8 s",
+  "S:FB5B": "effect of sound command $4C: mask $C0 = chip 0 channel 1, chip 0 channel 2, about 0.7 s",
+  "S:FB64": "effect of sound command $4D: mask $20 = chip 0 channel 3, about 0.2 s",
+  "S:FB69": "effect of sound command $4E: mask $18 = chip 0 channel 4, chip 1 channel 1, about 0.9 s",
+  "S:FB72": "effect of sound command $4F: mask $01 = chip 1 channel 4, about 0.9 s",
+  "S:FB77": "effect of sound command $50: mask $01 = chip 1 channel 4, about 6.1 s",
+  "S:FB7C": "effect of sound command $51: mask $18 = chip 0 channel 4, chip 1 channel 1, about 1.1 s",
+  "S:FB85": "an effect table only the uncalled code at $FC6A loads: mask $80 = chip 0 channel 1, both sequences are just an end mark, so the channel is silenced",
+  "S:E95C": "the final explosion's row for channel pair 1: ESB's table uses five channels (pairs 1, 3, 4, 5, 7), each entering this run of rows one row later",
+  "S:E73F": "effect sequences from here to $FA57, the format of all of them: rows of four bytes (Atari's .S) - RPT repeat count, TMR ticks each repeat lasts (a tick is one AUDDO pass, 8 ms), SND the value written to the POKEY register, INC added to it at every repeat - and a zero byte ends a sequence (.SZ). a frequency sequence has no end mark of its own, it runs on into the control sequence after it, and the channel is silent once its control sequence has ended",
+  "S:EB1F": "from here to $FA57 the sequences of the effects ESB added (commands $41-$51), named by command, channel pair (1-8) and f or c for frequency or control",
+  "S:F505": "a frequency sequence and at $F551 its control sequence that no effect table points to: it starts like the one at $F5AE (command $4F), which looks like its later version",
+  "S:FCF6": "the addresses of the 34 effect tables in the order of their routines (Atari's OFFSET POINTERS), no code reads it",
+  "S:FB91": "tab_pb: pass-by",
+  "S:FB9F": "tab_sh: shield",
+  "S:FBA6": "tab_pf: tower pfffts",
+  "S:FB8A": "tab_bl: player's laser blast",
+  "S:FB98": "tab_pbz: end of the pass-by sound",
+  "S:FC55": "tab_fx4e: effect of command $4E",
+  "S:FC5C": "tab_fx4f: effect of command $4F",
+  "S:FC63": "tab_fx50: effect of command $50",
+  "S:FC6A": "code no table entry or instruction reaches: LDY #$FB85 / JMP AUDNEW, which would silence chip 0 channel 1 with the table at $FB85",
+  "S:FF4E": "command $01: aud_test_tones, the test tones on the eight effect channels",
+  "S:FF50": "command $02: PMTST, the test tones on the four music voices (tunes 11-14)",
+  "S:FF52": "command $03: speech, phrase 10",
+  "S:FF54": "command $04: speech, phrase 15",
+  "S:FF56": "command $05: speech, phrase 9",
+  "S:FF58": "command $06: speech, phrase 1, only when no speech is under way",
+  "S:FF5A": "command $07: speech, phrase 3",
+  "S:FF5C": "command $08: speech, phrase 23",
+  "S:FF5E": "command $09: speech, phrase 12",
+  "S:FF60": "command $0A: speech, phrase 17",
+  "S:FF62": "command $0B: SPKI, warm start of the speech chip, queued like a sentence",
+  "S:FF64": "command $0C: speech, phrases 4, 2 and 5",
+  "S:FF66": "command $0D: speech, phrase 6",
+  "S:FF68": "command $0E: speech, phrase 19",
+  "S:FF6A": "command $0F: speech, phrase 13",
+  "S:FF6C": "command $10: speech, phrase 20",
+  "S:FF6E": "command $11: speech, phrase 22",
+  "S:FF70": "command $12: speech, phrase 7",
+  "S:FF72": "command $13: SPKSKP, drop the speech still waiting in the queue",
+  "S:FF74": "command $14: speech, phrase 18",
+  "S:FF76": "command $15: speech, phrase 14",
+  "S:FF78": "command $16: speech, phrase 21",
+  "S:FF7A": "command $17: speech, phrase 11",
+  "S:FF7C": "command $18: speech, phrase 8",
+  "S:FF7E": "command $19: speech, phrase 24",
+  "S:FF80": "command $1A: speech, phrase 16",
+  "S:FF82": "command $1B: speech, phrase 32",
+  "S:FF84": "command $1C: speech, phrase 26",
+  "S:FF86": "command $1D: speech, phrase 29",
+  "S:FF88": "command $1E: speech, phrases 35 and 36",
+  "S:FF8A": "command $1F: speech, phrase 34",
+  "S:FF8C": "command $20: speech, phrase 27",
+  "S:FF8E": "command $21: speech, phrase 30",
+  "S:FF90": "command $22: speech, phrase 37",
+  "S:FF92": "command $23: speech, phrase 31",
+  "S:FF94": "command $24: speech, phrase 25",
+  "S:FF96": "command $25: speech, phrase 38",
+  "S:FF98": "command $26: speech, phrase 39",
+  "S:FF9A": "command $27: speech, phrase 33",
+  "S:FF9C": "command $28: speech, phrase 40, only when no speech is under way",
+  "S:FF9E": "command $29: PMTHB, tunes 35-38: music whose melody is not identified, sent by the asteroid wave's setup",
+  "S:FFA0": "command $2A: PMBEN, tunes 7-10: Ben's theme, sent when a Jedi letter is awarded",
+  "S:FFA2": "command $2B: PMEND, tunes 15-18: the Imperial March, sent by the wave 2 setup",
+  "S:FFA4": "command $2C: PMRRP, tunes 23-26: music whose melody is not identified, sent by the wave 3 setup",
+  "S:FFA6": "command $2D: PMSF2, tunes 1-4: the special effect of descending semitone scales, no called stub of the main program sends it",
+  "S:FFA8": "command $2E: PMTH5, tunes 27-30: the Star Wars main theme, sent by the wave 1 setup",
+  "S:FFAA": "command $2F: PMDAR, tunes 43-46: the Imperial March's rhythm figure looped, sent by the launch sequence",
+  "S:FFAC": "command $30: PMDES, tunes 39-42: music that looks like Yoda's theme, sent when the game ends",
+  "S:FFAE": "command $31: PM4TH, tunes 31-34: music whose melody is not identified, sent when the initials entry starts",
+  "S:FFB0": "command $32: effect tab_cr, Atari's CR0: crash into bridge or tower",
+  "S:FFB2": "command $33: effect tab_df, Atari's DF0: Death Star final explosion",
+  "S:FFB4": "command $34: effect tab_nay, Atari's NAY0: nay, test failed",
+  "S:FFB6": "command $35: effect tab_pb, Atari's PB0: pass-by",
+  "S:FFB8": "command $36: effect tab_pbz, Atari's PBZ0: end of the pass-by sound",
+  "S:FFBA": "command $37: effect tab_pf, Atari's PF0: tower pfffts",
+  "S:FFBC": "command $38: effect tab_ph, Atari's PH0: port hole shot",
+  "S:FFBE": "command $39: effect tab_ps, Atari's PS0: short pass-by",
+  "S:FFC0": "command $3A: effect tab_sh, Atari's SH0: shield",
+  "S:FFC2": "command $3B: effect tab_ss, Atari's SS0: shoot shots",
+  "S:FFC4": "command $3C: effect tab_sx, Atari's SX0: small explosion",
+  "S:FFC6": "command $3D: effect tab_xl, Atari's XL0 data, which Star Wars's AUDTC (TIE fighter cannon) plays",
+  "S:FFC8": "command $3E: effect tab_xlz, ends the sound of command $3D (Star Wars's AUDTCZ)",
+  "S:FFCA": "command $3F: effect tab_bl, Atari's BL0, player's laser blast (Star Wars's AUDXL)",
+  "S:FFCC": "command $40: effect tab_yea, Atari's YEA0: yea, test successful",
+  "S:FFCE": "command $41: effect tab_fx41: 2 channels, distortion $00, $20, $80 (noise), about 0.4 s",
+  "S:FFD0": "command $42: effect tab_fx42: 1 channel, distortion $60, about 0.4 s",
+  "S:FFD2": "command $43: effect tab_fx43: 2 channels, distortion $A0 (pure tone), about 2.5 s",
+  "S:FFD4": "command $44: effect tab_fx44: silences chip 0 channel 1, chip 0 channel 2",
+  "S:FFD6": "command $45: effect tab_fx45: 2 channels, distortion $60, $80 (noise), about 6.1 s",
+  "S:FFD8": "command $46: effect tab_fx46: 2 channels, distortion $A0 (pure tone), about 0.8 s",
+  "S:FFDA": "command $47: effect tab_fx47: 3 channels, distortion $80 (noise), about 4.8 s",
+  "S:FFDC": "command $48: effect tab_fx48: 1 channel, distortion $00, about 1.1 s",
+  "S:FFDE": "command $49: effect tab_fx49: 2 channels, distortion $40, $80 (noise), about 0.9 s",
+  "S:FFE0": "command $4A: effect tab_fx4a: 2 channels, distortion $60, $80 (noise), about 4.5 s",
+  "S:FFE2": "command $4B: effect tab_fx4b: 1 channel, distortion $80 (noise), about 2.8 s",
+  "S:FFE4": "command $4C: effect tab_fx4c: 2 channels, distortion $A0 (pure tone), about 0.7 s",
+  "S:FFE6": "command $4D: effect tab_fx4d: 1 channel, distortion $80 (noise), $A0 (pure tone), about 0.2 s",
+  "S:FFE8": "command $4E: effect tab_fx4e: 2 channels, distortion $60, $80 (noise), $A0 (pure tone), about 0.9 s",
+  "S:FFEA": "command $4F: effect tab_fx4f: 1 channel, distortion $20, about 0.9 s",
+  "S:FFEC": "command $50: effect tab_fx50: 1 channel, distortion $00, $A0 (pure tone), about 6.1 s",
+  "S:FFEE": "command $51: effect tab_fx51: 2 channels, distortion $00, $80 (noise), about 1.1 s",
+  "S:FFF0": "not a table entry: by its place the checksum word of this ROM, as at $7FF0 in Star Wars - both sums of TEST come out right with it. DOCMD and the test sequence of MAIN still take command $52 through it, to $9CA7, where there is no ROM",
+  "S:FFF2": "the 6809 vectors: SWI3, SWI2, FIRQ, IRQ, SWI, NMI, RESET. as DOCMD lets command $53 through, that command jumps through the first of them to INIT",
+  "S:DF0F": "ESB: while the speech routine is talking or in a pause",
+  "S:DF15": "the music plays at half volume",
+  "S:FCBE": "ESB: and forget the last value written",
+  "S:FCD6": "odd offsets are the control registers (distortion and volume)",
+  "S:FCDA": "ESB: while the speech routine is in a pause",
+  "S:FCDE": "or talking",
+  "S:FCE2": "the volume nibble",
+  "S:FCE4": "half of it",
+  "S:FCE6": "taken off the control value: the effect plays at half volume under speech",
+  "S:FD7C": "the sequence runs through commands $01-$52, and $52 has no routine (see the end of PBX)",
+  "S:FE96": "ESB tests the ROMs as two pairs of 8K blocks, each pair summed into one word: $4000 with $C000 (136031-113) and $6000 with $E000 (136031-112)",
+  "S:FED4": "8K, counted in words",
+  "S:FED8": "sum with end-around carry",
+  "S:FEE4": "the second block of the pair goes into the same sum",
+  "S:FEF4": "a good pair sums to $FFFF",
+  "S:FEF7": "U + $16C wraps to $0004 and then $0008, in the SOUT range: the sum is written to the latch of the main board (Star Wars stored it in the ROM for a logic analyzer), zero = good",
+  "S:FEFF": "U = TROMP + 4 after the first pair, TEST after the second"
+ },
+ "ram": {},
+ "regions": [
+  [
+   "S",
+   "C016",
+   "C05E",
+   "ptrs"
+  ],
+  [
+   "S",
+   "4000",
+   "4002",
+   "words"
+  ],
+  [
+   "S",
+   "E0A9",
+   "E0AB",
+   "ptrs"
+  ],
+  [
+   "S",
+   "E0AD",
+   "E0B3",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA59",
+   "FA61",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA62",
+   "FA66",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA67",
+   "FA6F",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA70",
+   "FA78",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA79",
+   "FA7D",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA7E",
+   "FA82",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA83",
+   "FA97",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FA98",
+   "FAA4",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FAA5",
+   "FAAD",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FAAE",
+   "FAB2",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FAB3",
+   "FABB",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FABC",
+   "FACC",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FACD",
+   "FAD5",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FAD6",
+   "FADA",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FADB",
+   "FADF",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FAE0",
+   "FB00",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB01",
+   "FB09",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB0A",
+   "FB0E",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB0F",
+   "FB17",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB18",
+   "FB20",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB21",
+   "FB29",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB2A",
+   "FB32",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB33",
+   "FB3F",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB40",
+   "FB44",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB45",
+   "FB4D",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB4E",
+   "FB56",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB57",
+   "FB5B",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB5C",
+   "FB64",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB65",
+   "FB69",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB6A",
+   "FB72",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB73",
+   "FB77",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB78",
+   "FB7C",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB7D",
+   "FB85",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FB86",
+   "FB8A",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FCF6",
+   "FD3A",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FF4C",
+   "FFF0",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FFF0",
+   "FFF2",
+   "words"
+  ],
+  [
+   "S",
+   "FFF2",
+   "10000",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FE96",
+   "FE9C",
+   "words"
+  ]
+ ],
+ "esb_notes": {
+  "S:FB91": "the name does not fit: this is sound command $35 and loads tab_pb, Atari's PB0 (pass-by), so it is Star Wars's AUDPB",
+  "S:FB9F": "the name does not fit: this is sound command $3A and loads tab_sh, Atari's SH0 (shield), so it is Star Wars's AUDSH",
+  "S:FBA6": "the name does not fit: this is sound command $37 and loads tab_pf, Atari's PF0 (tower pfffts), so it is Star Wars's AUDPF",
+  "S:FB8A": "the name does not fit: this is sound command $3F and loads tab_bl, Atari's BL0 (player's laser blast), so it is Star Wars's AUDXL",
+  "S:FB98": "the name does not fit: this is sound command $36 and loads tab_pbz, Atari's PBZ0 (end of the pass-by sound), so it is Star Wars's AUDPBZ",
+  "S:FC55": "the name does not fit: this is sound command $4E, one of the effects ESB added, and loads tab_fx4e (chip 0 channel 4, chip 1 channel 1, distortion $60, $80 (noise), $A0 (pure tone), about 0.9 s). the test sounds are aud_yea, aud_nay and aud_test_tones",
+  "S:FC5C": "the name does not fit: this is sound command $4F, one of the effects ESB added, and loads tab_fx4f (chip 1 channel 4, distortion $20, about 0.9 s). the test sounds are aud_yea, aud_nay and aud_test_tones",
+  "S:FC63": "the name does not fit: this is sound command $50, one of the effects ESB added, and loads tab_fx50 (chip 1 channel 4, distortion $00, $A0 (pure tone), about 6.1 s). the test sounds are aud_yea, aud_nay and aud_test_tones",
+  "S:DBC3": "sound command $2D. the main program's stub for it is never called",
+  "S:DBE4": "sound command $2A, sent by the main program when a Jedi letter is awarded. the four tunes are longer than Star Wars's",
+  "S:DC05": "sound command $02",
+  "S:DC26": "sound command $2B. the code is Star Wars's but tunes 15-18 are now the Imperial March (march_v1 - march_v4), sent by the wave 2 setup",
+  "S:DC47": "not in the command table PBX, so nothing calls it, and its tunes 19-22 are all the empty tune at $CB1C",
+  "S:DC68": "sound command $2C. tunes 23-26 are new music (tune2c_v1 - tune2c_v4), sent by the wave 3 setup",
+  "S:DC89": "sound command $2E. tunes 27-30 are the Star Wars main theme (theme_v1 - theme_v4), sent by the wave 1 setup",
+  "S:DCAA": "sound command $31. tunes 31-34 are new music (tune31_v1 - tune31_v4), sent when the initials entry starts",
+  "S:DCCB": "sound command $29. tunes 35-38 are new music (tune29_v1 - tune29_v4), sent by the asteroid wave's setup",
+  "S:DCEC": "sound command $30. tunes 39-42 are new music (tune30_v1 - tune30_v4), sent when the game ends",
+  "S:DD0D": "sound command $2F. tunes 43-46 are the Imperial March's rhythm figure looped 20 to 23 times (vamp_v1 - vamp_v4), sent by the launch sequence"
+ },
+ "questions": [
+  "S:C639, S:C8AF, S:C92B: these three 'routines' are not code. the bytes are notes of tunes 15, 16 and 17 ($16 $39 $16 = two triplet notes, $20 $00 / $20 $80 = rests) that the orphan pass took for LBRA / BRA. the LBRA at $C639 'jumps' to $FF52, which is why the command table PBX from $FF52 to $FFD9 is listed as instructions. hints.py needs NOT_CODE for (S, $C639) and (S, $C92B) (and $C8AF, reached from $C92D), then PBX comes out as 82 words $FF4C-$FFEF. i gave no names to these three headers",
+  "S:FF52-S:FFD9 is data listed as code (see above). the regions and the per-entry comments i give for S:FF4C-S:FFEF apply once the false code is gone",
+  "S:FC6A (7 bytes shown as .byte) is code: LDY #$FB85 / JMP AUDNEW. nothing reaches it - PBX goes from $FC63 (command $50) to $FC71 (command $51). its table at $FB85 only silences chip 0 channel 1",
+  "S:FFF0: PBXS_EQ is $53 and both DOCMD (CMPB #$53 / BHI) and the self test sequence in MAIN (CMPB #$53 / BLO) accept command $52, but PBX has routines for $00-$51 only. the word used for $52 is $9CA7 at $FFF0, which by its place is the ROM's checksum word (TEST's two sums come out right with it) and points to no ROM. the main program does send $52 (its aud_cmd_52). what the sound CPU does at $9CA7 depends on what the board returns there and i could not settle it from the ROM - possibly the routine at $FC6A was meant, the one routine without a table entry. command $53 goes through the SWI3 vector to INIT",
+  "names carried from Star Wars that sit on the wrong routines (the matcher placed them by position - ESB dropped Star Wars's RY, RD, TL, RC, DR, RS and TH effects, which shifts the list). by the tables they load: S:FB8A AUDRY is Star Wars's AUDXL (loads BL0, command $3F), S:FB91 AUDRD is AUDPB (PB0, $35), S:FB98 AUDPH is AUDPBZ (PBZ0, $36), S:FB9F AUDRS is AUDSH (SH0, $3A), S:FBA6 AUDTH is AUDPF (PF0, $37), and S:FC55 AUDYEA, S:FC5C AUDNAY, S:FC63 AUDTST are new ESB effects (commands $4E, $4F, $50). i did not rename them, i put an esb_notes line on each and lower-case names on the true ones (aud_port_hole $FBDE, aud_yea $FBE5, aud_nay $FBEC, aud_test_tones $FBF3). these eight are candidates for sw_drop_names with the names AUDXL, AUDPB, AUDPBZ, AUDSH, AUDPF, aud_fx4e, aud_fx4f, aud_fx50. the carried symbols RY0 ($FAB2) and TST0 ($FB77) in sw_carry.json are wrong for the same reason",
+  "the PM routine names are right as code (same tune numbers as Star Wars) but ESB put other music behind most of them: PMEND plays the Imperial March, PMDAR the march's rhythm figure, PMTH5 still the main theme, PMREB is dead (empty tunes, no command). i left the names and added esb_notes",
+  "music i could not identify by ear from the data: command $29 (tunes 35-38), $2C (tunes 23-26) and $31 (tunes 31-34). command $30 (tunes 39-42) looks like Yoda's theme from its notes (C G C, A F#, G E C B, A in the written key) - not verified by listening. the uses i give for the tune commands come from the main program's calls of its stubs for $29-$31 (L711E, P1_95E5, L6E3A, L6FBD, L6BF0, L6991, L7494, L74B6)",
+  "speech: i can say which command says which phrase (comments on the rows at L4002) but not what the 41 phrases say - none of them has the same data as a Star Wars phrase. phrase 0 is never said (same data as phrase 1) and phrase 28 is a single byte no word list uses",
+  "carried Atari statement comments inside the tune data ($C098-$C74A, for example .NOTE lines in BENV1-BENV4 and in the first part of the Imperial March) were matched by byte runs, they describe the bytes correctly as statements but the surrounding .CALL / BENV5 comment lines are Star Wars's source and do not match ESB's longer tunes",
+  "the labels GLOCK, EHARD and QKRIZE carry Star Wars's statement comments (.BYTE lists) that already did not match the bytes in Star Wars. $E0F3 is listed as 'ROM fill, 64 bytes of $01' but is frequency envelope 2",
+  "effects of commands $41-$51: described by channels, control type and length only, the ROM does not say what they are for. S:F505-S:F5AD is a sequence pair no table uses",
+  "the per-table pointer regions ($FA59 up) start one byte after each table's mask byte, so each table becomes a .byte row for the mask and .word rows for the sequence addresses. labels and comments on tune starts that are now in the middle of a .byte row ($CB1C, $CB1E, $D092 and so on) rely on the row being split at the new TUNTAB pointer targets"
+ ]
+}

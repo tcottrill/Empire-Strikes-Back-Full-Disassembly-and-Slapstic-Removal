@@ -1,0 +1,52 @@
+{
+ "cpu": "sound",
+ "about": "sound program: Star Wars names carried by position onto the wrong effect routines (found by the s_sound pass)",
+ "sw_drop_names": [
+  "S:FB8A",
+  "S:FB91",
+  "S:FB98",
+  "S:FB9F",
+  "S:FBA6",
+  "S:FC55",
+  "S:FC5C",
+  "S:FC63"
+ ],
+ "sw_drop_symbols": [
+  "RY0",
+  "TST0"
+ ],
+ "routines": {
+  "S:FB8A": {
+   "name": "aud_start_3f",
+   "desc": "start the sound effect of command $3F: Star Wars' AUDXL by the table it loads (the BL table)"
+  },
+  "S:FB91": {
+   "name": "aud_start_35",
+   "desc": "start the sound effect of command $35: Star Wars' AUDPB by the table it loads"
+  },
+  "S:FB98": {
+   "name": "aud_start_36",
+   "desc": "start the sound effect of command $36: Star Wars' AUDPBZ by the table it loads"
+  },
+  "S:FB9F": {
+   "name": "aud_start_3a",
+   "desc": "start the sound effect of command $3A: Star Wars' AUDSH by the table it loads"
+  },
+  "S:FBA6": {
+   "name": "aud_start_37",
+   "desc": "start the sound effect of command $37: Star Wars' AUDPF by the table it loads"
+  },
+  "S:FC55": {
+   "name": "aud_start_4e",
+   "desc": "start the sound effect of command $4E: an effect ESB added"
+  },
+  "S:FC5C": {
+   "name": "aud_start_4f",
+   "desc": "start the sound effect of command $4F: an effect ESB added"
+  },
+  "S:FC63": {
+   "name": "aud_start_50",
+   "desc": "start the sound effect of command $50: an effect ESB added"
+  }
+ }
+}

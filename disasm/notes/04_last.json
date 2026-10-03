@@ -1,0 +1,66 @@
+{
+ "about": "headers left without a description after the tracer changes that followed the two reconcile passes: unused library entries, and stale image now read from its first whole instruction",
+ "routines": {
+  "B0:B2FC": {
+   "name": "lsrd7",
+   "desc": "the 7-, 6- and 5-bit entries of the logical shift right family: three LSRA / RORB pairs that fall into lsrd4. nothing calls them"
+  },
+  "B0:B69E": {
+   "name": "scr_10",
+   "desc": "add 10 points: D = address of the 3-byte BCD value, then the common tail that goes to ADUSCR. no caller found in any listing"
+  },
+  "B0:B6A3": {
+   "name": "scr_100",
+   "desc": "add 100 points, as scr_10. no caller found"
+  },
+  "B0:B6A8": {
+   "name": "scr_1000",
+   "desc": "add 1,000 points, as scr_10. no caller found"
+  },
+  "B0:B6AD": {
+   "name": "scr_5000",
+   "desc": "add 5,000 points, as scr_10. no caller found"
+  },
+  "B0:F9D2": {
+   "desc": "self test: start of the walking-bit matrix processor test, reached through the table word at $F7E6"
+  },
+  "B1:621B": {
+   "desc": "bank 1's copy of the ASRD7 entry of the shift library. nothing calls it"
+  },
+  "P0:9474": {
+   "name": "s2vw_old_p0",
+   "desc": "stale image, never run: the tail of a copy of Star Wars' S2VW from an earlier build, read from its first whole instruction. the bytes from $952B on are the same on all four pages"
+  },
+  "P0:952C": {
+   "name": "s2vw_end_p0",
+   "desc": "stale image, never run: the last instructions of the S2VW copy, the same on all four pages. they are here so that the slapstic's bitwise addresses $9540-$955F hold something that looks like code - page 3 reads $9540 and $9548 as data to enter that mode"
+  },
+  "P1:90CF": {
+   "name": "gun_find_last",
+   "desc": "X = the last gun record ($4928), falling into gun_find_free. an entry nothing calls"
+  },
+  "P1:952C": {
+   "name": "s2vw_end_p1",
+   "desc": "stale image, never run: the last instructions of a copy of Star Wars' S2VW, the same on all four pages - see s2vw_end_p0 on page 0"
+  },
+  "P2:952C": {
+   "name": "s2vw_end_p2",
+   "desc": "stale image, never run: the last instructions of a copy of Star Wars' S2VW, the same on all four pages - see s2vw_end_p0 on page 0"
+  },
+  "P3:93E9": {
+   "name": "s2vw_old_p3",
+   "desc": "stale image, never run: a copy of Star Wars' S2VW left from an earlier build, byte for byte the same as page 2's from $9361 to $9560. nothing on page 3 calls it"
+  },
+  "P3:952C": {
+   "name": "s2vw_end_p3",
+   "desc": "stale image, never run as code: the last instructions of the S2VW copy, the same on all four pages. lz_hit_probot and lz_hit_space read $9548 and $9540 here as data, which puts the slapstic into its bitwise mode before a maze call - see docs/SLAPSTIC.md"
+  },
+  "B1:FFC0": {
+   "name": "rom_sum_b1",
+   "desc": "the bank 1 half of the self test's ROM sum. bank 0's rom_sum_2banks sets W_BANK and the 6809 fetches its next instruction here: add the 8K at X, in bank 1, into the sum with end-around carry, then clear W_BANK, which continues in bank 0 at $FFD8. found by running the program (emu_src/tests/coverage.py)"
+  }
+ },
+ "comments": {
+  "B1:FFD5": "back to bank 0: the next instruction is fetched from bank 0 at $FFD8"
+ }
+}

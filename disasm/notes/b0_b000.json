@@ -1,0 +1,540 @@
+{
+ "about": "bank 0 $B0E4-$B8A5: the rebel training manual of the attract mode (page set-up, script runner, view), the shift library, math box helpers and sine table, bcd and random helpers, the score routines and their table, the site and cockpit view, the laser splash builder",
+ "routines": {
+  "B0:B0E4": {
+   "name": "manual_page_init",
+   "desc": "starts one page of the rebel training manual, called by PHINXT. turns all messages off, calls the set-up routine of section Q_FRC (0 probot, 1 walkers, 2 TIE fighter, 3 asteroids) from manual_init_tab, then points the script pointer $4CB6 at the script of that section's page $4CB5, taken from manual_script_tab"
+  },
+  "B0:B111": {
+   "name": "man_init_probot",
+   "desc": "manual set-up for section 0, the probot pages. sets the player's height to $0200, steps the page number $4CB5 on (0, 1, 2, then 0 again - this is the only place the page changes, so each pass through the four sections shows the next page of all of them), sets the demo probot up for that page (page 2 P2_86C7) and clears the transmission records (page 3 P3_98D3)"
+  },
+  "B0:B12E": {
+   "name": "man_init_walker",
+   "desc": "manual set-up for section 1, the walker pages. turns the player half round (-1.0 in the A.X and B.Y terms of the player's matrix), sets the height to $0800, sets the demo AT-ST up for page $4CB5 (page 1 P1_866F) and the demo AT-AT (page 0 P0_8674), then clears the AT-AT record's type byte so that only the AT-ST shows until the script calls man_show_atat"
+  },
+  "B0:B14E": {
+   "name": "man_show_atat",
+   "desc": "called from the walker scripts (command 5 records at time $65 on all three walker pages, after the AT-ST record has been cleared): raises the player to height $1800 and sets the demo AT-AT up again for page $4CB5 (page 0 P0_8674). reached only through the script, hence no caller found"
+  },
+  "B0:B15B": {
+   "name": "man_init_tie",
+   "desc": "manual set-up for section 2, the TIE fighter pages: B = page $4CB5, page 3 P3_8613 sets the alien records up"
+  },
+  "B0:B162": {
+   "name": "man_init_asteroid",
+   "desc": "manual set-up for section 3, the asteroid pages: B = page $4CB5, page 2 P2_965E sets the demo asteroid up in the records at ALIENZ"
+  },
+  "B0:B189": {
+   "name": "manual_run",
+   "desc": "the per-frame work of a manual page, called by the phase routine at L7542. if the time word of the script record at $4CB6 has been reached by PH_TIM it runs the record's command (byte 2, 0-6, through the table at LAE14, with U at the record: end of page, message on, message off, store byte, store word, call routine, nothing) and steps the pointer on 8 bytes - one record a frame at most. then it calls the move routine of section Q_FRC from manual_move_tab. the task text gives this as LB18A"
+  },
+  "B0:B1C5": {
+   "name": "man_move_probot",
+   "desc": "per-frame movement for the probot pages of the manual: the probots (page 2 P2_877C), the gun shots (page 1 P1_9185) and the transmissions (page 3 P3_9989)"
+  },
+  "B0:B1CF": {
+   "name": "man_probot_fire",
+   "desc": "called from the script of the probot weaponry page (command 5 record at $AE94, time $40): makes the demo probot, the first alien record, fire a shot (page 1 P1_9063, which with the manual flag $4CB9 set fires at once from the first gun record). reached only through the script, hence no caller found"
+  },
+  "B0:B1D6": {
+   "name": "man_probot_xmit",
+   "desc": "called from the script of the probot weaponry page (command 5 record at $AEC4, time $B5): makes the demo probot launch a transmission (page 3 P3_98E8, which takes a free transmission record). reached only through the script, hence no caller found"
+  },
+  "B0:B1DD": {
+   "name": "man_move_walker",
+   "desc": "per-frame movement for the walker pages of the manual: the AT-STs (page 1 P1_86E1), the AT-ATs (page 0 P0_8705) and the gun shots (page 1 P1_9185)"
+  },
+  "B0:B1E7": {
+   "name": "man_atst_fire",
+   "desc": "called from the script of the AT-ST weaponry page (command 5 record at $AF6C, time $30): makes the demo AT-ST, the first record at $4A54, fire a shot (page 1 P1_8FF7). reached only through the script, hence no caller found"
+  },
+  "B0:B1EE": {
+   "name": "man_atat_fire",
+   "desc": "called from the script of the AT-AT weaponry part of the same page (command 5 record at $AFA4, time $90): makes the demo AT-AT, the first record at $4A87, fire a shot (page 1 P1_8F8B). reached only through the script, hence no caller found"
+  },
+  "B0:B1F5": {
+   "name": "man_move_tie",
+   "desc": "per-frame movement for the TIE fighter pages of the manual: the computer drones (page 3 CPU) and the gun shots (page 1 P1_9185)"
+  },
+  "B0:B1FC": {
+   "name": "man_tie_fire",
+   "desc": "called from the script of the TIE fighter weaponry page (command 5 record at $B04C, time $55): makes the demo TIE fighter, the first alien record, fire a shot from the first gun record (page 1 P1_8F16, X = alien, U = gun). reached only through the script, hence no caller found"
+  },
+  "B0:B206": {
+   "name": "man_move_asteroid",
+   "desc": "per-frame movement for the asteroid pages of the manual: page 2 P2_96E0 moves and launches the asteroids"
+  },
+  "B0:B20A": {
+   "name": "manual_view",
+   "desc": "draws a manual page, called by the view routine at LA697 with Y at the display list. turns on message $53 (REBEL TRAINING MANUAL   SECTION), views the messages, writes the section and page numbers after the heading as n.n, then calls the view routine of section Q_FRC from manual_view_tab"
+  },
+  "B0:B214": {
+   "name": "manual_view_num",
+   "desc": "not a separate routine, the rest of manual_view (no call or jump to this address was found): colour, a move to the end of the heading, section number Q_FRC+1, a period, page number $4CB5+1, centre, then the section's view routine. the two upper-case comments here came over from a Star Wars routine with the same first instructions and do not describe this code"
+  },
+  "B0:B254": {
+   "name": "man_view_probot",
+   "desc": "view routine of the probot pages: the transmissions (page 3 P3_9B6D) and the probots (page 2 P2_8FB7)"
+  },
+  "B0:B25B": {
+   "name": "man_view_walker",
+   "desc": "view routine of the walker pages: the AT-STs (page 1 P1_88FD) and the AT-ATs (page 0 P0_891A)"
+  },
+  "B0:B262": {
+   "name": "man_view_tie",
+   "desc": "view routine of the TIE fighter pages: views the alien ships (page 3 SNVW_P3)"
+  },
+  "B0:B266": {
+   "name": "man_view_asteroid",
+   "desc": "view routine of the asteroid pages: page 2 P2_9983 views the asteroid records. the upper-case comment on its line belongs to a Star Wars line and does not apply"
+  },
+  "B0:B2B1": {
+   "name": "asrd12",
+   "desc": "arithmetic shift right of D by 12 bits, done as a byte move, sign extension and 4 shifts of B. first of five such entries (12 to 8 bits) that ESB puts in front of Atari's ASRD7-ASRD1 chain. no call to any of the five was found in either bank or the slapstic pages, they look like unused library code"
+  },
+  "B0:B2B9": {
+   "name": "asrd11",
+   "desc": "arithmetic shift right of D by 11 bits: A to B, sign extend, 3 shifts of B. no caller found, unused as far as can be seen"
+  },
+  "B0:B2C0": {
+   "name": "asrd10",
+   "desc": "arithmetic shift right of D by 10 bits: A to B, sign extend, 2 shifts of B. no caller found, unused as far as can be seen"
+  },
+  "B0:B2C6": {
+   "name": "asrd9",
+   "desc": "arithmetic shift right of D by 9 bits: A to B, sign extend, 1 shift of B. no caller found, unused as far as can be seen"
+  },
+  "B0:B2CB": {
+   "name": "asrd8",
+   "desc": "arithmetic shift right of D by 8 bits: A to B and sign extend. replaces the Star Wars ASRD8, which shifted eight times and fell into ASRD7. no caller found, unused as far as can be seen"
+  },
+  "B0:B2CF": {
+   "desc": "entry point: arithmetic shift D right 7 bits (falls through ASRD6..ASRD1 to the RTS at ASRD0)"
+  },
+  "B0:B2D9": {
+   "desc": "entry point: arithmetic shift D right 2 bits (falls through ASRD1 to the RTS at ASRD0)"
+  },
+  "B0:B2DB": {
+   "desc": "entry point: arithmetic shift D right 1 bit, then the RTS at ASRD0"
+  },
+  "B0:B2DE": {
+   "name": "lsrd12",
+   "desc": "logical shift right of D by 12 bits: A to B, clear A, 4 shifts of B. first of a logical shift right library that Star Wars does not have: 12 to 8 bits as separate short routines, then a fall-through chain for 7 to 1 bits that starts in the bytes at LB2FC. only the 4 bit entry lsrd4 is called. no caller found for this one"
+  },
+  "B0:B2E6": {
+   "name": "lsrd11",
+   "desc": "logical shift right of D by 11 bits: A to B, clear A, 3 shifts of B. no caller found, unused as far as can be seen"
+  },
+  "B0:B2ED": {
+   "name": "lsrd10",
+   "desc": "logical shift right of D by 10 bits: A to B, clear A, 2 shifts of B. no caller found, unused as far as can be seen"
+  },
+  "B0:B2F3": {
+   "name": "lsrd9",
+   "desc": "logical shift right of D by 9 bits: A to B, clear A, 1 shift of B. no caller found, unused as far as can be seen"
+  },
+  "B0:B2F8": {
+   "name": "lsrd8",
+   "desc": "logical shift right of D by 8 bits: A to B, clear A. no caller found, unused as far as can be seen"
+  },
+  "B0:B302": {
+   "name": "lsrd4",
+   "desc": "logical shift right of D by 4 bits, the one used entry of the logical shift chain (the 7, 6 and 5 bit entries are the six bytes in front of it, shown as data). called by the AT-AT view code in slapstic page 0 to turn a clamped distance into a brightness byte"
+  },
+  "B0:B30B": {
+   "name": "lsld12",
+   "desc": "shift D left 12 bits: B to A, clear B, 4 shifts of A. first of five such entries (12 to 8 bits) that ESB puts in front of Atari's LSLD7-LSLD1 chain. no caller found, unused as far as can be seen"
+  },
+  "B0:B313": {
+   "name": "lsld11",
+   "desc": "shift D left 11 bits: B to A, clear B, 3 shifts of A. no caller found, unused as far as can be seen"
+  },
+  "B0:B31A": {
+   "name": "lsld10",
+   "desc": "shift D left 10 bits: B to A, clear B, 2 shifts of A. no caller found, unused as far as can be seen"
+  },
+  "B0:B320": {
+   "name": "lsld9",
+   "desc": "shift D left 9 bits: B to A, clear B, 1 shift of A. no caller found, unused as far as can be seen"
+  },
+  "B0:B325": {
+   "name": "lsld8",
+   "desc": "shift D left 8 bits: B to A and clear B. replaces the Star Wars LSLD8, which shifted eight times and fell into LSLD7. no caller found, unused as far as can be seen"
+  },
+  "B0:B331": {
+   "desc": "entry point: shift D left 3 bits (falls through LSLD2, LSLD1 to the RTS at LSLD0)"
+  },
+  "B0:B365": {
+   "name": "tranu1_entry",
+   "desc": "the real entry of ESB's TRANU1: it saves U, which the transpose uses as its second scratch register, and the code ends with PULS U,PC where Star Wars has RTS. the TRANU1 label two bytes further on marks the part that matches Star Wars and must not be called by itself. no call to either address was found in bank 0, so the routine looks unused here"
+  },
+  "B0:B38D": {
+   "name": "store_u1_block",
+   "desc": "copies the ship 1 download block of the math box ($5028-$5045: the nine matrix terms, the three spare words and the position) into the unit vector block whose middle U points at - the reverse of the download IS1UV starts. called by slapstic page 0 P0_95C3 with U = M_AL"
+  },
+  "B0:B3F1": {
+   "name": "presub_via_u2",
+   "desc": "runs the math box pre-subtract MS_PSB2 with ship 2's download block in the place of ship 1's: swaps the two blocks, starts program $67 for the block index the caller left in M_BIC and waits, then swaps the blocks back. called by the walker code in slapstic pages 0 and 1"
+  },
+  "B0:B3FD": {
+   "name": "swap_u1_u2",
+   "desc": "exchanges the ship 1 download block ($5028-$5045) with the ship 2 block ($5048-$5065) word by word: the nine matrix terms and the position, not the three spare words. U is saved and used as the second scratch register. the three headers that follow are parts of this one routine"
+  },
+  "B0:B40B": {
+   "name": "swap_u1_u2_b",
+   "desc": "not a separate routine: swap_u1_u2 continues here with the A.Y word. no call or jump to this address was found"
+  },
+  "B0:B453": {
+   "name": "swap_u1_u2_c",
+   "desc": "not a separate routine: swap_u1_u2 continues here with the C.Y word. no call or jump to this address was found"
+  },
+  "B0:B46B": {
+   "name": "swap_u1_u2_d",
+   "desc": "not a separate routine: swap_u1_u2 ends here with the three position words and PULS U,PC. no call or jump to this address was found"
+  },
+  "B0:B4B2": {
+   "name": "roll_by_angle",
+   "desc": "rolls a unit vector block by an angle: B = angle (256 to the full turn), block index already in M_BIC. sets M_SIN and M_COS from the sine table and runs math box program MS_ROLL, waiting for it"
+  },
+  "B0:B4BA": {
+   "name": "pitch_by_angle",
+   "desc": "pitches a unit vector block by an angle: B = angle (256 to the full turn), block index already in M_BIC. sets M_SIN and M_COS from the sine table and runs math box program MS_PTCH, waiting for it"
+  },
+  "B0:B4C2": {
+   "name": "yaw_by_angle",
+   "desc": "yaws a unit vector block by an angle: B = angle (256 to the full turn), block index already in M_BIC. sets M_SIN and M_COS from the sine table and runs math box program MS_YAW, waiting for it. the most used of the three, called from all the enemy view code in the slapstic pages"
+  },
+  "B0:B4CA": {
+   "name": "set_sin_cos",
+   "desc": "B = angle (256 to the full turn): writes its sine to M_SIN and its cosine to M_COS for the math box rotate programs. the cosine is the sine of the angle plus $40. X is saved, D returns the cosine"
+  },
+  "B0:B4E2": {
+   "name": "sine",
+   "desc": "B = angle (256 to the full turn), returns D = sine as a signed fraction with $4000 = 1.0. looks the first quadrant up in the 65-word table sine_tab, reads the table backwards for the second quadrant and negates the value for angles $80-$FF. uses X"
+  },
+  "B0:B5C5": {
+   "name": "rnd_set",
+   "desc": "ESB's form of the Star Wars RND8 (random number set): moves RND_S1 and RND_S2 down to RND_S3 and the byte after it, then reads two new bytes from the pokey random register P_RND1 into RND_S2 and RND_S1. called all over the slapstic pages before a routine that wants random bytes"
+  },
+  "B0:B5D4": {
+   "name": "scr_level_bonus",
+   "desc": "adds the bonus for the level the game was started at, called once at frame $40 of the wave completed phase when $4C62 is set. GM_DIF 0 (easy) adds nothing, 1 adds 100000, 2 adds 250000 (the table at $B724, messages $4F-$51), 3 and up (continued play, message $52) adds the 8-digit bcd bonus carried over at $4BEF and shows it as the amount being added"
+  },
+  "B0:B61A": {
+   "name": "scr_legs_bonus",
+   "desc": "the progressive bonus for flying through an AT-AT's legs, called by slapstic page 0 P0_87DD when the player passes under a walker. adds 5000 to the 3-byte bcd bonus at $4CBF unless it has reached 900000, adds the bonus to the score, starts the 20-frame display timer $4CDF and a sound (LC657)"
+  },
+  "B0:B64E": {
+   "name": "scr_shot_3",
+   "desc": "score 3 points: an enemy shot destroyed by the player's laser, for a shot whose type byte has bit 6 clear (slapstic page 1 P1_92E8 and PTHTBG)"
+  },
+  "B0:B653": {
+   "name": "scr_shot_7",
+   "desc": "score 7 points: an enemy shot destroyed by the player's laser, for a shot whose type byte has bit 6 set, as the AT-AT's shots have (slapstic page 1 P1_92E3 and PTHTBG)"
+  },
+  "B0:B658": {
+   "name": "scr_xmit_5",
+   "desc": "score 5 points: called by slapstic page 3 P3_9CF2 when the laser hits a probot transmission record"
+  },
+  "B0:B65D": {
+   "name": "scr_wave_done",
+   "desc": "score 2500 points for completing a wave (message $4E, WAVE COMPLETED: 2,500 POINTS), called when the wave completed phase starts at L723E"
+  },
+  "B0:B662": {
+   "name": "scr_jedi",
+   "desc": "score 20000 points: called by slapstic page 1 P1_95E8 when the letter bits at $4C80 reach $0F, all four letters of JEDI"
+  },
+  "B0:B667": {
+   "name": "scr_probot_25",
+   "desc": "score 25 points for a probot shot down while the kill counter $4C53 is not yet zero (slapstic page 2 P2_92EE)"
+  },
+  "B0:B66C": {
+   "name": "scr_probot_250",
+   "desc": "score 250 points for a probot shot down once the kill counter $4C53 has run out (slapstic page 2 P2_92EE)"
+  },
+  "B0:B671": {
+   "name": "scr_probot_quota",
+   "desc": "score 5000 points when a probot kill brings the counter $4C53 down to zero (slapstic page 2 P2_9341, which then calls the letter award on page 1)"
+  },
+  "B0:B676": {
+   "name": "scr_atst_50",
+   "desc": "score 50 points for an AT-ST destroyed while the kill counter $4C53 is not yet zero (slapstic page 1 P1_8E33)"
+  },
+  "B0:B67B": {
+   "name": "scr_atst_500",
+   "desc": "score 500 points for an AT-ST destroyed once the kill counter $4C53 has run out (slapstic page 1 P1_8E33)"
+  },
+  "B0:B680": {
+   "name": "scr_atat_75",
+   "desc": "score 75 points for an AT-AT destroyed, by laser or by tow cable, while the kill counter $4C53 is not yet zero (slapstic page 0 P0_9034 and P0_90C1)"
+  },
+  "B0:B685": {
+   "name": "scr_atat_750",
+   "desc": "score 750 points for an AT-AT destroyed once the kill counter $4C53 has run out (slapstic page 0 P0_9047 and P0_90D4)"
+  },
+  "B0:B68A": {
+   "name": "scr_walker_quota",
+   "desc": "score 5000 points when a walker kill, AT-ST or AT-AT, brings the counter $4C53 down to zero (slapstic pages 0 and 1, which then call the letter award on page 1)"
+  },
+  "B0:B68F": {
+   "name": "scr_tie_100",
+   "desc": "score 100 points for a TIE fighter destroyed while the kill counter $4C53 is not yet zero (XPSA in slapstic page 3)"
+  },
+  "B0:B694": {
+   "name": "scr_tie_1000",
+   "desc": "score 1000 points for a TIE fighter destroyed once the kill counter $4C53 has run out (XPSA in slapstic page 3)"
+  },
+  "B0:B699": {
+   "name": "scr_tie_quota",
+   "desc": "score 5000 points when a TIE fighter kill brings the counter $4C53 down to zero (XPSA in slapstic page 3). four more routines of the same shape follow in the bytes at LB69E, shown as data and not called"
+  },
+  "B0:B74B": {
+   "name": "view_cockpit",
+   "desc": "draws the parts of the player's craft that show on the screen, ESB's replacement for the body of Star Wars VWPLAN, called by VWSITE and VWSITC with Y at the display list. takes the list for craft type $4C60 (0 or 1) from cockpit_lists and calls the four routines it names in turn: x shift, y shift, write the two positions, write colour and pictures. each list ends with the two picture words, which the fourth routine reads through X"
+  },
+  "B0:B77F": {
+   "name": "cockpit_no_x",
+   "desc": "first step of the cockpit list for craft type 1: no sideways shift, U = 0 and LZ_GX = 0. reached through cockpit_list_1, hence no caller found"
+  },
+  "B0:B786": {
+   "name": "cockpit_shift_y",
+   "desc": "second step of both cockpit lists: the up and down shift of the cockpit from the site's screen y, as in Star Wars VWPLAN (whose comments it carries). stores it in LZ_GY and returns it in D as the y word of a position vector. reached through the lists, hence no caller found"
+  },
+  "B0:B79C": {
+   "name": "cockpit_put_pos",
+   "desc": "third step of both cockpit lists: writes the position vector, D = y word and U = x word, at 0,Y and again at 8,Y - one for each of the two pictures. reached through the lists, hence no caller found"
+  },
+  "B0:B7A5": {
+   "name": "cockpit_colour",
+   "desc": "returns in D the display list word that colours the cockpit: JSRL $002A, the colour word kept in vector RAM, while the Jedi timer $4C50 runs or the flag $4C84 is set, else colour 1 at brightness $80. called by the two routines that follow"
+  },
+  "B0:B7B8": {
+   "name": "cockpit_put_2",
+   "desc": "writes colour and picture for both parts of the cockpit: the colour word at 12,Y and the list's first picture word at 14,Y, then falls into cockpit_put_1 for the colour at 4,Y and the second picture word at 6,Y. X points at the picture words and is stepped past them"
+  },
+  "B0:B7C0": {
+   "name": "cockpit_put_1",
+   "desc": "writes the colour word at 4,Y and the next picture word from X at 6,Y. the tail of cockpit_put_2 and the body of cockpit_one_part"
+  },
+  "B0:B7C9": {
+   "name": "cockpit_two_parts",
+   "desc": "fourth step of both cockpit lists: writes colours and pictures for the two parts and moves Y past the 16 bytes built. reached through the lists, hence no caller found"
+  },
+  "B0:B7CF": {
+   "name": "cockpit_one_part",
+   "desc": "a fourth step for a cockpit with one part: one colour and picture, Y moved on 8 bytes. neither list names it and no call was found, so it is unused"
+  }
+ },
+ "labels": {
+  "B0:B109": "manual_init_tab",
+  "B0:B169": "manual_script_tab",
+  "B0:B171": "man_scripts_probot",
+  "B0:B177": "man_scripts_walker",
+  "B0:B17D": "man_scripts_tie",
+  "B0:B183": "man_scripts_asteroid",
+  "B0:B1BD": "manual_move_tab",
+  "B0:B24C": "manual_view_tab",
+  "B0:B4FE": "sine_tab",
+  "B0:B6E5": "score_values",
+  "B0:B7D4": "cockpit_lists",
+  "B0:B7D8": "cockpit_list_0",
+  "B0:B7E4": "cockpit_list_1"
+ },
+ "comments": {
+  "B0:B0E7": "section of the manual, 0-3: probot, walkers, TIE fighter, asteroids",
+  "B0:B0EB": "a section past 3 is set up as section 0",
+  "B0:B0F4": "the section's set-up routine",
+  "B0:B0FD": "the section's list of three page scripts",
+  "B0:B0FF": "page within the section, 0-2",
+  "B0:B105": "the script starts here",
+  "B0:B111": "player height for the probot pages",
+  "B0:B114": "this is MS_TZ+M_S1, the player's z",
+  "B0:B11B": "next page, and 0 after page 2",
+  "B0:B127": "B is not used by the routine called: it clears the three transmission records at $4A54",
+  "B0:B12E": "$C0 is -1.0 in the high byte: turn the player half round",
+  "B0:B130": "MS_AX+M_S1",
+  "B0:B133": "this is MS_BY+M_S1 ($508A), the B.Y term of the player's matrix - PHINXT stores $40 in the same two bytes just before calling here",
+  "B0:B136": "player height for the AT-ST part of the walker pages",
+  "B0:B13C": "B = page: the demo AT-ST goes in the first record at $4A54",
+  "B0:B142": "B = page: the demo AT-AT goes in the first record at $4A87",
+  "B0:B148": "but its type byte is cleared: no AT-AT until the script calls man_show_atat",
+  "B0:B14E": "player height for the AT-AT part of the walker pages",
+  "B0:B18E": "next record of the page's script",
+  "B0:B191": "the time it is due",
+  "B0:B197": "not yet",
+  "B0:B199": "command, 0-6",
+  "B0:B19E": "anything above 6 does nothing",
+  "B0:B1A5": "run the command with U at the record",
+  "B0:B1A7": "8 bytes to a record",
+  "B0:B1B9": "the section's move routine",
+  "B0:B20C": "message $53: REBEL TRAINING MANUAL   SECTION",
+  "B0:B219": "a blank move of y 336, x 348, to just after the heading",
+  "B0:B223": "section number, shown as 1-4",
+  "B0:B22A": "JSRL to the period, CH_PER in the vector ROM",
+  "B0:B22F": "page number, shown as 1-3",
+  "B0:B236": "centre",
+  "B0:B248": "the section's view routine",
+  "B0:B2FC": "really code: LSRA RORB three times, the 7, 6 and 5 bit entries of the logical shift right chain that ends in lsrd4. nothing calls them",
+  "B0:B358": "MS_CX,U",
+  "B0:B3F4": "MS_PSB2, the 15-bit pre-subtract, for the block index in M_BIC",
+  "B0:B4B5": "MS_ROLL",
+  "B0:B4BD": "MS_PTCH",
+  "B0:B4C5": "MS_YAW",
+  "B0:B4CC": "the angle is parked in the high byte of M_COS",
+  "B0:B4D8": "a quarter turn on: the cosine",
+  "B0:B4E5": "second or fourth quadrant?",
+  "B0:B4E9": "then count back from 90 degrees",
+  "B0:B4EE": "word index, and bit 7 of the angle goes to carry",
+  "B0:B4F2": "carry set, angle $80-$FF: the sine is negative",
+  "B0:B4FE": "sine table: 65 words, 0 to 90 degrees in steps of 1/256 turn, $4000 = 1.0",
+  "B0:B5C5": "the last two bytes move down to RND_S3 and $4855",
+  "B0:B5C9": "two new random bytes",
+  "B0:B5D4": "level the game was started at",
+  "B0:B5D7": "0, the easy start: no bonus",
+  "B0:B5D9": "3 and up is continued play",
+  "B0:B5E0": "3-byte entries at $B724: nothing, 100000 for level 1, 250000 for level 2",
+  "B0:B5E8": "continued play: add the four bcd bytes carried over at $4BEF, as ADUSCR does for three",
+  "B0:B609": "the top two digits",
+  "B0:B61F": "the 5000 step",
+  "B0:B624": "at 900000 the bonus stops growing",
+  "B0:B63F": "add the bonus to the score",
+  "B0:B644": "show it for 20 frames",
+  "B0:B69E": "really code, never called as far as can be seen: four more score routines, LDD #$B70F, #$B712, #$B715, #$B718 each followed by BRA ADUSCR - 10, 100, 1000 and 5000 points",
+  "B0:B6B4": "ESB passes the address of the three bcd bytes in D, where Star Wars passed it in U",
+  "B0:B6D4": "a 6-digit amount: clear the top two digits of the amount shown",
+  "B0:B6E5": "3: scr_shot_3",
+  "B0:B6E8": "7: scr_shot_7",
+  "B0:B6EB": "5: scr_xmit_5",
+  "B0:B6EE": "25: scr_probot_25",
+  "B0:B6F1": "250: scr_probot_250",
+  "B0:B6F4": "5000: scr_probot_quota",
+  "B0:B6F7": "50: scr_atst_50",
+  "B0:B6FA": "500: scr_atst_500",
+  "B0:B6FD": "75: scr_atat_75",
+  "B0:B700": "750: scr_atat_750",
+  "B0:B703": "5000: scr_walker_quota",
+  "B0:B706": "100: scr_tie_100",
+  "B0:B709": "1000: scr_tie_1000",
+  "B0:B70C": "5000: scr_tie_quota. then 10, 100 and the first byte of 1000 for the uncalled routines at LB69E",
+  "B0:B714": "rest of 1000, then 5000, also for the uncalled routines",
+  "B0:B71B": "2500: scr_wave_done",
+  "B0:B71E": "5000: the step of the legs bonus",
+  "B0:B721": "20000: scr_jedi. then from $B724 the level bonus of scr_level_bonus: 0, 100000, 250000",
+  "B0:B74D": "the two cockpit lists",
+  "B0:B750": "craft type, 0 or 1",
+  "B0:B75B": "the list: four routine addresses and two picture words",
+  "B0:B763": "this one reads the two picture words through X",
+  "B0:B79C": "position for the second picture",
+  "B0:B7A0": "position for the first picture",
+  "B0:B7AF": "JSRL $002A: the colour word kept in vector RAM",
+  "B0:B7B4": "colour 1 at brightness $80",
+  "B0:B7BC": "first picture word of the list",
+  "B0:B7C4": "second picture word of the list",
+  "B0:B7D4": "cockpit_lists: the list for craft type 0, then for type 1. each list is four routine addresses and two JSRL words to vector ROM pictures"
+ },
+ "ram": {
+  "4CB5": {
+   "name": "man_page",
+   "desc": "rebel training manual: page within the section, 0-2, shown as 1-3. stepped on by man_init_probot, so it changes once in every pass through the four sections"
+  },
+  "4CB6": {
+   "name": "man_script",
+   "desc": "rebel training manual: word, pointer to the next 8-byte record of the page's script (time word, command byte, operands). set by manual_page_init, stepped by manual_run"
+  },
+  "4A54": {
+   "name": "xmit_atst",
+   "desc": "enemy record area with a different use in each wave: the three $28-byte probot transmission records ($4A54-$4ACB) in the probot wave, the AT-ST records of $11 bytes ($4A54-$4A86) in the walker wave. byte 0 of a record is zero when it is free"
+  },
+  "4A87": {
+   "name": "atat_rec",
+   "desc": "start of the AT-AT walker records, $19 bytes each up to $4AD2 (slapstic page 0). byte 0 of a record is zero when it is free - man_init_walker clears the first one's"
+  },
+  "4BEF": {
+   "name": "cont_bonus",
+   "desc": "four bcd bytes, high first ($4BEF-$4BF2): the bonus for continued play, the score copied from $4BF4-$4BF7 at game over when $4C85 is set. shown on the wave select screen and with message $52, added to the score by scr_level_bonus when GM_DIF is 3 or more"
+  },
+  "4CBA": {
+   "name": "sc_add_hi",
+   "desc": "top two bcd digits of the amount being added to the score, the byte in front of SC_ADD - the amount is shown as 8 digits from here. zero except for the continued play bonus"
+  },
+  "4CBF": {
+   "name": "legs_bonus",
+   "desc": "three bcd bytes ($4CBF-$4CC1): the progressive bonus for flying through AT-AT legs. cleared when the walker wave starts, raised by 5000 and added to the score by scr_legs_bonus, shown while legs_bon_tmr runs"
+  },
+  "4CDF": {
+   "name": "legs_bon_tmr",
+   "desc": "frames left to show the legs bonus: set to $14 by scr_legs_bonus, counted down by the display code in slapstic page 1 (P1_9D45)"
+  },
+  "4C60": {
+   "name": "craft_type",
+   "desc": "which craft the player flies as far as the cockpit goes: 0 is set when the probot wave starts (L6C04), 1 at L6FAE and L7112. picks the cockpit list in view_cockpit and the laser origins in slapstic page 3 P3_95D3, where type 1 has a second pair of guns"
+  },
+  "4C50": {
+   "name": "jedi_timer",
+   "desc": "three bytes, the first two a word of whole counts: set to $01C0 when the four JEDI letters are complete (P1_95D7), counted down to zero by P1_95F1. while it runs the cockpit is drawn in the cycling colour and the shield display is replaced, flashing below $60"
+  },
+  "4C84": {
+   "name": "jedi_glow",
+   "desc": "made each frame by slapstic page 1 P1_9645: 1 while jedi_timer runs or $4C82 is 1, else 0. cockpit_colour, the laser splash colour at LAC38 and bank 1 draw code test it"
+  },
+  "5080": {
+   "name": "s1_ax",
+   "desc": "MS_AX+M_S1 written as a bare address: word, the A.X term of the player's unit vector block ($4000 = 1.0). man_init_walker stores $C0 in its high byte"
+  },
+  "509C": {
+   "name": "s1_tz",
+   "desc": "MS_TZ+M_S1 written as a bare address: word, the player's universe z - the height above the ground in the Hoth waves"
+  },
+  "5028": {"name": "M_AX1", "desc": "SHIP 1 UNIT VECTOR COEFF (Atari's name in Star Wars): word, A.X of the ship 1 download block that the math box rotates and views with"},
+  "502A": {"name": "M_AY1", "desc": "SHIP 1 UNIT VECTOR COEFF (Atari's name in Star Wars): word, A.Y of the ship 1 download block"},
+  "502C": {"name": "M_AZ1", "desc": "SHIP 1 UNIT VECTOR COEFF (Atari's name in Star Wars): word, A.Z of the ship 1 download block"},
+  "502E": {"name": "m_vx1", "desc": "word, the spare fourth word of the A row of the ship 1 download block, where a unit vector block keeps its x velocity (MS_VX). store_u1_block copies it back with the rest"},
+  "5030": {"name": "M_BX1", "desc": "word, B.X of the ship 1 download block (the name the Star Wars listing uses)"},
+  "5032": {"name": "M_BY1", "desc": "word, B.Y of the ship 1 download block (the name the Star Wars listing uses)"},
+  "5034": {"name": "M_BZ1", "desc": "word, B.Z of the ship 1 download block (the name the Star Wars listing uses)"},
+  "5036": {"name": "m_vy1", "desc": "word, the spare fourth word of the B row of the ship 1 download block, where a unit vector block keeps its y velocity (MS_VY)"},
+  "5038": {"name": "M_CX1", "desc": "word, C.X of the ship 1 download block, the address M_U1 points at (the name the Star Wars listing uses)"},
+  "503A": {"name": "M_CY1", "desc": "word, C.Y of the ship 1 download block (the name the Star Wars listing uses)"},
+  "503C": {"name": "M_CZ1", "desc": "word, C.Z of the ship 1 download block (the name the Star Wars listing uses)"},
+  "503E": {"name": "m_vz1", "desc": "word, the spare fourth word of the C row of the ship 1 download block, where a unit vector block keeps its z velocity (MS_VZ)"},
+  "5040": {"name": "M_XT1", "desc": "SHIP 1 UNIVERSE LOC (Atari's name in Star Wars): word, x of the ship 1 download block's position"},
+  "5042": {"name": "M_YT1", "desc": "SHIP 1 UNIVERSE LOC (Atari's name in Star Wars): word, y of the ship 1 download block's position"},
+  "5044": {"name": "M_ZT1", "desc": "SHIP 1 UNIVERSE LOC (Atari's name in Star Wars): word, z of the ship 1 download block's position"},
+  "5048": {"name": "M_AX2", "desc": "SHIP 2 UNIT VECTOR COEFF (Atari's name in Star Wars): word, A.X of the ship 2 download block, the matrix of the object being viewed"},
+  "504A": {"name": "M_AY2", "desc": "SHIP 2 UNIT VECTOR COEFF (Atari's name in Star Wars): word, A.Y of the ship 2 download block"},
+  "504C": {"name": "M_AZ2", "desc": "SHIP 2 UNIT VECTOR COEFF (Atari's name in Star Wars): word, A.Z of the ship 2 download block"},
+  "5050": {"name": "M_BX2", "desc": "word, B.X of the ship 2 download block (the name the Star Wars listing uses)"},
+  "5052": {"name": "M_BY2", "desc": "word, B.Y of the ship 2 download block (the name the Star Wars listing uses)"},
+  "5054": {"name": "M_BZ2", "desc": "word, B.Z of the ship 2 download block (the name the Star Wars listing uses)"},
+  "5058": {"name": "M_CX2", "desc": "word, C.X of the ship 2 download block, the middle that the slapstic code hands to UNITV as #$5058 (the name the Star Wars listing uses)"},
+  "505A": {"name": "M_CY2", "desc": "word, C.Y of the ship 2 download block (the name the Star Wars listing uses)"},
+  "505C": {"name": "M_CZ2", "desc": "word, C.Z of the ship 2 download block (the name the Star Wars listing uses)"},
+  "5060": {"name": "M_XT2", "desc": "SHIP 2 UNIVERSE LOC (Atari's name in Star Wars): word, x of the ship 2 download block's position"},
+  "5062": {"name": "M_YT2", "desc": "SHIP 2 UNIVERSE LOC (Atari's name in Star Wars): word, y of the ship 2 download block's position"},
+  "5064": {"name": "M_ZT2", "desc": "SHIP 2 UNIVERSE LOC (Atari's name in Star Wars): word, z of the ship 2 download block's position"}
+ },
+ "regions": [
+  ["B0", "B169", "B189", "ptrs"],
+  ["B0", "B4FE", "B580", "words"],
+  ["B0", "B7D4", "B7E0", "ptrs"],
+  ["B0", "B7E0", "B7E4", "avg"],
+  ["B0", "B7E4", "B7EC", "ptrs"],
+  ["B0", "B7EC", "B7F0", "avg"]
+ ],
+ "questions": [
+  "B0:B2FC - the six bytes $44,$56 x3 shown as data are code: LSRA RORB three times, the 7, 6 and 5 bit entries of a logical shift right chain that falls into LB302 (lsrd4). nothing calls them",
+  "B0:B69E-B6B1 - the 20 bytes shown as data are code: four score routines of the usual shape (LDD #$B70F / #$B712 / #$B715 / #$B718, each with BRA ADUSCR) for 10, 100, 1000 and 5000 points. no call to $B69E, $B6A3, $B6A8 or $B6AD was found in any listing, so they look dead - the table entries $B70F-$B71A are used only by them",
+  "B0:B133 - the operand shows as GM_WAV, but $508A is MS_BY+M_S1, the B.Y term of the player's matrix: PHINXT at L7527/L752A stores $40 in $5080 and $508A through the MS_AX+M_S1 and MS_BY+M_S1 expressions just before, and L6BBD/L6BC0 store $C0 in the same pair. the alias GM_WAV = $508A in esb_defines.asm looks wrong for ESB",
+  "B0:B365 - TRANU1 in ESB ends with PULS U,PC, so its real entry is LB365 (PSHS U) and the TRANU1 label at LB367 is two bytes inside the routine. no caller of either address was found in bank 0",
+  "B0:B214, B0:B40B, B0:B453, B0:B46B - these headers split one routine each (manual_view, swap_u1_u2) at addresses nothing refers to. i named them as continuations. the upper-case comments at LB214 (CENTER), LB21C (ASK FOR HALT), LB266 (INIT PLAYERS SHIP) and at the call LA6AB (VIEW GROUND STARS) are carried Star Wars comments that do not fit the ESB code",
+  "B0:B189 - the task text names the interpreter LB18A, the header and the call at L7545 are LB189. i used B189",
+  "B0:B14E, B1CF, B1D6, B1E7, B1EE, B1FC - no caller found because they are called from command 5 records of the manual scripts at $AE54-$B0E3 (the other annotator's table): bytes 3-4 of such a record are the routine address",
+  "B0:B2B1-B2CB, B2DE-B2F8, B30B-B325 - fifteen shift entries with no caller in any listing, taken to be unused library code generated with the shift macros",
+  "ram $4A54 - one name (xmit_atst) for an area that holds transmission records in the probot wave and AT-ST records in the walker wave. whoever annotates the slapstic pages may want two names",
+  "ram $5028-$5064 - i gave the Star Wars names (M_AX1 .. M_ZT2, upper case) since the math RAM layout is the same. $5080 and $509C are MS_AX+M_S1 and MS_TZ+M_S1, which other lines of the listing show as expressions - the names s1_ax and s1_tz may be better dropped in favour of the expressions",
+  "ram $4C53 - the score routines are described in terms of the kill counter at $4C53 (small score while it is nonzero, ten times as much once it is zero, 5000 when it reaches zero and the letter award P1_9573 is called). it is outside my range and i did not name it. it looks like the kills still wanted for the wave's Jedi letter",
+  "ram $4CB8 and $4CB9 - used by the manual but only outside my range: $4CB8 is set to $FF by script command 0 (LAE23) and ends the page at L7551, $4CB9 is set while the manual runs and makes the fire routines in slapstic page 1 fire at once",
+  "B0:B5C5 - rnd_set stores D at RND_S3, so the old RND_S2 goes to $4855, the byte after RND_S3, which has no name"
+ ]
+}

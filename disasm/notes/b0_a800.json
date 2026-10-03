@@ -1,0 +1,325 @@
+{
+ "about": "bank 0 $A800-$AFFF: the Executor pictures of the intro and the wave transitions, the score ladder and wave status display, the lazar ground splash, the shield gauge and glow, and the training manual's script opcodes and first six scripts",
+ "routines": {
+  "B0:A843": {
+   "name": "exec_slide_in",
+   "desc": "draws the Executor (the star destroyer picture at $298E in the pseudo ROM) coming in from the right near the end of the asteroid wave. nothing is drawn until PH_TIM reaches 260 (360 when GM_DIF is 2 or more), then the picture goes at y 200, x 530 - 7 * frames since then, at scale $7400. called by the view LA5F9. Y-->VG list"
+  },
+  "B0:A881": {
+   "name": "exec_slide_on",
+   "desc": "draws the Executor at y 200, x 250 - 7 * the low byte of PH_TIM, at scale $7400: the continuation of exec_slide_in in the phase that follows (view LA63E), starting where that one stopped. Y-->VG list"
+  },
+  "B0:A8F8": {
+   "name": "exec_drift_left",
+   "desc": "draws the Executor at the screen position VWDTHB saved in $4CCE (y) and $4CCC (x), after moving x 16 to the left. called every frame by the view LA599, whose phase (L707A) ends when x has reached -520. Y-->VG list"
+  },
+  "B0:A91A": {
+   "name": "vew_exec_intro",
+   "desc": "the whole view of the phase L6999, 100 frames before a game: message $2C (DARTH VADER'S EXECUTOR IS SEARCHING FOR THE REBEL HIDEOUT) in red, the Executor picture ($2B70 in the pseudo ROM) crossing the screen from x 700 leftwards 10 a frame, and the stars. after frame 60 the brightness of the text, the ship and the stars (ST_BRT) falls by 3 a frame"
+  },
+  "B0:A96C": {
+   "name": "vw_score_all",
+   "desc": "the score and status display that nearly every view calls first: vw_score_ladder then vw_wave_left. takes the place of Star Wars' VWMES. saves X and U. Y-->VG list"
+  },
+  "B0:A976": {
+   "name": "vw_score_ladder",
+   "desc": "shows the scores at the top left, much changed from the first half of Star Wars' VWMES: in red the high score entry the player has yet to beat with its rank ($4C72) and the top score with rank 1, in green the player's own rank and score with a flashing box round it, and in yellow the amount last added while SC_ADT runs (that part is Star Wars'). all lines use 8 digits and sit further left when the top score or the player's score has reached 1,000,000. Y-->VG list"
+  },
+  "B0:AB26": {
+   "name": "vw_wave_left",
+   "desc": "shows the right hand status: WAVE (message $0E) and the BCD wave number, left out while Jedi letters are held and their display is on, then a count of interrupts since the last call drawn beyond the right screen limit, and for the probot, walker and TIE fighter waves the number of enemies still to shoot ($4C53) followed by its name from enemy_name_msg. the number flashes red and white for 16 frames whenever it changes. Y-->VG list"
+  },
+  "B0:ABF5": {
+   "name": "lz_ground_hit",
+   "desc": "tests whether the lazar is sweeping the ground and sets up the splash. a point $4000 ahead at half the lazar's screen position goes through the matrix processor (MS_PSUB, scratch block), and if the resulting z is below zero or below half the player's height $509C while LZ_ON, LZ_HIT is set with splash type 3, a colour (white, or purple while the Jedi force is on) and SP_LOC from the high byte of z. made from the first half of Star Wars' GRLZIN"
+  },
+  "B0:ACC4": {
+   "name": "vw_gas_jedi",
+   "desc": "the views' entry to the shield gauge. while a hit is being animated (GS_HIT) it draws the gauge part of VWGAS, with the Jedi force timer $4C50 at zero it is VWGAS, and while the force is on it draws nothing, except that in the last $60 counts VWGAS blinks back in whenever bit 3 of the timer is set. Y-->VG list"
+  },
+  "B0:AE22": {
+   "name": "man_op_nop",
+   "desc": "training manual script opcode 6 and above: does nothing. reached through man_op_tab from the interpreter LB189"
+  },
+  "B0:AE23": {
+   "name": "man_op_end",
+   "desc": "training manual script opcode 0, the last record of every script: sets $4CB8 to $FF, which makes L7542 leave the page, and turns all messages off. reached through man_op_tab"
+  },
+  "B0:AE2C": {
+   "name": "man_op_messon",
+   "desc": "training manual script opcode 1: turns on the message whose number is byte 4 of the record (MESSON). U-->record. reached through man_op_tab"
+  },
+  "B0:AE33": {
+   "name": "man_op_messoff",
+   "desc": "training manual script opcode 2: turns off the message whose number is byte 4 of the record (LCB21, the MESSOFF entry). U-->record. reached through man_op_tab"
+  },
+  "B0:AE3A": {
+   "name": "man_op_poke_b",
+   "desc": "training manual script opcode 3: stores byte 4 of the record at the RAM address in bytes 5-6. the scripts use it to set the first byte of an object record. U-->record. reached through man_op_tab"
+  },
+  "B0:AE43": {
+   "name": "man_op_poke_w",
+   "desc": "training manual script opcode 4: stores the word in bytes 3-4 of the record at the RAM address in bytes 5-6. no script uses it. U-->record. reached through man_op_tab"
+  },
+  "B0:AE4C": {
+   "name": "man_op_call",
+   "desc": "training manual script opcode 5: calls the routine whose address is in bytes 3-4 of the record (LB14E, LB1CF, LB1D6, LB1E7, LB1EE, LB1FC, which is why the tracer found no caller for those) and keeps U. reached through man_op_tab"
+  }
+ },
+ "labels": {
+  "B0:AB16": "ladder_pos_6dig",
+  "B0:AB1E": "ladder_pos_8dig",
+  "B0:ABF0": "enemy_name_msg",
+  "B0:AD9D": "shield_colors",
+  "B0:ADA9": "shield_segs_left",
+  "B0:ADB3": "shield_segs_right",
+  "B0:AE14": "man_op_tab",
+  "B0:AE54": "man_probot_1",
+  "B0:AE84": "man_probot_2",
+  "B0:AEDC": "man_probot_3",
+  "B0:AF0C": "man_walker_1",
+  "B0:AF5C": "man_walker_2",
+  "B0:AFBC": "man_walker_3"
+ },
+ "comments": {
+  "B0:A84D": "GM_DIF 0 and 1 start at frame 260, the others at 360",
+  "B0:A85E": "7 * frames since the start (low byte only)",
+  "B0:A865": "x = 530 - 7n, 13 bits",
+  "B0:A86C": "y = 200",
+  "B0:A886": "low byte of PH_TIM",
+  "B0:A890": "x = 250 - 7 * PH_TIM",
+  "B0:A8D1": "bank 1 BJCNTR_6761: blank vector to the object's centre (Star Wars called DTHVW here)",
+  "B0:A8D4": "read the centre back out of the list: y, sign extended from 13 bits",
+  "B0:A8DC": "screen y of the Executor, kept for exec_drift_left",
+  "B0:A8DF": "and x",
+  "B0:A8EA": "scale for the distant ship",
+  "B0:A8EF": "JSRL to the Executor picture at $298E in the pseudo ROM",
+  "B0:A8F4": "bank 1 KD8AC: back to the screen centre",
+  "B0:A8FF": "x moves 16 left each frame",
+  "B0:A90C": "same scale and picture as VWDTHB",
+  "B0:A91D": "low byte of PH_TIM, the frame number of this phase",
+  "B0:A920": "from frame 60 on the brightness falls",
+  "B0:A924": "$80 - 3 * (frame - 60)",
+  "B0:A92E": "red at that brightness",
+  "B0:A932": "kept for the ship's colour",
+  "B0:A934": "the stars fade with it",
+  "B0:A937": "DARTH VADER'S EXECUTOR IS SEARCHING FOR THE REBEL HIDEOUT, in the colour just set",
+  "B0:A94B": "x = 700 - 10 * frame",
+  "B0:A95D": "JSRL to the Executor picture at $2B70 in the pseudo ROM",
+  "B0:A962": "bank 1 KD8AC: back to the screen centre",
+  "B0:A965": "bank 1 JVWSTAR: the stars",
+  "B0:A976": "top two digits of the top high score",
+  "B0:A979": "or of the player's score",
+  "B0:A97C": "non-zero: 8 digit lines, further left",
+  "B0:A989": "index of the high score entry still to beat",
+  "B0:A98C": "0 or less: no separate line for it",
+  "B0:A98E": "red",
+  "B0:A993": "y and x of the line from the position table",
+  "B0:A9A0": "its rank, index + 1, to BCD",
+  "B0:A9AE": "BCD+2",
+  "B0:A9B9": "JSRL to the period, then a blank",
+  "B0:A9C3": "7 bytes an entry, the 4 BCD score bytes follow the 3 initials",
+  "B0:A9DB": "6 digits: skip the top byte",
+  "B0:A9EF": "minus: the player leads, no top score line",
+  "B0:AA06": "rank 1 (A is still 1 for VWBYTE)",
+  "B0:AA22": "the top score, low 6 digits",
+  "B0:AA2A": "the top score, 8 digits",
+  "B0:AA3A": "green: the player's own line",
+  "B0:AA3F": "y 432",
+  "B0:AA5D": "the player leads: rank 1",
+  "B0:AA61": "else rank = index of the entry still to beat + 2",
+  "B0:AA6C": "rank 26 (BCD): not in the table of 25 yet",
+  "B0:AA7D": "three blanks in place of the rank and its period",
+  "B0:AA90": "has no effect, U is loaded next",
+  "B0:AAB4": "copy the medium flash colour instruction from vector RAM (VRMFL)",
+  "B0:AAB9": "y 424: under the player's line",
+  "B0:AAC8": "JSRL to a box 120 wide, for 6 digits",
+  "B0:AAFB": "scale of the score lines",
+  "B0:AB00": "8 digits, 7 leading zeroes suppressed",
+  "B0:AB05": "SC_ADD-1, as in Star Wars",
+  "B0:AB26": "Jedi letters earned",
+  "B0:AB2D": "and their display on: no room for WAVE",
+  "B0:AB37": "green",
+  "B0:AB50": "BCD wave number",
+  "B0:AB60": "y 492",
+  "B0:AB65": "x 560: beyond the right limit VGLIMR (480)",
+  "B0:AB6F": "interrupts since the last call - the IRQ increments SWNEW - shown as a number and cleared",
+  "B0:AB84": "Q_FRC here numbers the wave type: 0 probots, 1 walkers, 2 TIE fighters, 3 asteroids",
+  "B0:AB89": "asteroids: no count",
+  "B0:AB8B": "enemies still to shoot",
+  "B0:AB8E": "changed since the last frame?",
+  "B0:AB96": "then flash the number: timer from $7F down by 8 a frame",
+  "B0:ABA8": "the timer + $80 is the brightness",
+  "B0:ABAA": "and its bit 3 picks red or white",
+  "B0:ABB6": "steady red",
+  "B0:ABBB": "y 384",
+  "B0:ABCA": "the count in decimal, leading zero suppressed",
+  "B0:ABE7": "PROBOTS, WALKERS or TIES in the same colour",
+  "B0:ABF0": "message numbers by Q_FRC: PROBOTS, WALKERS, TIES, blank, blank",
+  "B0:ABF5": "a point $4000 ahead",
+  "B0:ABFB": "at half the lazar's screen x",
+  "B0:AC03": "and half its screen y",
+  "B0:AC16": "z of the point after the presub",
+  "B0:AC19": "below zero: on the ground",
+  "B0:AC1B": "$509C: the player's height",
+  "B0:AC21": "ground too when z is less than half the height",
+  "B0:AC33": "splash type 3",
+  "B0:AC38": "Jedi force flag",
+  "B0:AC3D": "off: white splash",
+  "B0:AC41": "force timer: under $60 the purple blinks to white on bit 3",
+  "B0:AC4E": "purple",
+  "B0:AC59": "high byte of z, taken as -1 when z is positive",
+  "B0:AC60": "no lower than -62",
+  "B0:AC66": "SP_LOC = 255 - 4 * the depth, kept within 1..$D0",
+  "B0:AC82": "GS_LEN is GS_HIT in this game: the gauge animates the loss",
+  "B0:AC99": "speech only in the TIE fighter and asteroid waves",
+  "B0:ACAC": "speech only in the probot and walker waves",
+  "B0:ACBF": "brightness the lost segment starts to fade from",
+  "B0:ACC8": "Jedi force timer",
+  "B0:ACCB": "force off: the normal gauge",
+  "B0:ACCD": "force on: no gauge until the last $60 counts",
+  "B0:ACD3": "then it blinks on bit 3 of the timer",
+  "B0:ACE0": "large scale",
+  "B0:ACE5": "red, flashing brighter every 4 frames",
+  "B0:ACF5": "SHIELDS GONE",
+  "B0:ACFA": "y 528: the top edge, where the gauge hangs",
+  "B0:AD04": "JSRLs to the left hand segments, outermost first",
+  "B0:AD0D": "colour for this many shields: 1 red, 2 yellow, 3 and up green",
+  "B0:AD15": "one segment for each shield left",
+  "B0:AD1D": "a shield just lost",
+  "B0:AD21": "entry 0: JSRL to the fading colour at $002E in vector RAM",
+  "B0:AD26": "then the segment that was lost",
+  "B0:AD39": "the same for the right hand segments",
+  "B0:AD68": "during the loss the title flashes (JSRL to VRMFL)",
+  "B0:AD6D": "SHIELDS, in the current colour",
+  "B0:AD72": "y 456, x -8",
+  "B0:AD7C": "the number of shields left",
+  "B0:AD86": "brightness of the lost segment, which the IRQ puts in the colour at $002E",
+  "B0:AD8C": "always zero: every frame",
+  "B0:AD92": "fade by 8 a frame",
+  "B0:AD98": "faded out: the loss is over, ready for the next hit",
+  "B0:AD9D": "colour word by shields left: 0 JSRL to the fading colour ($002E), 1 red, 2 yellow, 3-5 green",
+  "B0:ADA9": "JSRLs to the five shield segment pictures left of centre (L3BFA up)",
+  "B0:ADB3": "JSRLs to the five shield segment pictures right of centre (L3C54 up)",
+  "B0:AB16": "y and x of the two red lines, 6 digit layout: y 480, x -408 and y 528, x -408",
+  "B0:AB1E": "the same for the 8 digit layout: x -456",
+  "B0:AE14": "script opcode routines, indexed by byte 2 of a record: 0 end, 1 message on, 2 message off, 3 store byte, 4 store word, 5 call, 6 nothing",
+  "B0:AE54": "training manual scripts, 8 byte records in time order. bytes 0-1 the frame (PH_TIM) at which the record is due, byte 2 the opcode 0-6 (7 and up count as 6), then for 1 and 2 the message number in byte 4, for 3 the value in byte 4 and a RAM address in bytes 5-6, for 4 a word in bytes 3-4 and a RAM address in bytes 5-6, for 5 a routine address in bytes 3-4, byte 7 unused. LB189 runs at most one record a frame from the pointer $4CB6, so records with the same time run on successive frames. LB169 holds the script addresses: four sections (Q_FRC) of three pages ($4CB5). this one is probots page 1: the probot's parts",
+  "B0:AE7C": "frame $95: end of the page",
+  "B0:AE84": "probots page 2: PROBOT WEAPONRY",
+  "B0:AE94": "frame $40: call LB1CF",
+  "B0:AEAC": "store 4 in the first byte of the first alien record (ALIEN)",
+  "B0:AEB4": "store 0 at $49E6",
+  "B0:AEC4": "frame $B5: call LB1D6",
+  "B0:AED4": "end of the page",
+  "B0:AEDC": "probots page 3: PROBOT HIT ZONES",
+  "B0:AF04": "end of the page",
+  "B0:AF0C": "walkers page 1: the AT-ST, then from frame $65 the AT-AT",
+  "B0:AF2C": "store 0 in the first byte of the record at $4A54",
+  "B0:AF34": "call LB14E",
+  "B0:AF54": "end of the page",
+  "B0:AF5C": "walkers page 2: AT-ST WALKER WEAPONRY, then AT-AT WALKER WEAPONRY",
+  "B0:AF6C": "frame $30: call LB1E7",
+  "B0:AF84": "store 0 in the first byte of the record at $4A54",
+  "B0:AF8C": "call LB14E",
+  "B0:AFA4": "frame $90: call LB1EE",
+  "B0:AFB4": "end of the page",
+  "B0:AFBC": "walkers page 3: AT-ST WALKER HIT ZONES, then AT-AT WALKER HIT ZONES (ends at LB014)",
+  "B0:AFDC": "store 0 in the first byte of the record at $4A54",
+  "B0:AFE4": "call LB14E"
+ },
+ "ram": {
+  "488C": {
+   "name": "gs_fade",
+   "desc": "brightness of the shield segment just lost: DO1GAS sets $F0, VWGAS takes 8 off each frame and ends the loss (GS_HIT, GS_GLW cleared) at zero. the IRQ puts it in the colour instruction at $002E in vector RAM"
+  },
+  "488D": {
+   "name": "sc_wide",
+   "desc": "non-zero when the top high score or the player's score has its top two digits in use: vw_score_ladder then shows 8 digit scores and moves the lines and the box left"
+  },
+  "4B42": {
+   "name": "hs_top",
+   "desc": "the top high score, 4 BCD bytes: the score field of the first 7 byte entry of INITLS (3 initials, 4 score bytes)"
+  },
+  "4BFB": {
+   "name": "bcd_lo",
+   "desc": "BCD+2, the low byte (two digits) of BINBCD's result"
+  },
+  "4C19": {
+   "name": "left_flash",
+   "desc": "flash timer of the enemies-left number: $7F when the count changes, down by 8 a frame, the number alternates red and white while it runs"
+  },
+  "4C4A": {
+   "name": "wave_bcd",
+   "desc": "the wave number shown after WAVE, BCD (GM_DWAV in Star Wars): 1 at power up, the starting difficulty + 1 when a game begins"
+  },
+  "4C50": {
+   "name": "jedi_tim",
+   "desc": "word, with a fraction byte at $4C52: Jedi force time left. set to $01C0 when the fourth letter is earned and counted down by P1_95F1, zero when the force is off. under $60 the purple colours and the shield gauge blink on its bit 3"
+  },
+  "4C53": {
+   "name": "bonus_left",
+   "desc": "probots, walkers or TIE fighters still to shoot in this wave: preset when the wave starts, one off for each kill, at zero the wave's Jedi letter is awarded (P1_9573). shown with the enemy's name by vw_wave_left"
+  },
+  "4C54": {
+   "name": "left_shown",
+   "desc": "the value of $4C53 that vw_wave_left last showed, to start the flash when it changes"
+  },
+  "4C72": {
+   "name": "hs_next",
+   "desc": "index (0 = top) of the high score entry the player's score has yet to beat: 24, the last of the 25, at game start, stepped down by KE209 as the score passes entries, -1 when the player leads"
+  },
+  "4C80": {
+   "name": "jedi_let",
+   "desc": "Jedi letters earned, one bit each in bits 0-3, $0F when JEDI is complete"
+  },
+  "4C82": {
+   "name": "jedi_show",
+   "desc": "state of the Jedi letter display: 0 off, 1 a newly earned letter is being presented, 2 the letters are shown"
+  },
+  "4C84": {
+   "name": "jedi_on",
+   "desc": "set by P1_9645 each frame while the Jedi force timer runs or a new letter is being presented: stars and lazar splash turn purple"
+  },
+  "4CAC": {
+   "name": "ph_tim_lo",
+   "desc": "PH_TIM+1, the low byte of the phase timer"
+  },
+  "4CB8": {
+   "name": "man_done",
+   "desc": "$FF when the training manual script has reached its end record (man_op_end), cleared by PHINXT. L7542 leaves the page when it is set"
+  },
+  "4CBA": {
+   "name": "sc_add_top",
+   "desc": "SC_ADD-1: the top two digits of the amount last added to the score, which is shown as 8 digits from here"
+  },
+  "4CCC": {
+   "name": "exec_x",
+   "desc": "word: screen x of the Executor, saved by VWDTHB from its projected centre and moved left by exec_drift_left. L707A ends its phase when it is down to -520"
+  },
+  "4CCE": {
+   "name": "exec_y",
+   "desc": "word: screen y of the Executor, saved by VWDTHB for exec_drift_left"
+  },
+  "509C": {
+   "name": "ply_z",
+   "desc": "word in math RAM: the player's height, third of the position words $5098/$509A/$509C. the wave setups preset it ($0200 probots, $0800 walkers, $1800), S1MVBS adds the vertical movement and copies it to MS_TZ+M_U1"
+  }
+ },
+ "regions": [
+  ["B0", "AB16", "AB26", "words"],
+  ["B0", "AD9D", "ADBD", "avg"],
+  ["B0", "B169", "B189", "ptrs"]
+ ],
+ "questions": [
+  "B0:AE54-B0E3: the script records mix fields (word time, opcode byte, then a message number, a value and RAM address, or a code address) so no region kind fits them. bytes 3-4 of the opcode 5 records are code addresses (LB14E at AF37 AF8F AFE7, LB1CF at AE97, LB1D6 at AEC7, LB1E7 at AF6F, LB1EE at AFA7, LB1FC at B04F) and bytes 5-6 of the opcode 3 records are RAM addresses ($49D2, $49E6, $4A54)",
+  "B0:B169 is outside this chunk but the task asked for it: 16 pointers, first four to the per-section lists LB171/LB177/LB17D/LB183 inside the same table, then twelve script addresses (LAE54 .. LB0C4). the interpreter there also uses $4CB5 (manual page 0-2) and $4CB6 (word, pointer to the next script record), which i left for the owner of $B000 to name",
+  "B0:AB6F: SWNEW ($48CC) is not the switch edge catcher in the game - the IRQ increments it at LEAA5 and vw_wave_left shows it as a number at x 560, past VGLIMR, and clears it. it looks like a development readout of interrupts per frame left in, but i could not confirm that it is invisible on the real monitor",
+  "B0:AB60 the carried comment HILITE SELECTED LETTER, B0:AB34 6 DIGITS WITH COMMAS, B0:ABC0 YELLOW FOR THE SITE and the DETH STAR comments at B0:A897-A89C and B0:AAAA-AAD2 belong to other Star Wars code and do not describe these lines: AB34 shows message $0E WAVE, ABC0 is the x position 288, A897/A89C are the scale $7400 and the JSRL to the Executor picture, AAAA-AAD2 draw the flashing box round the player's score",
+  "the header note of VWGAS (B0:ACD8) is Star Wars' and names TGCLR, VJFUEL, GSVNEW and GSVALL, none of which exist here: the ESB routine draws one segment picture per shield on each side from shield_segs_left/right in a colour from shield_colors, fades the lost segment, then the word SHIELDS and the number. i left the description alone and commented the lines",
+  "$4801 is used here as plain scratch (brightness in vew_exec_intro, loop count in VWGAS) and already has seven Atari temp aliases, so i gave it no name",
+  "Q_FRC ($4C4F) keeps its Star Wars name and description but in this game it holds the wave type 0-3 (probots, walkers, TIE fighters, asteroids): it indexes enemy_name_msg, the manual sections at LB169 and the jump tables at LB109 and LB1BD",
+  "the Executor picture is identified by message $2C and its shape only (a 1300 wide wedge hull). it sits at $2B70 in pseudo ROM set 0 (source LBCEC) and at $298E in set 2 (source LC202)",
+  "B0:AC99 and B0:ACAC: DO1GAS speaks (SPKSIZ, PMREB) at zero shields only when Q_FRC is 2 or more and (SPKSIZ, SPKELE) at one shield only when Q_FRC is under 2. i could not tell why the two tests are opposite. the carried comments about R2 there are Star Wars'"
+ ]
+}

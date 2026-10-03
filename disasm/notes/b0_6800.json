@@ -1,0 +1,285 @@
+{
+ "about": "bank 0 $6800-$6FFF: game phase routines from the starting wave select screen and the continue offer through begin act, wave 1, wave 2 and the start of wave 3 (phases $0D-$12, $15-$26, $45-$47)",
+ "routines": {
+  "B0:681A": {
+   "name": "sel_wave_init",
+   "desc": "phase $0D, init of the starting difficulty select screen. Star Wars' PHISDS (select a death star) changed: loads picture set 0 into the pseudo vector ROM, clears the phase timer and the message offsets, sets the message colour and turns on message $2B (select starting difficulty, the three waves with their bonuses and the two instructions targets), then steps to the execute phase"
+  },
+  "B0:6856": {
+   "name": "sel_wave_exec",
+   "desc": "phase $0E, the starting difficulty select screen. Star Wars' PHESDS changed: the table TDTH now has five targets, three planets (easy, medium, hard = GM_DIF 0, 1, 2) and two instructions targets that pick easy and set instr_flag. Each frame it hit tests the cursor against the targets with the octagon check, draws the planets, the two instructions pictures, the cursor (yellow when on a target), the messages and a countdown, and goes to phase $0F when a fire or thumb switch is pressed on a target or, on easy, when 256 frames have passed"
+  },
+  "B0:6980": {
+   "name": "launch_init",
+   "desc": "phase $0F, init of the sequence shown between the select screen and the game: picture set 0, stars (ISTAR), phase timer 0, all messages off and two sounds (AUDRC and LC63E), then falls into the execute phase"
+  },
+  "B0:6999": {
+   "name": "launch_exec",
+   "desc": "phase $10: draws the sequence through LA91A (message $2C, darth vader's executor is searching for the rebel hideout, fading after frame 60 while a picture crosses the screen over the stars) for 100 frames, then goes to phase $13 (PHISG2) to start the game"
+  },
+  "B0:69B0": {
+   "name": "cont_offer_init",
+   "desc": "phase $11, init of the screen that offers a start at a higher wave after a game (PHEEGM and PHEENT come here when cont_wave is 3 or more). Runs the new game reset L678F, loads picture set 0, starts the countdown at $100, clears cont_used and the no-credit flag and turns on message $2D (you may start your next game on wave / bonus) plus one of $30 (the starting bonus of the last game was never paid), $2E (Jedi bonus earned) or $2F (Jedi bonus not earned)"
+  },
+  "B0:69F9": {
+   "name": "cont_offer_exec",
+   "desc": "phase $12, the continue offer screen, a second changed copy of Star Wars' PHESDS with one planet at cont_planet. Draws the score, the coin messages, the planet, the cursor, the messages, a countdown, the offered wave number (cont_wave + 1) and its bonus (cont_bonus, 6 or 8 digits). A fire or thumb switch pressed with the cursor on the planet takes a credit, sets GM_DIF to cont_wave and goes straight to phase $13 (PHISG2) - with no credit it puts 256 frames back on the countdown, once. When the timer reaches $200 the offer and the pending offer are cleared and the phase goes back to the banner"
+  },
+  "B0:6B55": {
+   "name": "begin_act_init",
+   "desc": "phase $15 (PHS_BGN), begin a set of four waves. Star Wars' PHIBGN changed: resets the ship's flight state (OLD1SHP), makes the BCD wave number for the display from GM_DIF + 1 (at most 99), copies GM_DIF to the level of each of the four wave types, clears Q_FRC (the wave type here), Q_RTHV and instr_run, then falls into the execute phase"
+  },
+  "B0:6B8A": {
+   "name": "begin_act_exec",
+   "desc": "phase $16, Star Wars' PHEBGN reduced to its first two instructions: goes to phase $17, the init of wave 1"
+  },
+  "B0:6B8F": {
+   "name": "wave1_init",
+   "desc": "phase $17, init of wave 1: picture set 1, wave type 0 in Q_FRC, jedi_left from the wave 1 quota, the Jedi letter display turned off unless a letter is being awarded, prog_count cleared. If instructions were asked for it goes to phase $43 (which comes back at wave1_setup), otherwise it falls into wave1_setup"
+  },
+  "B0:6BB8": {
+   "name": "wave1_setup",
+   "desc": "phase $45, the rest of the wave 1 init, entered by falling in from wave1_init or from the instructions phase (table L757B): general parameters and a new ship (L630A) turned to face backwards, ground stars (ISTARG), the wave 1 objects and the progress indicator set up on the slapstic pages, player speed, position and height, timer and the hit speech flags cleared, a sound and one of two R2 speeches by the low bit of GM_DIF, single laser pair, then phase $18"
+  },
+  "B0:6C0B": {
+   "name": "wave1_leadin",
+   "desc": "phase $18, the first 40 frames of wave 1 before anything attacks: views the scene (IPARM), ends the game through PHIS0D when the shields are gone, runs the shield gauge and the Jedi flags, turns and moves the player, then goes to phase $19"
+  },
+  "B0:6C3C": {
+   "name": "wave1_level_init",
+   "desc": "phase $19: works out the level wave 1 is played at, 2 * w1_level + diff_add, folded into $10-$1F once it passes $1F, stores it in fire_level and its two wave 1 copies, clears the phase timer and roll_step and falls into the wave 1 play phase (PHESP1, phase $1A)"
+  },
+  "B0:6CC1": {
+   "name": "wave1_level_up",
+   "desc": "called each frame by the wave 1 play phase once the Jedi quota is met or 100 frames have passed: steps fire_level up by one every 32 frames and w1_pace every 16 frames, both folded into $10-$1F past $1F"
+  },
+  "B0:6CF3": {
+   "name": "wave1_end_init",
+   "desc": "phase $1B, wave 1 is over (prog_count reached 4): timer 0, a speech picked by GM_DIF (0, 1, 2, from 3 up one of the four in w1_end_spk at random), and w1_spawn = $FF so that page 2 frees the wave 1 objects. Falls into phase $1C (PHESP2), which plays on until none is left"
+  },
+  "B0:6D6A": {
+   "name": "wave1_exit_init",
+   "desc": "phase $1D: clears the phase timer and steps to the wave 1 exit phase"
+  },
+  "B0:6D73": {
+   "name": "wave1_exit_exec",
+   "desc": "phase $1E, the flight out of wave 1: views with VEWHPA, still moves shots, explosions, glow and the shield gauge, turns the player with L778C and moves him. After 40 frames it waits for the ship to face backwards (unit vector A x at or below $C100) and at 80 frames at the latest goes to phase $1F, the init of wave 2"
+  },
+  "B0:6DBF": {
+   "name": "wave2_init",
+   "desc": "phase $1F, init of wave 2: picture set 1, wave type 1 in Q_FRC, jedi_left from the wave 2 quota, the Jedi letter display turned off unless a letter is being awarded. With instructions asked for it goes to phase $43 (which comes back at wave2_setup), otherwise it joins wave2_setup at L6DF3, past the new ship and stars, so the flight carries on from wave 1"
+  },
+  "B0:6DE5": {
+   "name": "wave2_setup",
+   "desc": "phase $46, the rest of the wave 2 init, entered from the instructions phase (table L757B) with a new ship facing backwards and ground stars, and at L6DF3 from wave2_init: sets up the two kinds of wave 2 objects and the progress indicator on the slapstic pages, works out fire_level from w2_level and diff_add, clears the timer, the passing bonus and the speech flags, starts a sound and a speech and goes to phase $20"
+  },
+  "B0:6E44": {
+   "name": "wave2_exec",
+   "desc": "phase $20, wave 2 play: views with LA448, ends the game through PHIG0D when the shields are gone, moves shots, explosions and the two kinds of wave 2 objects, runs the Jedi time, turns and moves the player. After 1200 frames, or once the quota is met with Jedi time running, it clears adv_hold so nothing holds the advance up. At frame 60 it shows the Jedi letters, and when walk_adv reaches 400 it goes to phase $21"
+  },
+  "B0:6EB0": {
+   "name": "wave2_end_init",
+   "desc": "phase $21 (PHS_SP2), wave 2 is over: timer 0 and both spawn counts = $FF so that the slapstic pages free the wave 2 objects, then (at the label the matcher named PHISP2) bumps the hit speech flag and steps to phase $22"
+  },
+  "B0:6EC3": {
+   "name": "wave2_end_exec",
+   "desc": "phase $22: plays wave 2 on, as wave2_exec does without the timing tests, until neither kind of wave 2 object has a live record, then goes to phase $23"
+  },
+  "B0:6F08": {
+   "name": "wave2_exit_init",
+   "desc": "phase $23: clears the phase timer, starts PMSF2 and the sound LC634 and falls into the wave 2 exit phase"
+  },
+  "B0:6F16": {
+   "name": "wave2_exit_exec",
+   "desc": "phase $24, the flight out of wave 2: views with LA48A, still moves shots, explosions, glow and the shield gauge, turns the player with L7796 and moves him with L7AFB for 40 frames, then goes to phase $25, the init of wave 3"
+  },
+  "B0:6F56": {
+   "name": "wave3_init",
+   "desc": "phase $25, init of wave 3: picture set 2, wave type 2 in Q_FRC, jedi_left from the wave 3 quota, the Jedi letter display turned off unless a letter is being awarded. With instructions asked for it goes to phase $43 (which comes back at wave3_setup), otherwise it falls into wave3_setup"
+  },
+  "B0:6F7A": {
+   "name": "wave3_setup",
+   "desc": "phase $47, the rest of the wave 3 init, entered by falling in from wave3_init or from the instructions phase (table L757B): general parameters and a new ship facing backwards, stars (ISTAR), the wave 3 setup on page 3, fire_level from SP_WAV and diff_add, timer and hit speech flags cleared, the double laser pair, the theme PMTH5 and a sound, then phase $26"
+  },
+  "B0:6FC4": {
+   "name": "wave3_exec",
+   "desc": "phase $26, wave 3 play, built on Star Wars' PHESP1: views with LA515, ends the game through PHIB0D when the shields are gone, moves shots, glows, explosions and the computer ships, runs the Jedi time, turns and moves the player and moves the stars. At frame 60 it shows the Jedi letters, after 440 frames it goes to phase $27, and while fewer than three ships are alive it adds another (ADASHP on page 3)"
+  }
+ },
+ "labels": {
+  "B0:684E": "tdth_instr",
+  "B0:69F5": "cont_planet",
+  "B0:6CEB": "w1_end_spk"
+ },
+ "comments": {
+  "B0:6801": "rank starts at the last of the 25 high score entries",
+  "B0:6806": "the starting bonus has not been paid yet",
+  "B0:680C": "difficulty option, bits 2 and 3, is the first difficulty adder",
+  "B0:681A": "picture set 0 into the pseudo vector ROM",
+  "B0:683A": "message $2B: the whole select screen",
+  "B0:684E": "the two instructions targets: y -300 x -325 and y -300 x 325",
+  "B0:685F": "256 frames without a choice",
+  "B0:6865": "then start on easy",
+  "B0:686B": "no instructions unless the cursor is on one of their targets",
+  "B0:68A9": "entries 0-2 are the planets: easy, medium, hard",
+  "B0:68AD": "entries 3 and 4: instructions wanted, on easy",
+  "B0:68DF": "the two instructions targets, each drawn twice",
+  "B0:68F5": "JSRL to the picture at $2A6A",
+  "B0:690B": "brightness from the low byte of the timer: falls over 16 frames, then jumps back",
+  "B0:691A": "two pictures alternate every 16 frames",
+  "B0:6950": "(256 - timer) * 8 / 256: counts 7 down to 0",
+  "B0:696C": "on a target: any fire or thumb switch going on starts the game",
+  "B0:6972": "clear the three bytes of the game time",
+  "B0:697B": "phase $0F: the launch sequence",
+  "B0:6980": "picture set 0",
+  "B0:69A5": "100 frames",
+  "B0:69AB": "phase $13: PHISG2",
+  "B0:69B0": "the reset every new game gets",
+  "B0:69B8": "the countdown runs from $100 to $200",
+  "B0:69D6": "message $2D: you may start your next game on wave / bonus",
+  "B0:69E0": "starting bonus never paid: you must complete advanced wave and earn Jedi bonus",
+  "B0:69E9": "you must earn Jedi bonus to start at higher waves",
+  "B0:69ED": "congratulations, advanced wave finished and Jedi bonus earned",
+  "B0:69F5": "the planet of the continue screen: y -180",
+  "B0:69F7": "x 0",
+  "B0:6A02": "time is up",
+  "B0:6A08": "back to the banner",
+  "B0:6A0C": "and the offer and the pending offer are gone",
+  "B0:6A56": "on the planet: the offered wave becomes the starting wave",
+  "B0:6A9D": "($200 - timer) * 16 / 256: counts 16 down to 0, shown in decimal",
+  "B0:6AC1": "y -64, x 54: after the word wave",
+  "B0:6ACF": "offered wave number, counted from 1",
+  "B0:6AE9": "y -340: under the word bonus",
+  "B0:6AF2": "top two digits zero?",
+  "B0:6AFC": "then 6 digits",
+  "B0:6B09": "else 8 digits",
+  "B0:6B17": "free play keeps two credits",
+  "B0:6B26": "a fire or thumb switch went on with the cursor on the planet",
+  "B0:6B30": "phase $13: PHISG2, the game starts at the offered wave",
+  "B0:6B42": "count a continued game for the accounting",
+  "B0:6B47": "no credit: the first time only",
+  "B0:6B4C": "put 256 frames back on the countdown",
+  "B0:6B5B": "wave number shown is GM_DIF + 1, at most 99",
+  "B0:6B6E": "all four wave types start the set at this level",
+  "B0:6B7D": "wave type 0",
+  "B0:6B8A": "phase $17: init of wave 1",
+  "B0:6B8F": "picture set 1",
+  "B0:6B99": "Jedi quota of wave 1",
+  "B0:6B9F": "keep the letter display only while a letter is being awarded",
+  "B0:6BAE": "instructions wanted: phase $43 shows them first",
+  "B0:6BBB": "unit vector A x = -1",
+  "B0:6BC0": "and B y = -1 (the operand is MS_BY+M_S1, not a wave number): face backwards",
+  "B0:6BF3": "odd GM_DIF: one R2 speech, even: the other",
+  "B0:6C02": "one pair of laser beams",
+  "B0:6C31": "40 frames",
+  "B0:6C3C": "level = 2 * wave 1 level + difficulty adder",
+  "B0:6C43": "past $1F it is folded into $10-$1F",
+  "B0:6C94": "frame 20: show the Jedi letters, unless they are already on",
+  "B0:6CA4": "quota met, or 100 frames gone: the level climbs",
+  "B0:6CB8": "four marks on the indicator end the wave",
+  "B0:6CC1": "low byte of the phase timer",
+  "B0:6CC6": "every 32 frames",
+  "B0:6CD9": "every 16 frames",
+  "B0:6CEB": "the four speeches one of which ends wave 1 from GM_DIF 3 up",
+  "B0:6CFC": "speech by GM_DIF: 0, 1, 2, else at random",
+  "B0:6D1B": "random 0-3",
+  "B0:6D24": "minus: page 2 frees the wave 1 objects",
+  "B0:6D60": "play on until no wave 1 object is left",
+  "B0:6DA5": "80 frames at the most",
+  "B0:6DAB": "40 at the least",
+  "B0:6DB1": "then until unit vector A x says the ship faces backwards",
+  "B0:6DBF": "picture set 1",
+  "B0:6DC4": "wave type 1",
+  "B0:6DC9": "Jedi quota of wave 2",
+  "B0:6DD9": "instructions wanted: phase $43 shows them first",
+  "B0:6DE3": "skip the new ship and the stars: the flight carries on from wave 1",
+  "B0:6DE8": "face backwards, as in wave1_setup",
+  "B0:6E02": "level = 2 * wave 2 level + difficulty adder, folded into $10-$1F past $1F",
+  "B0:6E20": "passing bonus back to zero (3 BCD bytes)",
+  "B0:6E31": "Jedi time under $80",
+  "B0:6E7C": "1200 frames",
+  "B0:6E82": "or the quota is met and Jedi time is running",
+  "B0:6E8C": "then nothing holds the advance up any more",
+  "B0:6EA2": "advance at 400: the wave is over",
+  "B0:6EB6": "minus: the pages free the wave 2 objects of both kinds",
+  "B0:6EFB": "play on until neither kind has a live record",
+  "B0:6F03": "phase $23: the exit from wave 2",
+  "B0:6F56": "picture set 2",
+  "B0:6F5B": "wave type 2",
+  "B0:6F60": "Jedi quota of wave 3",
+  "B0:6F70": "instructions wanted: phase $43 shows them first",
+  "B0:6F7D": "face backwards, as in wave1_setup",
+  "B0:6F8E": "level = 2 * wave 3 level + difficulty adder, folded into $10-$1F past $1F",
+  "B0:6FAC": "two pairs of laser beams",
+  "B0:6FB4": "Jedi time under $80",
+  "B0:6FFC": "440 frames"
+ },
+ "ram": {
+  "481B": {"name": "gtime_1", "desc": "second byte of GTIME, the current game's time. Cleared with it when a game starts."},
+  "481C": {"name": "gtime_2", "desc": "third byte of GTIME."},
+  "4894": {"name": "roll_step", "desc": "word: the roll to add this frame, worked out by S1TWGD as the limited difference between the wanted roll and GD_ACT. Cleared at the start of wave 1."},
+  "4BEE": {"name": "cont_wave", "desc": "the wave (as GM_DIF, from 0) the next game may start on. Copied from pend_wave at the end of a game in which the Jedi bonus was earned - 3 or more sends the end of game to the continue offer screen. Cleared when the offer runs out."},
+  "4BEF": {"name": "cont_bonus", "desc": "4 BCD bytes: the bonus that goes with cont_wave, the score the earlier game had when it reached that wave. Shown on the continue screen and added to the score by LB5D4."},
+  "4BF0": {"name": "cont_bonus_1", "desc": "second byte of cont_bonus (the six low digits start here)."},
+  "4BF1": {"name": "cont_bonus_2", "desc": "third byte of cont_bonus."},
+  "4BF3": {"name": "pend_wave", "desc": "pending continue offer: GM_DIF + 1 noted by L7274 each time a set of four waves is finished. It becomes cont_wave at the end of the game if the Jedi bonus was earned."},
+  "4BF4": {"name": "pend_bonus", "desc": "4 BCD bytes: the score when pend_wave was noted. It becomes cont_bonus."},
+  "4BF6": {"name": "pend_bonus_2", "desc": "third and fourth bytes of pend_bonus."},
+  "4BF8": {"name": "cont_used", "desc": "set when a game is started from the continue offer screen. Bank 1's accounting (K7421) counts such a game and clears it."},
+  "4BFB": {"name": "bcd_lo", "desc": "third byte of BCD: the two low digits BINBCD leaves."},
+  "4C4A": {"name": "wave_bcd", "desc": "wave number for the display, BCD: GM_DIF + 1, at most 99. The accounting keeps the highest one reached."},
+  "4C4C": {"name": "w1_level", "desc": "level of wave 1, set to GM_DIF at the start of each set of four waves. Its double plus diff_add is wave 1's fire_level, and page 2 picks wave 1 behaviour by it."},
+  "4C4D": {"name": "w2_level", "desc": "level of wave 2, set to GM_DIF at the start of each set of four waves."},
+  "4C4E": {"name": "w4_level", "desc": "level of wave 4, set to GM_DIF at the start of each set of four waves. (Wave 3's is SP_WAV.)"},
+  "4C50": {"name": "jedi_time", "desc": "word, with a fraction byte after it at $4C52: time left of the Jedi bonus. Page 1 sets it to $01C0 when the fourth letter is earned and counts it down every frame. 0 when the bonus is not running. Drawn as a bar."},
+  "4C53": {"name": "jedi_left", "desc": "targets still to shoot in this wave for its Jedi letter. Loaded from the wave's quota by its init, shown on screen, counted down by the routines that score a kill. The letter is awarded when it reaches 0."},
+  "4C55": {"name": "jedi_need_1", "desc": "Jedi quota of wave 1: set from the starting wave by L75AC (6, 8, 10, then GM_DIF + 9), one more each time the letter is earned and after each set of four waves, at most $5A."},
+  "4C56": {"name": "jedi_need_2", "desc": "Jedi quota of wave 2, kept as jedi_need_1."},
+  "4C57": {"name": "jedi_need_3", "desc": "Jedi quota of wave 3, kept as jedi_need_1. (Wave 4's is GM_BMP.)"},
+  "4C5A": {"name": "diff_add", "desc": "difficulty adder: the difficulty option (OPTS1 bits 2 and 3) at the start of a game, raised by L72C4 after each finished set of waves while GM_DIF is 2 or less. Added into every wave's fire_level."},
+  "4C5B": {"name": "fire_level", "desc": "level the current wave is played at: 2 * the wave type's level + diff_add, folded into $10-$1F once past $1F. Page 1 indexes the enemy shot table with it and fires when a 5 bit random number is below it. Wave 1 steps it up every 32 frames."},
+  "4C5D": {"name": "w1_pace", "desc": "wave 1: starts as fire_level and steps up every 16 frames (wave1_level_up). Page 2 (P2_91A8) indexes its table of random delays with it, capped at 8, shorter as it rises."},
+  "4C5F": {"name": "w2_level_b", "desc": "copy of fire_level made by the wave 2 setup. Page 0 (P0_8B3A) tests it against 9."},
+  "4C60": {"name": "gun_layout", "desc": "which laser gun layout is drawn and fired: 0 in waves 1 and 2 (one pair of beams), 1 in waves 3 and 4 (a second pair is added). Indexes the gun position tables."},
+  "4C61": {"name": "instr_flag", "desc": "1 when the player picked an instructions target on the select screen: each wave's init then goes to phase $43 to show that wave's instructions first. Cleared when a set of waves is finished and when a game starts from the continue offer."},
+  "4C62": {"name": "strt_bonus", "desc": "1 from the start of a game until its starting bonus has been paid, in the phase that ends the first set of four waves (L7243, LB5D4). Still set at the end of a game it selects message $30 on the continue screen."},
+  "4C63": {"name": "w1_spawn", "desc": "wave 1: how many object records page 2 (P2_877C) keeps filled, 5 from its setup. 0 = add none. Minus (the end of wave phase stores $FF) = free every record not flagged $10."},
+  "4C64": {"name": "w2_spawn_a", "desc": "wave 2: spawn count of the objects page 1 handles (P1_86E1), used as w1_spawn. $FF from wave2_end_init frees them."},
+  "4C65": {"name": "w2_spawn_b", "desc": "wave 2: spawn count of the objects page 0 handles (P0_8705, 3 from its setup), used as w1_spawn. $FF from wave2_end_init frees them."},
+  "4C69": {"name": "w1_active", "desc": "wave 1: number of live object records, counted afresh by page 2 every frame. The wave's last phase ends when it is 0."},
+  "4C6A": {"name": "w2_active_a", "desc": "wave 2: number of live records of the objects page 1 handles, counted afresh every frame."},
+  "4C6B": {"name": "w2_active_b", "desc": "wave 2: number of live records of the objects page 0 handles, counted afresh every frame."},
+  "4C72": {"name": "rank_index", "desc": "index of the high score entry (7 bytes each in INITLS) the player's score has still to beat: $18, the last, at the start of a game, stepped down by bank 1 (KE209) each time the score passes that entry, minus once it beats them all. The score display shows the rank and the score to beat from it."},
+  "4C82": {"name": "jedi_show", "desc": "state of the Jedi letter display: 0 off, 1 a letter is being awarded (it grows into place), 2 the letters are shown. The wave inits clear it unless it is 1, the play phases set 2 a little into the wave, attract mode flips it between 0 and 2."},
+  "4C85": {"name": "jedi_done", "desc": "1 once all four Jedi letters have been earned in this game (page 1, P1_95E2), 0 from PHISG2. At the end of the game it turns the pending continue offer into the offer and picks the message of the continue screen."},
+  "4CA1": {"name": "prog_count", "desc": "count shown by the indicator at the top of the screen in waves 1 and 2. Wave 1 counts it up from 0 and ends at 4. Wave 2 starts it at 4 and counts it down as walk_adv passes -150, -50, 50 and 150."},
+  "4CA3": {"name": "walk_adv", "desc": "word, wave 2: position of the advance on the indicator, from -400 ($FE70) up by 5 or 6 a frame to 400, which ends the wave."},
+  "4CA6": {"name": "adv_hold", "desc": "wave 2: frames the advance is held up. Hits on wave 2 objects add to it while the Jedi quota is open, the advance moves only when it is 0."},
+  "4CAC": {"name": "ph_tim_lo", "desc": "low byte of PH_TIM, the phase timer."},
+  "4CB9": {"name": "instr_run", "desc": "nonzero while the instructions phases ($43, $44) run: PHINXT bumps it, L7542 and begin_act_init clear it. The slapstic pages then leave out sounds and speech and place their objects by fixed values."},
+  "4CBF": {"name": "pass_bonus", "desc": "3 BCD bytes, wave 2: the bonus LB61A adds to the score when the player passes close by one of the objects page 0 handles (P0_87DD). LB61A first raises it by the amount at LB71E, up to 900,000. Cleared by the wave 2 setup."},
+  "4CC1": {"name": "pass_bonus_2", "desc": "third byte of pass_bonus."},
+  "4CD4": {"name": "cont_nocrd", "desc": "continue screen: set the first time the planet is fired on with no credit, when 256 frames are put back on the countdown, so that it happens once."},
+  "4CD5": {"name": "w2_spk_cnt", "desc": "wave 2: counts the frames a page 0 test (P0_8F45) holds running. At 20 the speech SPKALW is started and the count parks at $80. Cleared by the wave 2 setup."},
+  "4CD7": {"name": "hit_spk_done", "desc": "wave 2: nonzero once the speech SPKHIT has been started by page 0 (P0_9641), or is no longer wanted - the end of wave init bumps it."},
+  "4CD8": {"name": "glow_said", "desc": "set once the speech for a shot that hits the ship while its shield is already glowing has been started (page 1, P1_94D2), so it is said once a wave. Cleared by the wave setups."},
+  "4CD9": {"name": "hit_said", "desc": "set at the first enemy shot to hit the ship in a wave (page 1, P1_94AB), when waves 3 and 4 start their music. Cleared by the wave setups."},
+  "4CDF": {"name": "pass_bon_tmr", "desc": "frames the passing bonus stays on screen: 20 from LB61A, counted down by page 1 (P1_9D45) while it shows pass_bonus."},
+  "5080": {"name": "ship_ax", "desc": "MS_AX+M_S1: X component (word) of unit vector A of the player's ship. $C0 in its high byte with the same in MS_BY+M_S1 turns the ship to face backwards."}
+ },
+ "regions": [
+  ["B0", "684E", "6856", "words"],
+  ["B0", "69F5", "69F9", "words"]
+ ],
+ "questions": [
+  "B0:6EBE: the header PHISP2 - SPACE WAVE 2 is a matcher artifact. The two instructions (INC $4CD7 / INC PHASE) are the tail of the wave 2 end init at L6EB0 (phase $21), nothing enters at L6EBE (table entry $21 is L6EB0), and the carried comment about Darth does not apply.",
+  "B0:6C5F PHESP1 and B0:6D2B PHESP2 carry Star Wars names and table comments (space wave 1 / 2). In ESB they are phase $1A, wave 1 play, and phase $1C, wave 1 played on until its objects are gone. I left their headers alone.",
+  "B0:6BC0, 6DED, 6F82 (and LB133): the operand shown as GM_WAV ($508A) is MS_BY+M_S1, unit vector B y of the player's ship, as in PHISG2's FACE BACKWARDS - the alias GM_WAV does not fit ESB's use of that address.",
+  "GM_DIF ($4C49) is no longer the option switch difficulty adder: in ESB it is the number of the wave set (wave number - 1), picked on the select screen and bumped by L72C4. The option difficulty lives in $4C5A (diff_add). Q_FRC ($4C4F) holds the wave type 0-3 (set by the four wave inits, used to index tables).",
+  "carried comments in this range that describe Star Wars lines and do not fit: L6810 (NO MORE BONUS COINS - it stores the difficulty adder), L6825 and the sound names at L6991 (AUDRC), L6BF0 (AUDPS), L6E3A (AUDPBZ), L6FBD (AUDPF) and the SPKxxx / PMxxx names, whose ESB sounds I did not identify.",
+  "$4C5C (written at L6C51 with the wave 1 level) and $4C5E (written at L6E14 with the wave 2 level) have no other use in any listing - not named.",
+  "which objects the two wave 2 handlers stand for (page 1: $4C64 / $4C6A, page 0: $4C65 / $4C6B, three records at $4A87) I did not settle from this range - presumably the two kinds of walkers. Likewise the wave 1 objects handled on page 2 are presumably the probots.",
+  "B0:68D5, 68F5, 691A-6926: the JSRL targets $B4A2 (planet), $B535, $B55F and $B58E are pictures in pseudo vector ROM set 0 (loaded by LA342 from table LB974) - not identified here.",
+  "L75AC caps the Jedi quota oddly: GM_DIF + 9 above $5A is replaced by $90, not $5A (L75C0)."
+ ]
+}

@@ -1,0 +1,8 @@
+B0  executed  5373 addresses, all listed as instructions: yes;  listed  7333, reached  5373 (73.3%)
+B1  executed  6477 addresses, all listed as instructions: yes;  listed  8518, reached  6477 (76.0%)
+P0  executed  1716 addresses, all listed as instructions: yes;  listed  2743, reached  1716 (62.6%);  stale image: 529 listed, 0 reached
+P1  executed  2097 addresses, all listed as instructions: yes;  listed  3115, reached  2097 (67.3%);  stale image: 225 listed, 3 reached
+    reached inside the stale image: $9DFE $9E00 $9E01
+P2  executed  1467 addresses, all listed as instructions: yes;  listed  3001, reached  1467 (48.9%);  stale image: 364 listed, 0 reached
+P3  executed  1730 addresses, all listed as instructions: yes;  listed  2732, reached  1730 (63.3%);  stale image: 407 listed, 0 reached
+S   executed   788 addresses, all listed as instructions: yes;  listed  1032, reached   788 (76.4%)

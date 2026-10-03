@@ -1,0 +1,251 @@
+{
+ "about": "bank 0 $7800-$7FFF and $A000-$A7FF: aiming the ship, player movement for the four waves, rheostat tics and residue, the tic sine table, then the display list start/end routines and the view routine of every game phase",
+ "routines": {
+  "B0:784D": {
+   "name": "aim_home_yaw",
+   "desc": "sets the yaw rate of turn (RHS_RAT of RHEOY) so that the ship turns back to head along -x, the heading every wave starts with. It is the yaw half of AIMDTH with the front/back test on minus the ship's A,X and without the COMB (a NOP is in its place). Called by L778C while the probot wave ends, followed by S1RHYW"
+  },
+  "B0:78C7": {
+   "name": "S1MV",
+   "desc": "the Star Wars routine SMVSP1/S1MV, instruction for instruction (the matcher missed it): star field viewer x = frame counter shifted left 7, so the stars stream past. It is the whole player movement of the TIE fighter wave, called after RESIDU"
+  },
+  "B0:7963": {
+   "name": "smv_probot",
+   "desc": "player movement of the probot wave (wave 1). Sets the x and y speed from the ship's forward axis (unit vector A,X and B,X, each / 32), adds a side slip along the ship's side axis (A,Y and B,Y) in proportion to the sight's x deflection, then falls into L79C9 to move the ship. SMVG0B is the same code for the walker wave"
+  },
+  "B0:79C9": {
+   "name": "smv_probot_adv",
+   "desc": "moves the ship by its x and y speed (both the ship block and the download block), then sets the z speed from the sight's y deflection times the horizontal speed (|x speed| + |y speed|) and moves the height, kept between $0200 and $0C00. Changed from Star Wars S1MVGD. Entered by falling through from L7963"
+  },
+  "B0:7A95": {
+   "name": "smv_walker_adv",
+   "desc": "the same as L79C9 for the walker wave, entered by falling through from SMVG9B: moves the ship in x and y, sets the z speed from the sight's y deflection and the horizontal speed, and keeps the height between $0200 and $1C00"
+  },
+  "B0:7AFB": {
+   "name": "smv_descend",
+   "desc": "player movement while the walker wave ends (phase $24): x and y speed straight from the ship's forward axis / 32 with no steering from the sight, then L7B0D moves the ship and brings it down"
+  },
+  "B0:7B04": {
+   "name": "smv_descend_vy",
+   "desc": "part of L7AFB, reached by falling through: y speed = forward axis y (unit vector B,X) / 32"
+  },
+  "B0:7B0D": {
+   "name": "smv_descend_adv",
+   "desc": "part of L7AFB, reached by falling through: moves the ship by its x and y speed (ship block and download block), sets the z speed to -$0400 and lowers the height by it each frame down to the floor of $0200"
+  },
+  "B0:7B5C": {
+   "name": "s1_roll_add",
+   "desc": "adds A (signed tics) to the roll residue and lets RHRSDU take whole magic steps out of it, rolling the ship (S1RL) when it gives one. Called every frame with A = 8 in the TIE fighter wave and A = -12 in the asteroid wave, which keeps the ship rolling slowly"
+  },
+  "B0:7B8B": {
+   "name": "RHTRIG",
+   "desc": "the Star Wars routine RHTRIG (the matcher missed it because ESB assembles the block offsets as 8-bit): X points to a rheostat block. Half the size of its rate of turn RHS_RAT is added, with the rate's sign, to its tic residue RHS_RSD, held at $7F or $81 on overflow"
+  },
+  "B0:7BB1": {
+   "name": "RHRSDU",
+   "desc": "the Star Wars routine RHRSDU (missed for the same 8-bit offsets): X points to a rheostat block. If the size of its residue is at least 78 tics it takes 78 off and sets M_SIN/M_COS for the 4.99 degree magic angle, else if at least 14 it takes 14 off and sets them for the .895 degree angle, with the sine signed like the residue. Returns Z clear when the caller has to rotate, Z set when there is nothing to do"
+  },
+  "B0:7C07": {
+   "name": "RESIDU",
+   "desc": "the Star Wars routine RESIDU (missed because the residue addresses are direct page here): turns the downloaded unit vectors (BIC MS_U1BC) by what is left in the pitch, yaw and roll residues, each through RESCNV and the matrix processor's pitch, yaw or roll program. The ship's own vectors only turn in magic steps and this makes the view turn smoothly"
+  },
+  "B0:7C7E": {
+   "name": "bank_roll_u1",
+   "desc": "rolls the downloaded unit vectors (BIC 5) by GD_ACT, the amount S1TWGD has banked the ground flyer, which in ESB is not rolled into the ship's own vectors. Bits 6-11 of |GD_ACT| times 3 make an angle in 256ths of a turn for the table roll at LB4B2, the low 6 bits are tics looked up in the tic table for a second roll with MS_ROLL, both signed like GD_ACT. Called by the view routines of the probot and walker waves after RESIDU"
+  },
+  "B0:A331": {
+   "name": "ivgen1_wait",
+   "desc": "Star Wars IVGEN1/IVGEN, changed: starts a display list. Waits until the IRQ has handed over a buffer (VGSYNC plus), points Y to its first instruction at offset $3A and stores the JSRL to VGINIT, then calls bank 1 KD8AC through L60BA, which resets the object draw position and adds a JSRL $32AC. Every view routine begins with it"
+  },
+  "B0:A342": {
+   "name": "load_vg_set",
+   "desc": "Star Wars DOWNVG, changed to choose between four sets: copies display list set B (0-3, pointers at LB974) from program ROM to the pseudo vector ROM at $2800-$2FFF. When B is not the set already loaded ($48CD) it first sends an empty display list and waits for the next buffer, so that nothing in the pseudo ROM is being drawn while it changes. The phase init routines call it with 0 for the attract and select screens, 1 for the probot and walker waves and 2 for the TIE fighter and asteroid waves, VGDONE calls it to reload the current set after a buffer overrun"
+  },
+  "B0:A448": {
+   "name": "vew_walker",
+   "desc": "view of the walker wave (phases $20 and $22). As IPARM, which views the probot wave, with the walker views (page 1 P1_88FD, page 0 P0_891A, page 0 P0_969D) and their lazar collision test (page 3 P3_97CB) in place of the probot ones"
+  },
+  "B0:A48A": {
+   "name": "vew_walker_end",
+   "desc": "view of the end of the walker wave (phase $24, 40 frames): score, shields, sight, ground stars, lazars and explosions without the walkers, then the picture at the start of the pseudo ROM set growing from small to full size 120 below the centre, with the message 'REBEL HIDEOUT'"
+  },
+  "B0:A515": {
+   "name": "vew_tie",
+   "desc": "view of the TIE fighter wave (phases $26 and $28): residue, score, shields, VWDTHB, sight, stars, explosions, lazars, the alien ships (SNVW), guns, collisions and glow. It ends with a line that alternates every 128 frames between 'SHOOT nn TIE FIGHTERS FOR BONUS', with the count $4C53 drawn into the gap ('5,000 POINTS AND JEDI LETTER AWARDED' once the count is 0), and 'SHOOT ENEMY SHOTS TO SAVE YOUR SHIELDS'"
+  },
+  "B0:A599": {
+   "name": "vew_tie_end",
+   "desc": "view of the end of the TIE fighter wave (phase $2A): as LA515 without the message line and with LA8F8 in place of VWDTHB, which draws the same far object at its saved screen position and moves it 16 to the left each frame"
+  },
+  "B0:A5CF": {
+   "name": "vew_tie_die",
+   "desc": "view for PHES0D, the player dying in the TIE fighter wave: residue, score, shields, stars, explosions, alien ships, guns, the growing GAME OVER message and glow, no sight and no lazars. The ESB form of Star Wars VEWS0D"
+  },
+  "B0:A5F9": {
+   "name": "vew_asteroid",
+   "desc": "view of the asteroid wave (phase $2C): residue, score, shields, sight, stars, explosions, lazars, the asteroids (page 2 P2_9983), guns, collisions, LA843 (an object that appears near the end of the wave) and a line that alternates every 128 frames between 'SURVIVE TO EARN NEXT JEDI LETTER' and 'AVOID COLLISIONS WITH ASTEROIDS'"
+  },
+  "B0:A63E": {
+   "name": "vew_asteroid_end",
+   "desc": "view of the end of the asteroid wave (phase $2E, 70 frames): residue, score, shields, stars, explosions, the message '5,000 POINTS AND JEDI LETTER AWARDED', the object of LA881 and the shrinking picture of LA763"
+  },
+  "B0:A66A": {
+   "name": "vew_asteroid_die",
+   "desc": "view for phase $3C (entered through L73AA), the player dying in the asteroid wave: residue, score, shields, stars, explosions, the asteroids, guns, the growing GAME OVER message and glow"
+  },
+  "B0:A697": {
+   "name": "vew_manual",
+   "desc": "view of the rebel training manual pages of the attract mode (phase after PHINXT): residue, score, shields, guns and LB20A, which shows 'REBEL TRAINING MANUAL SECTION' with its numbers and the objects of the wave being explained"
+  },
+  "B0:A6B2": {
+   "name": "vew_wave_bonus",
+   "desc": "view of the bonus screen after the asteroid wave (phase $32): score, shields and the picture at the start of the pseudo ROM set. For the first 64 frames it shows 'WAVE COMPLETED: 2,500 POINTS'. For the next 64, if the start bonus is still due ($4C62), it shows the bonus for the starting difficulty: none for easy, 100,000 for moderate, 250,000 for hard, or from difficulty 3 up 'BONUS AWARDED FOR CONTINUED PLAY' with the 8-digit amount at $4BEF"
+  },
+  "B0:A763": {
+   "name": "vw_shrink_pic",
+   "desc": "draws a picture made of seven vector ROM pieces ($34A2 to $3646), each with its own move, scale and JSRL. The scale comes from the low byte of the phase timer, 4 steps a frame up to $F8, so the picture starts full size 600 below the centre and shrinks towards the point 600 right and 200 above it. Called by LA63E at the end of the asteroid wave. Preserves X and U"
+  }
+ },
+ "labels": {
+  "B0:7CE6": "tic_sin_cos"
+ },
+ "comments": {
+  "B0:7838": "pitch rate of turn, RHS_RAT of RHEOP",
+  "B0:784A": "yaw rate of turn, RHS_RAT of RHEOY",
+  "B0:784D": "ship's unit vector A,X: minus when the ship heads towards -x",
+  "B0:785D": "AIMDTH has COMB here: the yaw goes the other way",
+  "B0:785E": "yaw rate of turn",
+  "B0:78BF": "yaw rate of turn",
+  "B0:78C4": "pitch rate of turn",
+  "B0:78CC": "stars relative movement",
+  "B0:78E5": "download block B,Z: the ship's up axis, y part",
+  "B0:790C": "download block B,Y: the ship's side axis, y part",
+  "B0:7912": "download block C,Y: the ship's side axis, z part",
+  "B0:7932": "y speed into the universe y position",
+  "B0:793B": "z speed into the universe z position",
+  "B0:7947": "the star field viewer position moves by the same three speeds",
+  "B0:7963": "forward axis x (unit vector A,X)",
+  "B0:7969": "x speed = forward x / 32",
+  "B0:796C": "forward axis y (unit vector B,X)",
+  "B0:7972": "y speed = forward y / 32",
+  "B0:7975": "side axis x (unit vector A,Y), high byte",
+  "B0:7983": "times the sight's x deflection",
+  "B0:7999": "side slip into the x speed",
+  "B0:799F": "side axis y: $508A is unit vector B,Y of the ship here (MS_BY+M_S1), not a wave number",
+  "B0:79C3": "side slip into the y speed",
+  "B0:79E1": "horizontal speed: |x speed| + |y speed|",
+  "B0:7A01": "times the sight's y deflection",
+  "B0:7A0E": "z speed",
+  "B0:7A6B": "side axis y: $508A is unit vector B,Y of the ship here (MS_BY+M_S1), not a wave number",
+  "B0:7AAD": "horizontal speed: |x speed| + |y speed|",
+  "B0:7ADA": "z speed",
+  "B0:7B25": "z speed: down $0400 a frame",
+  "B0:7B2E": "floor of the descent",
+  "B0:7B5C": "roll block: only its residue byte, $4877, is used",
+  "B0:7B5F": "A more tics to roll",
+  "B0:7C7E": "BIC of the ship 1 download block",
+  "B0:7C8D": "bits 6-11 of |GD_ACT|: whole steps of 64 tics",
+  "B0:7C9B": "M_COS used as a temp",
+  "B0:7CA0": "steps * 3 = angle in 256ths of a turn (64 tics are 4.09 degrees)",
+  "B0:7CAC": "roll the download block by angle B (sine table)",
+  "B0:7CB5": "the 0-63 tics left over",
+  "B0:7CB9": "3 bytes per tic table entry",
+  "B0:7CC0": "sine signed like GD_ACT",
+  "B0:7DD0": "the self test, when it finds no errors, xors this byte with $9941, $A000, $C7F1, $FFB3 and $3000 and shows the result",
+  "B0:7DD1": "the first byte is xored the same way with $9942, $A001, $C7F2, $FFB4 and $3001 for the second number shown. No code reads the other seven bytes or L7DD9",
+  "B0:7FF9": "one's complement of ' AGAIN' (the line reads GREG RIVERA DID IT AGAIN), then a last byte $96",
+  "B0:A000": "this byte and the next go into the two numbers the self test shows when there are no errors (see L7DD0)",
+  "B0:A333": "wait until the IRQ has handed over a buffer: VGSYNC plus is its high address byte",
+  "B0:A335": "offset of a buffer's first instruction",
+  "B0:A33E": "bank 1 KD8AC: object draw position to 0,$68 and a JSRL $32AC",
+  "B0:A342": "B = set wanted: already loaded?",
+  "B0:A34A": "no: start a display list",
+  "B0:A34D": "and end it empty",
+  "B0:A350": "wait for the next buffer, so the empty list is the one being drawn during the copy",
+  "B0:A356": "four sets",
+  "B0:A35C": "ROM address of each set",
+  "B0:A383": "the set that is loaded",
+  "B0:A4BF": "y -120",
+  "B0:A4C9": "40 frames: the scale goes from $F0 (small) to $00 (full size)",
+  "B0:A4D5": "JSRL $2800: the picture at the start of the pseudo ROM set",
+  "B0:A4DA": "'REBEL HIDEOUT'",
+  "B0:A4DF": "back to normal scale",
+  "B0:A544": "the line changes every 128 frames",
+  "B0:A54A": "TIE fighters still to shoot for the bonus",
+  "B0:A54F": "colour 7",
+  "B0:A554": "y 336, the line of the message",
+  "B0:A55E": "the count in decimal",
+  "B0:A567": "two digits?",
+  "B0:A56E": "x of a two digit count",
+  "B0:A578": "x of a one digit count",
+  "B0:A585": "'SHOOT    TIE FIGHTERS FOR BONUS': the count stands in the gap",
+  "B0:A589": "'5,000 POINTS AND JEDI LETTER AWARDED'",
+  "B0:A58D": "'SHOOT ENEMY SHOTS TO SAVE YOUR SHIELDS'",
+  "B0:A628": "the line changes every 128 frames",
+  "B0:A62E": "'SURVIVE TO EARN NEXT JEDI LETTER'",
+  "B0:A632": "'AVOID COLLISIONS WITH ASTEROIDS'",
+  "B0:A658": "'5,000 POINTS AND JEDI LETTER AWARDED'",
+  "B0:A6BE": "JSRL $2800: the picture at the start of the pseudo ROM set",
+  "B0:A6CC": "first 64 frames: 'WAVE COMPLETED: 2,500 POINTS'",
+  "B0:A6E0": "next 64 frames, only while the start bonus is due",
+  "B0:A6E5": "difficulty level of the set of waves just flown: 0 easy, 1 moderate, 2 hard, 3 up continued play",
+  "B0:A6EC": "messages $4F-$51: no bonus for easy, 100,000 for moderate, 250,000 for hard wave",
+  "B0:A6F3": "'BONUS AWARDED FOR CONTINUED PLAY'",
+  "B0:A6F8": "y -460",
+  "B0:A6FD": "x -476",
+  "B0:A702": "suppress 4 leading zeroes",
+  "B0:A707": "the bonus: 8 BCD digits with commas",
+  "B0:A71D": "JSRL $2800: the picture at the start of the pseudo ROM set",
+  "B0:A765": "phase timer, low byte",
+  "B0:A768": "the scale shrinks 4 steps a frame",
+  "B0:A771": "smallest size",
+  "B0:A773": "scale instruction, binary scale 2",
+  "B0:A777": "second move, drawn at the picture's scale: y -800",
+  "B0:A77A": "x -600",
+  "B0:A77D": "first move at full scale: y 200",
+  "B0:A782": "x 600",
+  "B0:A78F": "JSRL $34A2: the first of the seven pieces",
+  "B0:A794": "back to normal scale"
+ },
+ "ram": {
+  "4801": {"name": "tmp_scal", "desc": "temp of LA763 (word): the scale instruction for the pieces of the shrinking picture. The address is the shared temp of many routines"},
+  "486C": {"name": "rheop_rate", "desc": "RHS_RAT of the pitch block RHEOP: pitch rate of turn, set by AIM and AIMDTH and turned into tics by RHTRIG"},
+  "486D": {"name": "rheop_rsd", "desc": "RHS_RSD of the pitch block RHEOP: pitch tics still to be turned. RHRSDU takes whole magic steps from it, RESIDU turns the view by the rest"},
+  "486F": {"name": "RHEOR", "desc": "ROLL BLOCK (Atari's name, $4870 in Star Wars): it lies over the yaw block and only its RHS_RSD byte at $4877 is used"},
+  "4875": {"name": "rheoy_rate", "desc": "RHS_RAT of the yaw block RHEOY: yaw rate of turn, set by AIM, AIMDTH and L784D and turned into tics by RHTRIG"},
+  "4876": {"name": "rheoy_rsd", "desc": "RHS_RSD of the yaw block RHEOY: yaw tics still to be turned"},
+  "4877": {"name": "rheor_rsd", "desc": "RHS_RSD of the roll block RHEOR: roll tics still to be turned. L7B5C adds the steady roll of the TIE fighter and asteroid waves to it"},
+  "48CD": {"name": "vg_set", "desc": "number (0-3) of the display list set that LA342 last copied to the pseudo vector ROM at $2800. The self test uses the same byte as the low byte of SWNEW"},
+  "4BEF": {"name": "cont_bonus", "desc": "8 BCD digits (4 bytes): the bonus for continued play, shown on the select screen and by LA6B2 and added to the score by LB5D4. At the end of a game it is set from the score saved when the last set of waves was completed"},
+  "4BFB": {"name": "bcd_lo", "desc": "BCD+2: the low two digits of BINBCD's result"},
+  "4C53": {"name": "bonus_left", "desc": "number of targets still to shoot in the current wave for its bonus and Jedi letter: loaded from the wave's quota when the wave starts, counted down as they are hit, shown in the wave status line and in the TIE fighter wave's message"},
+  "4C62": {"name": "bonus_due", "desc": "1 from the start of a game until its first wave bonus screen has been shown: LA6B2 then shows the start bonus and phase $32 awards it (LB5D4) and clears the flag"},
+  "4CAC": {"name": "ph_tim_lo", "desc": "PH_TIM+1: low byte of the phase timer"},
+  "5032": {"name": "u1_by", "desc": "MS_BY+M_U1: unit vector B,Y of the ship 1 download block, word (the ship's side axis, y part)"},
+  "5034": {"name": "u1_bz", "desc": "MS_BZ+M_U1: unit vector B,Z of the ship 1 download block, word (the ship's up axis, y part)"},
+  "503A": {"name": "u1_cy", "desc": "MS_CY+M_U1: unit vector C,Y of the ship 1 download block, word (the ship's side axis, z part)"},
+  "503C": {"name": "u1_cz", "desc": "MS_CZ+M_U1: unit vector C,Z of the ship 1 download block, word (the ship's up axis, z part)"},
+  "5042": {"name": "u1_ty", "desc": "MS_TY+M_U1: universe y position in the ship 1 download block, word, a copy of the ship's"},
+  "5044": {"name": "u1_tz", "desc": "MS_TZ+M_U1: universe z position (height) in the ship 1 download block, word, a copy of the ship's"},
+  "5080": {"name": "s1_ax", "desc": "MS_AX+M_S1: unit vector A,X of the player's ship, word: the x part of its forward axis, plus when the ship heads towards +x"},
+  "5082": {"name": "s1_ay", "desc": "MS_AY+M_S1: unit vector A,Y of the player's ship, word: the x part of its side axis"},
+  "5086": {"name": "s1_vx", "desc": "MS_VX+M_S1: the player's x speed, word"},
+  "5088": {"name": "s1_bx", "desc": "MS_BX+M_S1: unit vector B,X of the player's ship, word: the y part of its forward axis"},
+  "508E": {"name": "s1_vy", "desc": "MS_VY+M_S1: the player's y speed, word"},
+  "5096": {"name": "s1_vz", "desc": "MS_VZ+M_S1: the player's z speed, word"},
+  "509A": {"name": "s1_ty", "desc": "MS_TY+M_S1: the player's universe y position, word"},
+  "509C": {"name": "s1_tz", "desc": "MS_TZ+M_S1: the player's universe z position (height), word"}
+ },
+ "regions": [],
+ "questions": [
+  "B0:799F, B0:7A6B and elsewhere: the alias GM_WAV = $508A looks like a false match. $508A is unit vector B,Y of the player's ship block (MS_BY+M_S1): L6BC0 stores $C0 in $5080 and in it exactly as PHISG2 does with MS_AX+M_S1 and MS_BY+M_S1 (FACE BACKWARDS), and the movement code multiplies it by the sight deflection. Star Wars has GM_WAV at $4B15",
+  "names carried from Star Wars that no longer fit, left as they are: IPARM (B0:A39D) is the view routine of the probot wave and is identical, call for call, to VEWHPA (B0:A3DC), which views the phase that ends that wave. VEWG0D (B0:A41B) is the view of dying in the probot wave (called from L72F6 after PHIS0D), VEWGD (B0:A4E8) the view of dying in the walker wave (called from PHEG0D), VEWG1B (B0:A711) a death view with score, shields, the pseudo ROM picture and GAME OVER only (called from L740E). SMVG0B/SMVG9B (B0:7A2F) are the player movement of the walker wave, the same code as L7963, and S1MVBS (B0:78D0) is the player movement of the asteroid wave. The upper-case comments carried into the view routines are shifted against the calls they stand beside",
+  "B0:A729 VEWHPB: no call to it found in bank 0 or the slapstic pages - dead, or reached through a table I did not find",
+  "B0:7DD2-7DD9 (02 BB 5A 30 5F EE 05 A8): eight bytes after the two the self test reads at L7DD0/L7DD1, read by no code I found. Likewise B0:A316-A31B (04 BC 96 FA 5B 28) overwrite the first six letters of a plain ASCII line that otherwise reads '...ALLY MANAGED THE TEAM' (the carried comment gives Star Wars' text). Whether these are checksum or signature bytes I cannot tell from the code",
+  "B0:7DD0 and B0:A000: the self test shows the xor of one byte pair from each ROM when there are no errors. I describe them only as that - whether they are also what brings each ROM's checksum to the wanted value is not shown by the code",
+  "B0:7FFF: the last byte $96 after the complemented ' AGAIN' is not text (its complement is $69) - purpose unknown",
+  "B0:A763: I could not tell what the seven-piece picture at vector ROM $34A2-$3646 shows (colours 1 and 4, drawn receding to the upper right at the end of the asteroid wave), nor what the object of VWDTHB/LA8F8/LA843/LA881 (JSRL $298E in the pseudo ROM) is in ESB",
+  "B0:A342: the fourth entry of the set pointer table at LB97A is labelled DOXMT in the listing, which looks like a mislabelled data address (set 3)",
+  "B0:7CE6: Atari's name for the tic table is TRHTIC and belongs to $7CE3, inside the JSR at L7CE2 (the listing shows L7CE2+1) - entry 0 is never read. I labelled the first real entry tic_sin_cos instead of reusing the name"
+ ]
+}

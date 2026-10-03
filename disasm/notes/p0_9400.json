@@ -1,0 +1,330 @@
+{
+ "about": "slapstic page 0 $9400-$9FFF: the end of the leg keyframe interpolation ($9402-$9471), the tow cable of the walker part ($9561-$992A: set-up, firing, movement, view, catch), page 0's signature bytes and copyright string, and leftovers that nothing runs - the tail of an S2VW copy ($9472-$9560), an earlier copy of the choreography and wave code that lives on page 3 ($9958-$9C19) with its tables ($9C1A-$9CA6), and a copy of bank 0's irq_handler assembled for $9CA7 that runs to the end of the page, whose part from $9DCD is the same on all four pages and hides the slapstic helper at $9DFE",
+ "routines": {
+  "P0:9472": {
+   "name": "s2vw_old_tail",
+   "desc": "leftover, never run: the last $EF bytes of a copy of Star Wars' S2VW (view an alien ship, lazar hit test, glow colour from TVWCL) assembled for $93E9-$954B, as page 2 still has it whole. page 0's own code ends at $9471 and overwrote the start, so the header address falls in the middle of an instruction (the first real one is CMPD #$0010 at $9474) and its long branches to $93E8 land inside the keyframe routine. nothing on page 0 jumps here - the maze instructions that do are decoys. $9472-$9560 is identical on pages 0, 2 and 3 and $952B-$9560 on all four, the bytes the slapstic's bitwise addresses $9540-$955F fall on"
+  },
+  "P0:9561": {
+   "name": "cable_init",
+   "desc": "tow cable set-up for the walker part, called by wave2_setup: loads the points of object $1F (the pointed body drawn at each end of the cable) into the math box, clears the cable record cable_rec, gives the player 4 + kill_count/5 cables (kill_count held to 25, so 4 to 9) in cables_left and clears kill_count, hit_spk_done and cables_used"
+  },
+  "P0:9590": {
+   "name": "cable_fire_save",
+   "desc": "cable_fire with X and U saved, called by cable_view when a thumb button was pressed"
+  },
+  "P0:9596": {
+   "name": "cable_fire",
+   "desc": "fires a tow cable if one is left and none is out: fills cable_rec (live, mode 1 flying, timer 40 frames, the four angles 0), takes one from cables_left, counts cables_used and sends sound $4B. the cable's unit vector block at M_AL gets the ship's matrix and position as downloaded for this frame's view, and its velocity is the vector from the ship to a point $0600 ahead and 3 times the gun sight's screen x and y to the side, put back into universe coordinates. returns carry set when fired, carry clear and A = 0 when not"
+  },
+  "P0:9609": {
+   "name": "cable_idle_chk",
+   "desc": "X = cable_rec. returns normally while no cable is out, otherwise drops its return address and returns to the caller's caller with A = 0, so cable_fire does nothing while a cable is out"
+  },
+  "P0:9614": {
+   "name": "cable_move",
+   "desc": "per-frame movement of the tow cable, called by the three play phases of the walker part (wave2_exec, wave2_end_exec, wave2_exit_exec): while the record is live it calls the routine for the mode in byte 2 through cable_mode_tab with X = cable_rec (a mode over 2 counts as 0)"
+  },
+  "P0:962D": {
+   "name": "cable_count_down",
+   "desc": "counts the cable's timer (byte 3 of the record at X) down and frees the record when it runs out. a cable that runs out without having caught a walker starts speech $09, once in a walker part (hit_spk_done) and only while cables are left"
+  },
+  "P0:964B": {
+   "name": "cable_mode_0",
+   "desc": "cable mode 0: only the timer. reached through cable_mode_tab, and no code sets mode 0"
+  },
+  "P0:964E": {
+   "name": "cable_mode_caught",
+   "desc": "cable mode 2, after cable_attach: the timer, and the two ends turn round the centre faster and at unequal rates, -45 and +69 a frame (256 to the turn). the centre is not moved here - atat_move_all carries its height down with the falling walker. reached through cable_mode_tab"
+  },
+  "P0:965D": {
+   "name": "cable_mode_fly",
+   "desc": "cable mode 1, in flight: the timer, the two ends turn round the centre in opposite directions by 33 a frame, and while the cable is still live its centre moves by the x and y velocity and its height goes a quarter of the way to $1300 each frame. reached through cable_mode_tab"
+  },
+  "P0:969D": {
+   "name": "cable_view",
+   "desc": "view of the tow cable, called by vew_walker and vew_walker_end with Y at the display list. first fires a cable when a thumb button went down this frame (lz_sw_edge). then, with a cable out, views its centre from the ship (MS_PSB2 on the position of the block at M_AL), keeps the result in cable_viewx/y/z and, when it is ahead and within 45 degrees both ways, its screen position in ST_QU and cable_scry, views and draws the two ends and draws the lines"
+  },
+  "P0:972B": {
+   "name": "cable_view_end1",
+   "desc": "first end of the cable, X = cable_rec: downloads the cable's block as ship 2, yaws it by the angle in byte 5 and views a point $02AA to one side of the centre ($0355 once a walker is caught). when the point is ahead and within 45 degrees it keeps its screen position in end1_scrx and end1_scry, sets end1_seen and has bank 1 view and draw object $1F there, rolled by byte 4"
+  },
+  "P0:97EA": {
+   "name": "cable_view_end2",
+   "desc": "second end of the cable, as cable_view_end1 with the angle in byte 7, the point $02AA to the other side ($0200 once a walker is caught), the roll in byte 6 and the results in end2_scrx, end2_scry and end2_seen"
+  },
+  "P0:98A9": {
+   "name": "cable_draw_lines",
+   "desc": "draws the cable itself when its centre is in view: a white colour word, then for each end that is in view a blank move from the beam's position (BJ_CX, BJ_CY) to the centre and a line from the centre to the end, and last bank 1's end of object, which brings the beam back to the middle of the screen"
+  },
+  "P0:9915": {
+   "name": "cable_attach",
+   "desc": "marks the cable attached to a walker, called by cable_catch (P0_90E1) when the cable has caught a leg and the walker starts to fall: sets bit 3 of the record, mode 2 and a timer of 10 frames and sends sound $4F"
+  },
+  "P0:9ACC": {
+   "name": "NWNSHP",
+   "desc": "Star Wars' NWNSHP without its first instruction JSR INOBJ, which is why the matcher missed it: picks the list of ships for SP_WAV and WV_LVL from TSPWAV, frees all alien records and builds one ship per list entry with NWASHP. part of the leftover copy at $9958-$9C19 - no caller on this page, the copy in use is on page 3 (NWCHOR_P3 at P3_8CD0 and what follows), and the table bytes at $9C1C do not have the form this code reads"
+  },
+  "P0:9E2D": {
+   "name": "irq_old_tail",
+   "desc": "not a routine start: the middle of the DOVG part of a second copy of bank 0's irq_handler, assembled to run at $9CA7 (the listing shows $9CA7-$9E2C as bytes). the copy has no SWI traps and no watchdog write, calls COINS and load_vg_set at their bank 0 addresses and its own copies of DEBNCE, DOPOTS, RHCTRL, RHLIM and RHPOS at $9EEA-$9FE1, and the copy of GNSITE that starts at $9FE2 is cut off by the end of the page - bank 0 at $A000 does not continue it. from here to $9EDB the bytes are those of bank 0 LEC03-LECB1. it cannot run: the IRQ goes to irq_handler in bank 0, the only words on the page that point at this code are the operands of the copy's own JSR and JMP instructions, the wave tables before it point no higher than $9CA4, and 27 bytes of it at $9DF7-$9E11 have been replaced by the slapstic helper and a table, so the copy would return at $9E01 without restarting the vector generator or clearing the IRQ. $9DCD-$9FFF is byte for byte the same on all four pages, $9D2C up on page 3 and $9C1B up on page 2. the one live thing in it is the helper at $9DFE (LDA 0,X / ASLA / RTS), called by four routines of page 1 only for the slapstic's alternate sequence"
+  }
+ },
+ "esb_notes": {
+  "P0:9A1A": "this copy is never called: $9958-$9C19 is an earlier assembly of the choreography and wave code whose working copy is on page 3 (NWCHOR_P3 at P3_8CD0), left behind in the unused part of page 0. $9958-$9A19, shown as bytes before it, is the same leftover: the end of CPUAL, CPUMVL and CPCHKL",
+  "P0:9B27": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9B6E": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9EEA": "copy of bank 0's DEBNCE inside the leftover irq_handler copy that fills $9CA7-$9FFF, the same on all four pages. called only by that copy, which never runs",
+  "P0:9EFD": "copy of bank 0's DOPOTS inside the leftover irq_handler copy, the same on all four pages, never run",
+  "P0:9F44": "copy of bank 0's RHCTRL inside the leftover irq_handler copy, the same on all four pages, never run. it calls the copies of RHLIM and RHPOS that follow it",
+  "P0:9F7D": "copy of bank 0's RHLIM inside the leftover irq_handler copy, the same on all four pages, never run",
+  "P0:9FB4": "copy of bank 0's RHPOS inside the leftover irq_handler copy, the same on all four pages, never run"
+ },
+ "sw_drop_comments": [
+  "P0:9943",
+  "P0:96C6",
+  "P0:9717",
+  "P0:976C",
+  "P0:97C5",
+  "P0:982B",
+  "P0:9884"
+ ],
+ "labels": {
+  "P0:9697": "cable_mode_tab"
+ },
+ "comments": {
+  "P0:9402": "the next keyframe's x",
+  "P0:9407": "MS_PERS: times the fraction of the way to it in M_XP",
+  "P0:9412": "the next keyframe's y and z",
+  "P0:942D": "$4000 is 1: the rest of the fraction",
+  "P0:9436": "this keyframe's x",
+  "P0:9440": "the two parts added: the interpolated x",
+  "P0:9449": "this keyframe's y and z",
+  "P0:946A": "the divider's numerator back to its usual $0200",
+  "P0:9472": "leftover of an S2VW copy from here to $9560. these two bytes are the operand of an LDD M_XP whose opcode page 0's own code overwrote and the next four are CMPD #$0010, not what is shown",
+  "P0:9560": "one more leftover byte, read by nothing",
+  "P0:9561": "object $1F, drawn at each end of the cable: load its points into the math box (bank 1 JADOBJ)",
+  "P0:9569": "no cable out",
+  "P0:956B": "walkers destroyed in the last walker part, counted to 25 at most here",
+  "P0:9574": "4 + count / 5",
+  "P0:957B": "9 at most",
+  "P0:9596": "no cable left: nothing is fired",
+  "P0:959B": "comes back only when no cable is out",
+  "P0:959D": "byte 3, the timer: 40 frames of flight",
+  "P0:95A1": "byte 0: the cable is out",
+  "P0:95A5": "byte 2, the mode: 1 = in flight",
+  "P0:95A9": "bytes 4 and 6: the roll angles of the two ends, never changed from 0",
+  "P0:95B1": "bytes 5 and 7: the angles of the two ends round the centre",
+  "P0:95C0": "the cable's block: the ship's matrix and position as downloaded for this frame's view",
+  "P0:95C6": "a point $0600 ahead of the ship",
+  "P0:95CC": "3 times the gun sight's screen x to the side",
+  "P0:95D5": "and 3 times its screen y up or down",
+  "P0:95DE": "the scratch block M_X0",
+  "P0:95E4": "program $60: the point in universe coordinates",
+  "P0:95E9": "less the ship's position: the cable's x step per frame, cable_vx (MS_VX of its block)",
+  "P0:95F2": "the y step, cable_vy",
+  "P0:95FB": "the z step, which nothing reads",
+  "P0:9604": "carry set: a cable was fired",
+  "P0:9607": "carry clear, A = 0: none fired",
+  "P0:960E": "no cable out: go on",
+  "P0:9610": "a cable is out: drop the return address and go back to the caller's caller",
+  "P0:961D": "the mode",
+  "P0:9620": "a mode over 2 counts as 0",
+  "P0:962D": "the timer",
+  "P0:9633": "bit 3: it caught a walker, no speech",
+  "P0:9637": "the speech was made earlier in this part",
+  "P0:963C": "no cables left: no speech",
+  "P0:9647": "the cable is gone",
+  "P0:9650": "first end: -45 a frame, 256 to the turn",
+  "P0:9656": "second end: +69 a frame",
+  "P0:965F": "first end: -33 a frame",
+  "P0:9665": "second end: +33 a frame",
+  "P0:966B": "the two roll angles: 0 added, they stay 0",
+  "P0:9677": "the timer has just run out: no move",
+  "P0:967E": "x position + x velocity (MS_TX and MS_VX of the block)",
+  "P0:9684": "y position + y velocity",
+  "P0:968A": "the height goes a quarter of the way to $1300",
+  "P0:9697": "movement routines by mode: 0 timer only",
+  "P0:9699": "1 in flight",
+  "P0:969B": "2 a walker caught",
+  "P0:969F": "nothing in view yet: the centre, the first end, the second end",
+  "P0:96AA": "the switch edges TSTLAZ took from the IRQ for this frame",
+  "P0:96AD": "THMBT: a thumb button went down",
+  "P0:96B1": "fire a cable",
+  "P0:96B9": "no cable out: nothing to view",
+  "P0:96BB": "BIC of the position words of the cable's block ($50F8)",
+  "P0:96C1": "MS_PSB2: the centre as seen from the ship",
+  "P0:96C6": "kept for the two ends, which are viewed relative to it",
+  "P0:96D8": "x is the distance ahead: not behind the ship",
+  "P0:96DE": "starts the divide for 1/x",
+  "P0:96F3": "more than 45 degrees to the side",
+  "P0:9704": "more than 45 degrees up or down",
+  "P0:9706": "the centre is in view",
+  "P0:9717": "screen x of the centre, in the first word of the temp area that carries the name ST_QU",
+  "P0:9720": "the two ends are viewed even when the centre is not in view",
+  "P0:972B": "the viewed centre, the post-add input",
+  "P0:973D": "BIC of the cable's block at M_AL: download it as ship 2",
+  "P0:9742": "BIC of the ship 2 download block",
+  "P0:9748": "byte 5: the first end's angle round the centre",
+  "P0:974D": "MS_CNCT: view ship 2 from ship 1",
+  "P0:9758": "bit 3: a walker is caught",
+  "P0:975E": "the end is $02AA to one side of the centre",
+  "P0:9763": "$0355 once a walker is caught",
+  "P0:976C": "the point (0, y, 0) in the cable's coordinates",
+  "P0:9775": "MS_PAD: the point as seen from the ship",
+  "P0:977A": "not behind the ship",
+  "P0:9786": "the end is the viewed centre for the object drawn there",
+  "P0:9789": "kept, and read by nothing",
+  "P0:97B4": "the first end is in view",
+  "P0:97C5": "screen x of the first end",
+  "P0:97D4": "byte 4: roll of the object, always 0",
+  "P0:97DE": "object $1F: view its points (JOBJBPNT)",
+  "P0:97E3": "draw the object",
+  "P0:97E6": "end of the object",
+  "P0:9807": "byte 7: the second end's angle round the centre",
+  "P0:981D": "the end is $02AA to the other side of the centre",
+  "P0:9822": "$0200 once a walker is caught",
+  "P0:982B": "the point (0, y, 0) in the cable's coordinates",
+  "P0:9873": "the second end is in view",
+  "P0:9884": "screen x of the second end",
+  "P0:9893": "byte 6: roll of the object, always 0",
+  "P0:989D": "object $1F again",
+  "P0:98A9": "the centre is not in view: no lines",
+  "P0:98AE": "white, brightness $80",
+  "P0:98B8": "blank move from where the beam is to the centre: dy",
+  "P0:98C1": "dx, intensity 0",
+  "P0:98CA": "line from the centre to the first end: dy, and the beam's new y",
+  "P0:98D6": "dx with intensity 7, and the beam's new x",
+  "P0:98E7": "blank move back to the centre",
+  "P0:98F9": "line from the centre to the second end",
+  "P0:9911": "end of the object: the beam back to the middle of the screen",
+  "P0:9915": "bit 3: the cable has caught a walker",
+  "P0:991D": "the timer: 10 more frames",
+  "P0:9922": "mode 2",
+  "P0:992B": "from here to $9940 22 bytes that no code reads",
+  "P0:993B": "$9941-$9942 are page 0's word of the signature the self test shows after NO ERRORS DETECTED (bank 0 LF187)",
+  "P0:9943": "ascii COPYRIGHT 1984 ATARI, to $9956",
+  "P0:9953": "$9957 is $FF. from $9958 leftover code shown as bytes, an earlier copy of what page 3 has from P3_8BF2: the end of CPUAL",
+  "P0:9999": "$999B: leftover copy of CPUMVL, to $99E0",
+  "P0:99DF": "$99E1: leftover copy of CPCHKL, to $9A19",
+  "P0:9C1A": "leftover data: 0, 1 - the shape entry TS_TIE of Star Wars' wave tables (object 0, the TIE fighter, 1 hit)",
+  "P0:9C1E": "the second entry points at $9C20 as well",
+  "P0:9C20": "ten leftover ship lists to $9C55, each ship a pointer to $9C1A and a pointer into the choreography bytes below, each list ended by a 0. not the form NWNSHP and ADASHP above read: they take a count byte and a list of words at $9C20, and 6 bytes for each ship",
+  "P0:9C50": "from $9C56 leftover choreography, 3 bytes an instruction as NWCHOR reads them: $x4 twirl, 1 goto, 2 gosub, 0 control mask. the gosubs go to $9CA4",
+  "P0:9CA0": "the choreography stops at $9CA6 without its return. from $9CA7 code: the leftover copy of bank 0's irq_handler, starting LDX 10,U / CMPX #$6000",
+  "P0:9DC2": "from $9DCD the bytes are the same on all four pages",
+  "P0:9DF2": "$9DF7-$9E01: LDX #$9E02 / LDB diff_adder / ABX / LDA 0,X / ASLA / RTS, put over the handler copy's instructions. nothing jumps to $9DF7",
+  "P0:9DFA": "$9DFE: LDA 0,X / ASLA / RTS, the helper page 1 calls with X = $9B5C + n for the slapstic's alternate sequence",
+  "P0:9E02": "16 bytes of $00 and $FF that the LDX above points at, read by nothing. with the 11 bytes before them they take the place of the 27 bytes of bank 0 LEBCD-LEBE7",
+  "P0:9E12": "the handler copy goes on, as bank 0 from LEBE8: CMPB #$08",
+  "P0:9E2D": "as bank 0 LEC03, in the middle of the handler copy",
+  "P0:9FE2": "the start of a copy of GNSITE, as bank 0 LEDB8-LEDD4",
+  "P0:9FFA": "the last byte is $FF where GNSITE goes on with ANDA #$C0: the copy is cut off by the end of the page"
+ },
+ "ram": {
+  "4AD4": {
+   "name": "cable_mode",
+   "desc": "byte 2 of the tow cable's record cable_rec, its mode: 1 in flight (cable_fire), 2 once it has caught a walker (cable_attach). cable_move calls the mode's routine through cable_mode_tab"
+  },
+  "4AD5": {
+   "name": "cable_timer",
+   "desc": "byte 3 of the tow cable's record cable_rec: frames until the cable is taken away, 40 when fired, 10 from the catch. counted down by cable_count_down"
+  },
+  "4D82": {
+   "name": "cable_scry",
+   "desc": "word: screen y of the tow cable's centre, from cable_view. its screen x is in the word before it, $4D80, the start of the shared temp area that has Atari's name ST_QU. cable_draw_lines draws the two lines from this point"
+  },
+  "4D84": {
+   "name": "cable_viewx",
+   "desc": "word: the tow cable's centre as seen from the ship, x (distance ahead). kept by cable_view as the post-add input for the two ends"
+  },
+  "4D86": {
+   "name": "cable_viewy",
+   "desc": "word: the tow cable's centre as seen from the ship, y"
+  },
+  "4D88": {
+   "name": "cable_viewz",
+   "desc": "word: the tow cable's centre as seen from the ship, z"
+  },
+  "4D8A": {
+   "name": "cable_seen",
+   "desc": "nonzero when the tow cable's centre is in view this frame. cleared at the start of cable_view, tested by cable_draw_lines"
+  },
+  "4D8B": {
+   "name": "end1_scrx",
+   "desc": "word: screen x of the cable's first end, from cable_view_end1, where cable_draw_lines ends the first line"
+  },
+  "4D8D": {
+   "name": "end1_scry",
+   "desc": "word: screen y of the cable's first end"
+  },
+  "4D8F": {
+   "name": "end1_viewx",
+   "desc": "word: the cable's first end as seen from the ship, x. written by cable_view_end1 and read by nothing"
+  },
+  "4D91": {
+   "name": "end1_viewy",
+   "desc": "word: the cable's first end as seen from the ship, y. written and read by nothing"
+  },
+  "4D93": {
+   "name": "end1_viewz",
+   "desc": "word: the cable's first end as seen from the ship, z. written and read by nothing"
+  },
+  "4D95": {
+   "name": "end1_seen",
+   "desc": "nonzero when the cable's first end is in view this frame. cleared at the start of cable_view, tested by cable_draw_lines"
+  },
+  "4D96": {
+   "name": "end2_scrx",
+   "desc": "word: screen x of the cable's second end, from cable_view_end2"
+  },
+  "4D98": {
+   "name": "end2_scry",
+   "desc": "word: screen y of the cable's second end"
+  },
+  "4D9A": {
+   "name": "end2_viewx",
+   "desc": "word: the cable's second end as seen from the ship, x. written by cable_view_end2 and read by nothing"
+  },
+  "4D9C": {
+   "name": "end2_viewy",
+   "desc": "word: the cable's second end as seen from the ship, y. written and read by nothing"
+  },
+  "4D9E": {
+   "name": "end2_viewz",
+   "desc": "word: the cable's second end as seen from the ship, z. written and read by nothing"
+  },
+  "4DA0": {
+   "name": "end2_seen",
+   "desc": "nonzero when the cable's second end is in view this frame. cleared at the start of cable_view, tested by cable_draw_lines"
+  },
+  "50F6": {
+   "name": "cable_vz",
+   "desc": "MS_VZ+M_AL: word, z step of the tow cable per frame as cable_fire works it out, third after cable_vx and cable_vy. nothing reads it - the height is moved towards $1300 instead"
+  }
+ },
+ "regions": [
+  [
+   "P0",
+   "9C1E",
+   "9C20",
+   "ptrs"
+  ]
+ ],
+ "questions": [
+  "P0:992B-P0:9940 22 bytes (60 A4 8F AA 20 73 3C 1C D4 25 88 C0 2E CA CB 6A 4A D1 B8 4A 4B A8) in front of the signature word at $9941: no code reads them and they are neither text nor code, one's complement text nor a constant xor of text. what they are is not known",
+  "P0:9472 the header address is the middle of an instruction of leftover code (the real boundaries are $9471 LDD M_XP, opcode overwritten, and $9474 CMPD #$0010). the three lines NEGB / NEG $4810 / SUBD #$0010 are a wrong reading. the whole of $9472-$954B is dead code and could be shown as bytes",
+  "P0:9958-P0:9A19 .byte rows that are code (leftover, never run): the end of CPUAL to $999A, CPUMVL $999B-$99E0, CPCHKL $99E1-$9A19, an earlier assembly of page 3's P3_8BF2-P3_8CCF with the yaw and pitch tests in another order. with NWCHOR to ADASHP ($9A1A-$9C19) it is one leftover block. the copyright string and $FF at $9943-$9957 lie over its start",
+  "P0:9CA7-P0:9E2C and P0:9FE2-P0:9FFE .byte rows that are code (leftover, never run): the first part of the irq_handler copy and the start of its GNSITE. inside it $9DF7-$9E01 is the planted helper and $9E02-$9E11 its table. the listing starts disassembling at $9E2D, in the middle of the copy",
+  "the tail $9DCD-$9FFF, for all four pages: docs/SLAPSTIC.md says tables on pages 0 and 2 point at code in it. on page 0 the words in question are the operands of JSR $9EEA / $9EFD / $9F44 / $9FE2 and JMP $9EE6 inside the handler copy at $9CE1-$9DC8, which the listing shows as data, not table entries. no table and no live instruction on page 0 or in either bank points into $9DCD-$9FFF. page 2 has the same bytes from $9C1B, so the same should hold there",
+  "why the handler copy exists is not settled. it agrees with the final bank 0 (COINS at $C67A, load_vg_set at $A342, the picture tables at $B922-$B96C), so it is not from an old build of bank 0, and its range test (interrupted PC not in $EA80-$EFFF) names irq_handler's bank 0 address. it differs from irq_handler by having no SWI, no STA WTCHDG and the extra range test",
+  "P0:9DF7 the 16 bytes at $9E02 and the instructions LDX #$9E02 / LDB diff_adder / ABX in front of the helper look like a table lookup by diff_adder but nothing enters at $9DF7 on any page - only $9DFE is called (page 1). read as camouflage for the helper, which the code does not prove",
+  "P0:9C1C-P0:9CA6 the leftover wave and choreography tables do not fit the leftover code before them (NWNSHP at $9ACC reads a count byte and words at $9C20, the bytes there are 5-byte lists). they are the same bytes as on page 2 from $9C1B, where live code ends at $9C19 too. two different leftovers seem to meet at $9C1A",
+  "P0:95A9 and P0:966B bytes 4 and 6 of the cable record (the roll of the object at each end) are set to 0 and have 0 added every frame - apparently spin rates left at 0",
+  "P0:962D what speech $09 says was not established here. the code shows only that it is started when a cable runs out without a catch, once per walker part, while cables are left",
+  "P0:9590 the maze instruction P0_82B9 JMP P0_9590 is marked decoy, so cable_fire is reached only from cable_view. cable_fire's carry result is not used by that caller",
+  "object $1F (9 points: a tip at x 500, a square of 20 at x 400, a square of 50 at x -300, drawn by bank 1 KD123 in colour 1) is described as the pointed body at each end of the cable from its points only, not checked against shapes_preview.html by eye",
+  "names taken from the neighbouring stretches and used here without renaming: cable_rec, cable_tz, s1_tx (p0_85ec), cable_vx, cable_vy, cable_tx, cable_ty and cable_catch for P0_90A5 (p0_8c00), cables_left, cables_used (p1_9800), lz_sw_edge for $4C97 (p3_85ec), anim_dx, anim_dy, anim_dz (p1_8c00). $4AD4 and $4AD5 are bytes 2 and 3 of cable_rec, named here because P0_9915 addresses them directly",
+  "the tail as the other pages describe it: p2_9400 (P2:9CA2) and p3_9800 (P3:9D2B) read the bytes before $9DCD on their pages as the same leftover copy of irq_handler, which agrees with what is said here for page 0"
+ ]
+}

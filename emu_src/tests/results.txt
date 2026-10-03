@@ -1,0 +1,211 @@
+== attract, set slapstic
+set slapstic: 300.0 s of machine time, 453600002 cycles, 108527712 + 121791914 instructions
+  game frames 4412   interrupts 73828 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  slapstic: 123298 addresses seen, page selects 0 / 8806 / 0 / 8806, 0 by the alternate sequence, bitwise entered 0 completed 0
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 132373 / 0 / 44032   data accesses in the window 17613
+  commands to the sound board 1 (overrun 0), replies 73290, POKEY writes 116, speech writes 80
+  trace: 73496 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== attract, set noslap
+set noslap: 300.0 s of machine time, 453600002 cycles, 108527712 + 121791914 instructions
+  game frames 4412   interrupts 73828 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  page latch: selects 0 / 8806 / 0 / 8806
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 132373 / 0 / 44032   data accesses in the window 1
+  commands to the sound board 1 (overrun 0), replies 73290, POKEY writes 116, speech writes 80
+  trace: 73496 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== attract, set pcb27256
+set pcb27256: 300.0 s of machine time, 453600001 cycles, 108465312 + 121791914 instructions
+  game frames 4414   interrupts 73828 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 2 / 17620 / 1 / 17621
+  instructions executed on page 0 / 1 / 2 / 3: 2 / 176483 / 0 / 88100   data accesses in the window 17621
+  commands to the sound board 1 (overrun 0), replies 73290, POKEY writes 116, speech writes 80
+  trace: 73496 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== attract: slapstic against noslap
+  the two runs agree in all 73496 records: same instructions, same cycles, same registers, same RAM
+== play_steady, set slapstic
+set slapstic: 900.0 s of machine time, 1360800004 cycles, 301141231 + 362628789 instructions
+  game frames 12309   interrupts 221484 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  slapstic: 12851719 addresses seen, page selects 30791 / 61345 / 13497 / 58018, 372 by the alternate sequence, bitwise entered 5 completed 0
+  instructions executed on page 0 / 1 / 2 / 3: 15188129 / 5575472 / 8005514 / 4843686   data accesses in the window 3802476
+  commands to the sound board 1980 (overrun 0), replies 219883, POKEY writes 1264053, speech writes 40606
+  trace: 221148 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== play_steady, set noslap
+set noslap: 900.0 s of machine time, 1360800004 cycles, 301141231 + 362628789 instructions
+  game frames 12309   interrupts 221484 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  page latch: selects 30791 / 61345 / 13497 / 58023
+  instructions executed on page 0 / 1 / 2 / 3: 15188129 / 5575472 / 8005513 / 4843687   data accesses in the window 3638820
+  commands to the sound board 1980 (overrun 0), replies 219883, POKEY writes 1264053, speech writes 40606
+  trace: 221148 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== play_steady, set pcb27256
+set pcb27256: 900.0 s of machine time, 1360800002 cycles, 300616367 + 362541025 instructions
+  game frames 12650   interrupts 221484 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 170234 / 159863 / 50231 / 39516
+  instructions executed on page 0 / 1 / 2 / 3: 15061231 / 5525765 / 7528931 / 5304540   data accesses in the window 3560812
+  commands to the sound board 2129 (overrun 0), replies 219883, POKEY writes 1300771, speech writes 51206
+  trace: 221150 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== play_steady: slapstic against noslap
+  the two runs agree in all 221148 records: same instructions, same cycles, same registers, same RAM
+== play_wild, set slapstic
+set slapstic: 900.0 s of machine time, 1360800001 cycles, 302371350 + 362724850 instructions
+  game frames 12328   interrupts 221484 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  slapstic: 11075331 addresses seen, page selects 24012 / 56290 / 11953 / 55602, 507 by the alternate sequence, bitwise entered 8 completed 0
+  instructions executed on page 0 / 1 / 2 / 3: 10924898 / 4523973 / 9397288 / 5047102   data accesses in the window 2837790
+  commands to the sound board 2126 (overrun 0), replies 219882, POKEY writes 1177671, speech writes 52275
+  trace: 221146 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== play_wild, set noslap
+set noslap: 900.0 s of machine time, 1360800001 cycles, 302371350 + 362724850 instructions
+  game frames 12328   interrupts 221484 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  page latch: selects 24012 / 56290 / 11953 / 55610
+  instructions executed on page 0 / 1 / 2 / 3: 10924897 / 4523973 / 9397288 / 5047103   data accesses in the window 2689925
+  commands to the sound board 2126 (overrun 0), replies 219882, POKEY writes 1177671, speech writes 52275
+  trace: 221146 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== play_wild, set pcb27256
+set pcb27256: 900.0 s of machine time, 1360800005 cycles, 301283413 + 362723415 instructions
+  game frames 12049   interrupts 221484 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 143548 / 136581 / 48251 / 41036
+  instructions executed on page 0 / 1 / 2 / 3: 13253399 / 5000393 / 8641930 / 4953613   data accesses in the window 3121166
+  commands to the sound board 2121 (overrun 0), replies 219882, POKEY writes 1191787, speech writes 52924
+  trace: 221150 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== play_wild: slapstic against noslap
+  the two runs agree in all 221146 records: same instructions, same cycles, same registers, same RAM
+== selftest_hold, set slapstic
+set slapstic: 60.0 s of machine time, 90720006 cycles, 19225682 + 24331573 instructions
+  game frames 0   interrupts 14765 (lost 14764)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 15408 cycles
+    interrupt requests that found the last one still waiting: 14764, the last at cycle 90716166; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  slapstic: 32784 addresses seen, page selects 3 / 2 / 2 / 2, 0 by the alternate sequence, bitwise entered 0 completed 0
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 0 / 0 / 0   data accesses in the window 32784
+  commands to the sound board 117 (overrun 0), replies 14656, POKEY writes 6243, speech writes 80
+  trace: 0 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== selftest_hold, set noslap
+set noslap: 60.0 s of machine time, 90720002 cycles, 19225685 + 24331573 instructions
+  game frames 0   interrupts 14765 (lost 14764)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 15408 cycles
+    interrupt requests that found the last one still waiting: 14764, the last at cycle 90716162; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  page latch: selects 3 / 2 / 2 / 2
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 0 / 0 / 0   data accesses in the window 32775
+  commands to the sound board 117 (overrun 0), replies 14656, POKEY writes 6243, speech writes 80
+  trace: 0 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== selftest_hold, set pcb27256
+set pcb27256: 60.0 s of machine time, 90720002 cycles, 19225690 + 24331573 instructions
+  game frames 0   interrupts 14765 (lost 14764)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 15408 cycles
+    interrupt requests that found the last one still waiting: 14764, the last at cycle 90716162; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 6 / 2 / 3 / 3
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 0 / 0 / 0   data accesses in the window 32770
+  commands to the sound board 117 (overrun 0), replies 14656, POKEY writes 6243, speech writes 80
+  trace: 0 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== selftest, set slapstic
+set slapstic: 130.0 s of machine time, 196560003 cycles, 42595459 + 52753984 instructions
+  game frames 413   interrupts 31992 (lost 25464)   watchdog bites 1   resets 0   sound resets 2
+  unmapped accesses 0   traps (HANG) 48640   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 25464, the last at cycle 156463105; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  slapstic: 44310 addresses seen, page selects 3 / 825 / 2 / 825, 0 by the alternate sequence, bitwise entered 0 completed 0
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 12423 / 0 / 4117   data accesses in the window 34431
+  commands to the sound board 15 (overrun 0), replies 31754, POKEY writes 1038, speech writes 160
+  trace: 6526 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== selftest, set noslap
+set noslap: 130.0 s of machine time, 196560001 cycles, 42595383 + 52753983 instructions
+  game frames 413   interrupts 31992 (lost 25464)   watchdog bites 1   resets 0   sound resets 2
+  unmapped accesses 0   traps (HANG) 48640   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 25464, the last at cycle 156463109; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  page latch: selects 3 / 825 / 2 / 825
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 12423 / 0 / 4117   data accesses in the window 32776
+  commands to the sound board 15 (overrun 0), replies 31754, POKEY writes 1038, speech writes 160
+  trace: 6526 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== selftest, set pcb27256
+set pcb27256: 130.0 s of machine time, 196560003 cycles, 42591144 + 52753984 instructions
+  game frames 413   interrupts 31992 (lost 25464)   watchdog bites 1   resets 0   sound resets 2
+  unmapped accesses 0   traps (HANG) 48640   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 25464, the last at cycle 156463108; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 8 / 1648 / 4 / 1650
+  instructions executed on page 0 / 1 / 2 / 3: 2 / 16538 / 0 / 8230   data accesses in the window 34417
+  commands to the sound board 15 (overrun 0), replies 31754, POKEY writes 1038, speech writes 160
+  trace: 6526 records
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== attract, set pcb27256, page bits at power-on give page 1
+set pcb27256: 300.0 s of machine time, 453600001 cycles, 108465312 + 121791914 instructions
+  game frames 4414   interrupts 73828 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 1 / 17621 / 1 / 17621
+  instructions executed on page 0 / 1 / 2 / 3: 2 / 176483 / 0 / 88100   data accesses in the window 17621
+  commands to the sound board 1 (overrun 0), replies 73290, POKEY writes 116, speech writes 80
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== attract, set pcb27256, page bits at power-on give page 2
+set pcb27256: 300.0 s of machine time, 453600001 cycles, 108465312 + 121791914 instructions
+  game frames 4414   interrupts 73828 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 2 / 17620 / 1 / 17621
+  instructions executed on page 0 / 1 / 2 / 3: 2 / 176483 / 0 / 88100   data accesses in the window 17621
+  commands to the sound board 1 (overrun 0), replies 73290, POKEY writes 116, speech writes 80
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== attract, set pcb27256, page bits at power-on give page 3
+set pcb27256: 300.0 s of machine time, 453600001 cycles, 108465312 + 121791914 instructions
+  game frames 4414   interrupts 73828 (lost 331)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 16465 cycles
+    interrupt requests that found the last one still waiting: 331, the last at cycle 2039808; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 1 / 17621 / 1 / 17621
+  instructions executed on page 0 / 1 / 2 / 3: 2 / 176483 / 0 / 88100   data accesses in the window 17621
+  commands to the sound board 1 (overrun 0), replies 73290, POKEY writes 116, speech writes 80
+  self test cells: ERRORS $0000, checksums 0000 0000 0000 0000 0000 0000
+  no faults
+== selftest_hold, set pcb27256, one bit of the 27256 flipped: must report $4000 only
+set pcb27256: 60.0 s of machine time, 90720000 cycles, 19225698 + 24331913 instructions
+  game frames 0   interrupts 14765 (lost 14764)   watchdog bites 0   resets 0   sound resets 1
+  unmapped accesses 0   traps (HANG) 0   core messages 0   longest watchdog gap 15408 cycles
+    interrupt requests that found the last one still waiting: 14764, the last at cycle 90716160; first at PC: $EE0E $EE11 $EE17 $EE0E $EE11 $EE17 $EE0E $EE11
+  LED latch page bits: writes leaving page 0 / 1 / 2 / 3: 6 / 2 / 3 / 3
+  instructions executed on page 0 / 1 / 2 / 3: 0 / 0 / 0 / 0   data accesses in the window 32768
+  commands to the sound board 117 (overrun 0), replies 14656, POKEY writes 6109, speech writes 80
+  self test cells: ERRORS $4000, checksums 0000 0000 0000 0000 0010 0000
+  no faults

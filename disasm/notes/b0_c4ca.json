@@ -1,0 +1,335 @@
+{
+ "about": "bank 0 $C4CA-$FFFF: sound command stubs and DOXMT, coin handling, the message generator and message output, the message texts and table, the IRQ handler, RESET, the self test and diagnostics, the 6809 vectors",
+ "routines": {
+  "B0:C4DA": {
+   "name": "doxmt_gated",
+   "desc": "send sound command A to the sound board through DOXMT, but only while Q_RTHV is zero - when it is set the command is dropped. Most of the sound effect stubs ($32 up) jump here instead of to DOXMT, so the endgame transition phases, which set Q_RTHV to 1, silence the effects. Bank 1 has its own copy at K6530"
+  },
+  "B0:C5E9": {
+   "name": "aud_cmd_36",
+   "desc": "sound stub: A = $36, then DOXMT (never gated). Called from XPSA (P3_8A3D) when the exploding alien is the one doing the passby, where Star Wars called AUDPBZ, so by its use it stops the passby sound. $36 is one of the commands the self test's sound test leaves out"
+  },
+  "B0:C620": {
+   "name": "aud_cmd_41",
+   "desc": "sound stub: A = $41, then doxmt_gated. A POKEY effect of the sound board (its routine $FBFA), one of the effects ESB added after Star Wars' list. Called from P1_8FEE and P1_905A"
+  },
+  "B0:C62A": {
+   "name": "aud_cmd_43",
+   "desc": "sound stub: A = $43, then doxmt_gated. A POKEY effect of the sound board (its routine $FC08). Called from P3_995A"
+  },
+  "B0:C634": {
+   "name": "aud_cmd_45",
+   "desc": "sound stub: A = $45, then doxmt_gated. A POKEY effect of the sound board (its routine $FC16). Called from L6F11"
+  },
+  "B0:C639": {
+   "name": "aud_cmd_46",
+   "desc": "sound stub: A = $46, then doxmt_gated. A POKEY effect of the sound board (its routine $FC1D). Called from P1_9A02, just before flash_fade is set to $7F"
+  },
+  "B0:C63E": {
+   "name": "aud_cmd_47",
+   "desc": "sound stub: A = $47, then doxmt_gated. A POKEY effect of the sound board (its routine $FC24). Called from L6994"
+  },
+  "B0:C643": {
+   "name": "aud_cmd_48",
+   "desc": "sound stub: A = $48, then doxmt_gated. A POKEY effect of the sound board (its routine $FC2B). Called from P1_9C2D"
+  },
+  "B0:C648": {
+   "name": "aud_cmd_49",
+   "desc": "sound stub: A = $49, then doxmt_gated. A POKEY effect of the sound board (its routine $FC32). Called from P2_9AF6"
+  },
+  "B0:C64D": {
+   "name": "aud_cmd_4a",
+   "desc": "sound stub: A = $4A, then doxmt_gated. A POKEY effect of the sound board (its routine $FC39). Called from L71D4"
+  },
+  "B0:C652": {
+   "name": "aud_cmd_4b",
+   "desc": "sound stub: A = $4B, then doxmt_gated. A POKEY effect of the sound board (its routine $FC40). Called from P0_95BA"
+  },
+  "B0:C657": {
+   "name": "aud_cmd_4c",
+   "desc": "sound stub: A = $4C, then doxmt_gated. A POKEY effect of the sound board (its routine $FC47). Called from LB649"
+  },
+  "B0:C65C": {
+   "name": "aud_cmd_4d",
+   "desc": "sound stub: A = $4D, then doxmt_gated. A POKEY effect of the sound board (its routine $FC4E). Called from TSTLAZ (P3_95B5), the other branch of which sends $3F where Star Wars started the X-wing laser sound"
+  },
+  "B0:C661": {
+   "name": "aud_cmd_4e",
+   "desc": "sound stub: A = $4E, then doxmt_gated. A POKEY effect of the sound board (its routine $FC55). Called from P2_9327"
+  },
+  "B0:C666": {
+   "name": "aud_cmd_4f",
+   "desc": "sound stub: A = $4F, then doxmt_gated. A POKEY effect of the sound board (its routine $FC5C). Called from P0_9927"
+  },
+  "B0:C66B": {
+   "name": "aud_cmd_50",
+   "desc": "sound stub: A = $50, then doxmt_gated. A POKEY effect of the sound board (its routine $FC63). Called from P1_963F, once, when the three-byte countdown at $4C50 falls below $60"
+  },
+  "B0:C670": {
+   "name": "aud_cmd_51",
+   "desc": "sound stub: A = $51, then doxmt_gated. A POKEY effect of the sound board (its routine $FC71), the last command the self test's sound test plays. Called from P0_904A"
+  },
+  "B0:C675": {
+   "name": "aud_cmd_52",
+   "desc": "sound stub: A = $52, then DOXMT (never gated). Called from P1_962A when the three-byte countdown at $4C50 runs out. $52 is the highest command number and is left out of the self test's sound test"
+  },
+  "B0:CB21": {
+   "name": "MESSOFF",
+   "desc": "Star Wars' MESSOFF, which the matcher left without its label: turn message B off. Searches the list MESBLK..MESLST for message number B and deletes it by moving the last entry into its slot and backing MESLST up one. ESB takes the number in B instead of A and saves B, X and U. Reached through the cross-bank table entry L6039"
+  },
+  "B0:CC58": {
+   "name": "spmess_entry",
+   "desc": "entry to SPMESS that saves X and U first, SPMESS ends by pulling them with the return address. Reached through the cross-bank table entry L6069 - in ESB the title banner (Star Wars' VWBNNR, which fell into SPMESS) is drawn in bank 1 and calls this to move the story messages"
+  },
+  "B0:E636": {
+   "name": "view_8dig",
+   "desc": "ESB's version of Star Wars' VW8DIG: output the four BCD bytes at U as 87,654,321 through Y, with leading zeros blanked according to BT_SUP and a comma only once a digit has been shown. U is preserved. Falls into the shared tail with view_6dig and view_4dig"
+  },
+  "B0:E63A": {
+   "name": "view_6dig",
+   "desc": "ESB's version of Star Wars' VW6DIG: output the three BCD bytes at U as 654,321 through Y, zero suppression by BT_SUP, U preserved"
+  },
+  "B0:E63E": {
+   "name": "view_4dig",
+   "desc": "output the two BCD bytes at U as 4,321 through Y: the high nibble of the first byte, a comma if a digit has been shown, then the other three digits. U preserved. Called only through the cross-bank table entry L607B"
+  },
+  "B0:E6AC": {
+   "name": "do_message",
+   "desc": "ESB's version of Star Wars' DOMESS: draw message B through Y at its fixed place. Ignores numbers of $DF and up and messages whose line count in message_tab is zero (the banner messages), saves the number in MESNUM, then mes_lines draws every line with its own colour. X preserved"
+  },
+  "B0:E6C8": {
+   "name": "do_message_nc",
+   "desc": "ESB's version of Star Wars' DOMES2: as do_message but without a colour instruction, the caller has set the colour. Draws the lines with mes_lines_nc"
+  },
+  "B0:E6E4": {
+   "name": "mes_lines",
+   "desc": "draw the lines of a message: X = the first line, mes_linect = number of lines, Y = display list. Each line is a colour index (times 2) into mes_colour_tab, y / 4, x / 4 (signed bytes) and the text. Per line it writes the colour word, the position vector, the characters (mes_text) and a centre instruction, and after the last line the normal scale $7200"
+  },
+  "B0:E717": {
+   "name": "mes_lines_nc",
+   "desc": "as mes_lines but the colour byte of each line is skipped and no colour word is written"
+  },
+  "B0:E743": {
+   "name": "mes_lines_scroll",
+   "desc": "as mes_lines but MSYOFF is subtracted from each line's y, so the text scrolls. Used by VWMESS for the messages in the MESBLK list (Star Wars' MOUT2)"
+  },
+  "B0:E779": {
+   "name": "mes_lines_fade",
+   "desc": "as mes_lines_scroll but each line's colour word takes only its high byte from mes_colour_tab and its brightness from mes_brite, so the whole text can be faded. Used by VWMES2"
+  },
+  "B0:E7B2": {
+   "name": "mes_text",
+   "desc": "ESB's version of Star Wars' MESOUT: output the characters at X through Y until one with bit 7 set has been done, each as the JSRL word found in the vector ROM's character tables - letters $41 up, the colon, digits $30-$39, and space and punctuation $20-$2F each have their own table base. X is left after the text, U preserved"
+  },
+  "B0:EA80": {
+   "name": "irq_handler",
+   "desc": "Star Wars' IRQ routine as changed for ESB, called from irq_entry with U = the interrupted frame and ended by RTS. Every 4 ms: checks the interrupted PC and the RAM trap byte (SWI on a fault), counts the game frame timer, runs COINS, debounces the switch bytes, catches fire and thumb button edges, reads a pot, and once every 256 interrupts checks the sound board's watchdog byte and resets it if wrong. Every fourth interrupt it steps the game time and the BCD time-on counter. Then DOVG: when the vector generator has halted it swaps display buffers if the mainline finished one, updates the gun sight and the animated picture slots at the bottom of vector RAM and starts the generator again"
+  },
+  "B0:F392": {
+   "desc": "endless jump to itself: waits for the watchdog to reset the machine. Left through when the self test switch is turned off and when the diagnostic switches change. Bank 0's SWI, SWI2, SWI3, FIRQ and NMI vectors also point here"
+  },
+  "B0:F3F3": {
+   "name": "SSWTCH",
+   "desc": "Star Wars' SSWTCH, the switch test state of the self test, missed by the matcher because ESB dropped its first two instructions and reaches it only through the state table (second entry of TSTATE). Draws the border, SWITCH TEST and the name of every switch that is on, beeps on a switch edge, shows the two option switch banks as N and F, then the pot test: a line from the screen centre to the position read from the two pots. Stays in this state until the aux coin switch steps on"
+  },
+  "B0:F9F7": {
+   "name": "mtst_zt_next",
+   "desc": "not a routine of its own: the loop end of the matrix test that starts at $F9D2 (mtst_zt_bits, shown as .byte rows), reached by the BEQ at $F9F2 when the product matched. Shifts the test bit in D left and loops to $F9E1 until it falls out, then returns through MULRET with the equal flag set"
+  },
+  "B0:FFB5": {
+   "name": "rom_sum_2banks",
+   "desc": "self test checksum of one 16K program ROM, placed at the same address in both banks because it switches W_BANK while it runs. U points at the ROM's entry in TROMP. Starting with the ROM's address as seed it adds the $1000 words of the bank 1 half, then of the bank 0 half, with end-around carry, steps U to the next entry and jumps back to LF08E with the sum in D. Bank 1's copy is what executes between the two writes to W_BANK"
+  }
+ },
+ "labels": {
+  "B0:C7D6": "vickers_text",
+  "B0:CCFB": "mes_colour_tab",
+  "B0:E7E3": "message_tab",
+  "B0:EEDA": "trom_slapstic",
+  "B0:EEDC": "trom_vector",
+  "B0:EEFE": "slap_select_tab",
+  "B0:F522": "sound_test_tab",
+  "B0:F9D2": "mtst_zt_bits"
+ },
+ "comments": {
+  "B0:C4DA": "effects are dropped while this is nonzero",
+  "B0:C4E0": "two stubs no traced code calls: LDA #$01 / JMP DOXMT and LDA #$02 / JMP DOXMT - the sound board's first effect and first tune, played first by the sound test",
+  "B0:C512": "stub no traced code calls: LDA #$0B / JMP DOXMT - $0B is the sound board's speech chip init (its SPKI)",
+  "B0:C5A3": "stub no traced code calls: LDA #$28 / JMP DOXMT - the last speech command",
+  "B0:C5BC": "stub no traced code calls: LDA #$2D / JMP DOXMT - one of the nine tunes $29-$31",
+  "B0:C5DF": "stub no traced code calls: LDA #$34 / JMP DOXMT - the self test's error sound",
+  "B0:C5E9": "not gated by Q_RTHV",
+  "B0:C5EE": "two stubs no traced code calls: LDA #$37 / JMP doxmt_gated and LDA #$38 / JMP doxmt_gated",
+  "B0:C61B": "stub no traced code calls: LDA #$40 / JMP DOXMT - the self test's no-error sound",
+  "B0:C625": "stub no traced code calls: LDA #$42 / JMP doxmt_gated",
+  "B0:C7D6": "not referenced by any code found: the bytes $13 $C7 $58 $38 $30, then the text VICKERS DID THE VOICES",
+  "B0:C7F1": "last word before this ROM's fill, one of the six words the self test combines into the signature it shows",
+  "B0:CB67": "message_tab: 3 bytes per message - number of lines, address of the first line",
+  "B0:CB6D": "number of lines",
+  "B0:CB6F": "none: a banner message, not drawn here",
+  "B0:CB74": "X = the first line",
+  "B0:CB95": "message_tab: 3 bytes per message - number of lines, address of the first line",
+  "B0:CC13": "address of the banner message: one byte x / 4, then the text",
+  "B0:CC1A": "x / 4, signed",
+  "B0:CC43": "title brightness starts at 0",
+  "B0:CC52": "$D8: the first of the seven moving story messages",
+  "B0:CCCE": "one past the last story message ($DE)",
+  "B0:CCFB": "colour instruction of a message line, indexed by the line's first byte (index times 2): 0-3 colours 1-4 at brightness $80, 4 colour 4 at $F0, 5-7 colours 5-7 at $80, 8-10 white at $00, $10, $20 for the intensity test, 11 a JSRL to the medium flash slot VRMFL",
+  "B0:E642": "digits 8 and 7",
+  "B0:E646": "comma only once a digit has been shown (BT_SUP gone negative)",
+  "B0:E64A": "JSRL to the comma",
+  "B0:E64F": "digits 6 and 5",
+  "B0:E653": "digit 4 is the high nibble",
+  "B0:E65F": "JSRL to the comma",
+  "B0:E664": "digit 3",
+  "B0:E668": "digits 2 and 1",
+  "B0:E6AE": "MESSZ: a legal message number?",
+  "B0:E6BB": "number of lines",
+  "B0:E6BD": "none: a banner message, not drawn here",
+  "B0:E6C2": "X = the first line",
+  "B0:E6CA": "MESSZ: a legal message number?",
+  "B0:E6E6": "colour index times 2",
+  "B0:E6EF": "y / 4, signed: times 4 into a 13-bit vector word",
+  "B0:E6F9": "x / 4, signed, brightness 0",
+  "B0:E703": "the characters",
+  "B0:E706": "centre",
+  "B0:E70B": "next line",
+  "B0:E710": "normal scale",
+  "B0:E719": "skip the line's colour byte",
+  "B0:E754": "less the scroll offset",
+  "B0:E780": "high byte of the line's colour word",
+  "B0:E782": "brightness common to all lines",
+  "B0:E78D": "less the scroll offset",
+  "B0:E7B6": "without the end mark",
+  "B0:E7B8": "a letter?",
+  "B0:E7BE": "letters: table at $3018, indexed by (character - $40) times 2",
+  "B0:E7C3": "colon?",
+  "B0:E7C7": "its word is at $304C",
+  "B0:E7CC": "a digit?",
+  "B0:E7D0": "digits: table at $3004",
+  "B0:E7D5": "$20-$2F, space and punctuation: table at $304E",
+  "B0:E7DD": "bit 7 marks the last character",
+  "B0:EA80": "U = the interrupted frame: its PC",
+  "B0:EA82": "below the program ROM?",
+  "B0:EB61": "the display-list set last loaded",
+  "B0:EB87": "low byte of the JMPL: the buffer's list starts at word $1D (byte $3A), past the IRQ's picture slots",
+  "B0:EBC9": "picture for the slot at vector RAM $0012: next of the four in VTLZS, every field",
+  "B0:EC09": "picture for the slot at $001C: next of the four at LB94A",
+  "B0:EC1C": "every second field",
+  "B0:EC3F": "picture for the slot VRGNX: next of the four at LB95A",
+  "B0:EC80": "the same colour with brightness flash_brite",
+  "B0:EC82": "into the slot at $002E",
+  "B0:EC85": "and with brightness $80 - flash_fade",
+  "B0:EC8A": "into the slot at $0032",
+  "B0:EC8D": "an RTSL after each of the three colour words",
+  "B0:EEDA": "TROMP continued: the slapstic ROM at $8000, summed over its four pages (error bit $4000)",
+  "B0:EEDC": "the vector ROM at $3000 (error bit $8000)",
+  "B0:EEFE": "the addresses that select slapstic pages 0-3: $8080, $8090, $80A0, $80B0",
+  "B0:F08B": "sum both halves of this 16K ROM, comes back to the next line",
+  "B0:F08E": "a good ROM sums to $FFFF: stored value 0",
+  "B0:F09E": "four program ROMs: $6000, $A000, $C000, $E000",
+  "B0:F0A4": "slapstic ROM: one pass per page select address",
+  "B0:F0A7": "seed, kept across the four pages",
+  "B0:F0AA": "arm the slapstic",
+  "B0:F0AF": "touch the page select: this page is now at $8000-$9FFF",
+  "B0:F0B4": "first word of the page - reading $8000 arms the slapstic again",
+  "B0:F0BA": "so touch the same page select once more",
+  "B0:F0C5": "to the end of the page",
+  "B0:F0CA": "end of slap_select_tab",
+  "B0:F0D6": "CHKSUM+8: the slapstic's word",
+  "B0:F0DE": "error bit $4000",
+  "B0:F0E3": "arm the slapstic and select page 0 again",
+  "B0:F0E9": "the vector ROM",
+  "B0:F0EB": "4K",
+  "B0:F0EF": "address as seed",
+  "B0:F12A": "negate the six stored checksum words for the display",
+  "B0:F135": "end of CHKSUM",
+  "B0:F184": "signature: one word from each of the six ROMs ($7DD0, slapstic $9941, $A000, $C7F1, $FFB3, vector ROM $3000) exclusive-ored together and shown as four hex digits after NO ERRORS DETECTED",
+  "B0:F28D": "pot channel 1 reading",
+  "B0:F315": "sound test select: the pot channel 0 reading",
+  "B0:F317": "pushed past $C0: step to the next sound",
+  "B0:F31F": "debounce, then auto repeat",
+  "B0:F32A": "$4D sounds in sound_test_tab",
+  "B0:F331": "send it $28 frames from now",
+  "B0:F33B": "pulled below $40: step to the previous sound",
+  "B0:F34F": "wrap from the first to the last",
+  "B0:F35E": "in the middle: re-arm both directions",
+  "B0:F397": "LF3F3 (SSWTCH): switch and pot test",
+  "B0:F399": "LF4E3: the sound test, which ESB put under Star Wars' label SCHKR",
+  "B0:F39F": "LF56F: checker board pattern (Star Wars' SCHKR, here shown as .byte rows)",
+  "B0:F4E8": "centre, normal scale",
+  "B0:F4F2": "SOUND TEST and SOUND",
+  "B0:F4F7": "position of the number",
+  "B0:F501": "blank one leading zero",
+  "B0:F505": "the selected sound's index, in hex",
+  "B0:F50A": "time to send it?",
+  "B0:F50E": "then again every 255 frames",
+  "B0:F514": "index to sound board command",
+  "B0:F519": "straight to the sound board, no wait for it to be ready",
+  "B0:F51C": "stay in the sound test state",
+  "B0:F522": "the $4D commands the sound test plays, in its order: $01, $02, $0B (speech init), then $03-$51 without $13, $36, $3E and $44. The last three bytes of the row at LF56A and the row after it are code: LDD #$BEDF / STD ,Y++ / JMP GETBAK, the checker board state",
+  "B0:F7E6": "fifth entry of TMULT2: the test at mtst_zt_bits ($F9D2) and its screen y",
+  "B0:F9D2": "code, not data: LDD #$4000 / STD M_XT / LDD #$0000 / STD M_YT / LDD #$0001 - a matrix test with a walking bit in ZT",
+  "B0:F9E1": "the bit under test, also the expected product",
+  "B0:F9E6": "program $5D: XP = the product",
+  "B0:F9F2": "right: on to the next bit",
+  "B0:FFB3": "one of the six words the self test combines into the signature it shows",
+  "B0:FFB5": "the ROM's address",
+  "B0:FFB7": "$2000 bytes per half",
+  "B0:FFBB": "bank 1: from here bank 1's copy of this routine runs",
+  "B0:FFC0": "address as seed",
+  "B0:FFC4": "add the word, end-around carry",
+  "B0:FFD8": "back in bank 0's copy",
+  "B0:FFDA": "the same address again, U to the next table entry",
+  "B0:FFED": "back to the self test with the sum in D",
+  "B0:FFF0": "a zero word, then the 6809 vectors: SWI3, SWI2 and FIRQ to HANG",
+  "B0:FFF8": "IRQ to irq_entry ($6005), SWI and NMI to HANG, RESET to RESET ($EDEE)"
+ },
+ "ram": {
+  "4837": {"name": "gnb_timer", "desc": "IRQ picture animation: fields left until VG_GNB steps to its next picture, reloaded with 4"},
+  "4839": {"name": "pic1c_timer", "desc": "IRQ picture animation: fields left until pic1c_index steps, reloaded with 1"},
+  "483A": {"name": "pic1c_index", "desc": "IRQ picture animation: index (0, 2, 4, 6) into the four words at LB94A, the chosen word is kept in the slot at vector RAM $001C"},
+  "483B": {"name": "lzs_timer", "desc": "IRQ picture animation: fields left until VG_LZS steps, reloaded with 2"},
+  "483E": {"name": "gnx_index", "desc": "IRQ picture animation: index (0, 2, 4, 6) into the four words at LB95A, the chosen word is kept in the slot VRGNX. Steps when VF_GNB runs out"},
+  "4842": {"name": "pic12_index", "desc": "IRQ picture animation: index (0, 2, 4, 6) into VTLZS, stepped every field, the chosen word is kept in the slot at vector RAM $0012"},
+  "488C": {"name": "flash_brite", "desc": "brightness of the flash colour word the IRQ keeps at vector RAM $002E. Set to $F0 by DO1GAS (LACC1) and stepped down by 8 a frame at LAD90 until it is 0, which clears GS_HIT"},
+  "48A2": {"name": "mes_linect", "desc": "message output: lines of the current message still to draw, loaded from the message's first byte in message_tab"},
+  "48C8": {"name": "pot1_test", "desc": "self test: the pot channel 1 reading taken each pass of TSTLP, the x of the pot test's line. The channel 0 reading is in the byte after it"},
+  "48CA": {"name": "snd_dn_rpt", "desc": "self test sound select: debounce and auto repeat counter for stepping to the previous sound, 3 when the stick is not pulled back, $0F after a step"},
+  "48CD": {"name": "vgrom_set", "desc": "number (0-3) of the display-list set that LA342 last copied from program ROM to vector RAM. The IRQ passes it to LA342 to load the set again when the vector generator has timed out"},
+  "48D4": {"name": "snd_test_no", "desc": "self test: index (0-$4C) into sound_test_tab of the sound chosen in the sound test, shown on screen in hex and cleared whenever the test state steps"},
+  "48D5": {"name": "snd_test_tmr", "desc": "self test: frames until the sound test sends the chosen sound - $28 after a new choice, 1 after a fire or thumb button, $FF after each send"},
+  "4C01": {"name": "bn_brite", "desc": "brightness of the title banner drawn by bank 1 (K66D0): cleared by BGBNNR, raised by 5 a frame for the first $20 frames, then lowered by 2 a frame to 0"},
+  "4CA2": {"name": "flash_fade", "desc": "a level set to $7F by P1_9A05 and stepped down by 8 a frame by slapstic page 1 code, where it is also used as a scale and brightness. The IRQ keeps the flash colour with brightness $80 minus this level at vector RAM $0032"},
+  "4CAE": {"name": "mes_brite", "desc": "brightness byte of the colour words of the messages VWMES2 draws (mes_lines_fade): $80 at the start of a scrolling text, counted down at L651A to fade it out"}
+ },
+ "regions": [
+  ["B0", "CCFB", "CD13", "words"],
+  ["B0", "EEDA", "EEDE", "ptrs"],
+  ["B0", "EEFE", "EF06", "ptrs"],
+  ["B0", "F397", "F39B", "ptrs"],
+  ["B0", "F39F", "F3A1", "ptrs"],
+  ["B0", "F7E6", "F7EA", "words"],
+  ["B0", "FFF2", "FFFE", "ptrs"]
+ ],
+ "questions": [
+  "sound stubs $C4EA-$C62F: every carried SPKxx / PMxx / AUDxx name was matched by command number (or, from AUDSS on, by position), but ESB's sound board numbers its commands differently, so the names and their descriptions do not say what the stubs send. ESB sound ROM table PBX at $FF4C: $00 reset, $01 an effect, $02 a tune, $03-$28 speech ($0B = speech chip init, $13 = skip waiting speech), $29-$31 tunes, $32-$51 POKEY effects, the word for $52 at $FFF0 is $9CA7 which is not a routine",
+  "$C4EA-$C55D SPKALW..SPKYAU (commands $03-$1A): all send ESB speech phrases, not the Star Wars sentences in their names. Two are plainly wrong: SPKSIZ at $C53A sends $13, ESB's skip-waiting-speech command (its callers carry Star Wars' SKIP ANY WAITING VOICES comments and Star Wars called SPKSKP there), while SPKSKP at $C53F sends $14, a phrase. SPKI at $C50D sends $0A, a phrase (called at L62ED when the first credit arrives and at L7212), not the speech init - the init is $0B, the uncalled stub at $C512",
+  "$C562-$C594 PMBEN..PMTHB (commands $1B-$25) and $C599 AUDCR, $C59E AUDDF ($26, $27): in ESB these numbers are speech phrases, not music or effects",
+  "$C5A8 AUDNAY (sends $29), $C5AD AUDPB ($2A), $C5B2 AUDPBZ ($2B), $C5B7 AUDPF ($2C), $C5C1 AUDPS ($2E), $C5C6 AUDRC ($2F), $C5CB AUDRD ($30), $C5D0 AUDRS ($31): in ESB these numbers start tunes (sound ROM routines $DBC3-$DD0D), not effects. The self test sends $34 for an error and $40 for no error, so the stub named AUDNAY is not the test-fail sound",
+  "$C5D5-$C61B (commands $32-$40): ESB kept fifteen of Star Wars' effects here in Atari's alphabetical order - CR, DF, NAY, PB, PBZ, PF, PH, PS, SH, SS, SX, TC, TCZ, XL, YEA - so each carried name is on the wrong stub. Evidence from the callers' carried comments and Star Wars' calls: $32 at $C5D5 (named AUDRY) is called where Star Wars called AUDCR, $35 at $C5E4 (named AUDSS) where it called AUDPB, $36 at $C5E9 (unnamed) AUDPBZ, $39 at $C5F8 (named AUDSX) AUDPS, $3A at $C5FD (named AUDTC) AUDSH, $3B at $C602 (named AUDTCZ) AUDSS, $3C at $C607 (named AUDTH) AUDSX, $3E at $C611 (named AUDXL) AUDTCZ, $3F at $C616 (named AUDYEA) AUDXL, and $34 and $40 are the self test's nay and yea. $33 (named AUDSH) = DF, $37 and $38 = PF and PH, $3D (named AUDTL) = TC follow only from the alphabetical order and are not confirmed",
+  "$C62F AUDPH sends $44, an effect ESB added after the Star Wars list, the name is carried by position only. $44, like $13, $36, $3E and $52, is left out of the self test's sound list, which suggests commands that stop a sound rather than make one - not confirmed",
+  "$C62A-$C675: the carried line comments on the unnamed stubs (AUD PF TOWER PFFFT on LDA #$43, AUD PS on #$45, and so on to AUD YEA on #$52) are Star Wars comments carried by position and do not describe these commands. I could not tell from the callers what the effects $41-$52 are",
+  "$C675 aud_cmd_52: the sound board accepts command numbers up to $53 (CMPB #$53 / BHI) but its table has routines only for $00-$51, the entry for $52 at sound ROM $FFF0 is the word $9CA7 and the sound routine at sound ROM $FC6A has no table entry. What command $52 does on the sound board needs checking in the sound ROM",
+  "Q_RTHV ($4CCA): the carried Star Wars description (first Darth in view) does not fit ESB, where it is the flag doxmt_gated tests to drop sound effects - set to 1 by the endgame transition phases (L72F3, L732E, L7369, L73BE, L740B), cleared at L6825, L69CA, L6B82 and L7451",
+  ".byte rows that are code: the uncalled sound stubs at $C4E0 (two), $C512, $C5A3, $C5BC, $C5DF, $C5EE (two), $C61B, $C625, each LDA #n / JMP DOXMT or JMP $C4DA. $F56F-$F576 (end of the row at LF56A and the row at LF572): LDD #$BEDF / STD ,Y++ / JMP GETBAK, the checker board test state, reached through the state table word at $F39F. $F9D2-$F9E0: LDD #$4000 / STD $5018 / LDD #$0000 / STD $501A / LDD #$0001, the start of a matrix test reached through the TMULT2 table word at $F7E6, it runs on into the code at $F9E1",
+  "$F4E3 SCHKR: the carried name and description (screen test patterns, checker pattern) are Star Wars', but ESB's routine here is the sound test state: it draws a pattern, the messages SOUND TEST / SOUND and the chosen sound's index, and sends the command from sound_test_tab. Star Wars' real SCHKR is the code at $F56F",
+  "self test RAM: the direct page bytes $48C7, $48C9 and $48CB show under the game names WV_BGP, WV_LP and WV_LIV in the self test ($F27E, $F313-$F362, $F4A4), where they are DBNC3, the pot channel 0 reading and the next-sound repeat counter",
+  "$CCDD LDX #LCB39+2: the operand is TSPMAL - 2 * $D8 ($CB3B), the alarm table indexed by story message number, not an address inside MESSOFF",
+  "$CC0A: the carried comment TABLE OF SPECIAL MESS. X POSITIONS is on a load of message_tab (LE7E3), ESB keeps the x of a banner message as the first byte of its text",
+  "$C7D6: the five bytes $13 $C7 $58 $38 $30 before the text VICKERS DID THE VOICES - I found no reference to them or to the text",
+  "the signature words: $C7F1 and $FFB3 (and $7DD0, slapstic $9941, $A000, vector ROM $3000) are exclusive-ored for the number shown after NO ERRORS DETECTED. They look like the words that trim each ROM's checksum to $FFFF but I did not verify that",
+  "regions: the RESET vector at $FFFE-$FFFF is a ROM address too, but a region cannot end at $10000 in four hex digits, so the ptrs region stops at $FFFE",
+  "the slapstic pages hold copies of the DOVG part of the IRQ handler (for example P0_9E2D-P0_9EDC) that write the same picture timers and slots. I did not find out whether they ever run"
+ ]
+}

@@ -1,0 +1,333 @@
+{
+ "about": "slapstic page 2 $8E00-$93FF: the wave 1 probots - the orbit state, the change between universe and player-relative position, the animation of the leg points, the per-frame view of the five records at ALIEN (body, legs, head, the lazar aim test, the launch of transmissions and shots), the probot shot down, then a dead copy of TIE fighter set-up code and of SNVW left from an earlier build",
+ "routines": {
+  "P2:8E1D": {
+   "name": "probot_do_orbit",
+   "desc": "per-frame handler of probot state 10 (entry 10 of the handler table P2_8873): turns the probot around the point in words $15 and $17 of its record, which P2_8DD2 picked. U = the probot record. makes the position player-relative, multiplies the offset from the point by $0800 or -$0800 (matrix program MS_PERS), the sign taken from the head angle (byte $10), and takes the y product off x and adds the x product to y, a small rotation about the point. it never picks a new behaviour itself"
+  },
+  "P2:8E54": {
+   "name": "probot_pos_rel",
+   "desc": "makes the position of the probot at U player-relative: when bit $08 of byte 0 is set it clears the bit and takes the player's position (s1_tx, s1_ty) off the x and y words at 5 and 7. does nothing when the position is relative already. called first by nearly every state routine"
+  },
+  "P2:8E6D": {
+   "name": "probot_pos_abs",
+   "desc": "the reverse of P2_8E54: when bit $08 of byte 0 of the record at U is clear it sets the bit and adds the player's position (s1_tx, s1_ty) to the x and y words at 5 and 7, so the probot holds a place in the universe. called by the fixed place state (P2_89F0) and when a probot is shot down"
+  },
+  "P2:8E86": {
+   "name": "probot_legs_anim",
+   "desc": "animates the legs of the probots by moving the points of objects 9-$10 in math RAM, from w1_anim_pts to w1_anim_end: eight legs of four 8-byte points, whose spare bytes 6 and 7 serve as a timer and a mode. for each leg, bytes 6 and 7 of point 0 count a random time of up to $70 calls and hold a random mode: 0 moves points 1, 2 and 3, $01 moves points 2 and 3, $80 or $81 moves point 3 alone. the first point moved has its own timer (up to $3F calls) and a random direction 0-7 that picks the move routine from the table at P2_8F1F, and the same routine is run for every point moved. point 0, the root at the body, never moves. called by P2_877C once for every live probot in a frame, and all probots draw the same points. X and U are preserved"
+  },
+  "P2:8F2F": {
+   "name": "leg_pt_ydn_xup",
+   "desc": "leg point move 7 of the table at P2_8F1F: y one step down (P2_8F7C), then falls into P2_8F31 for x one step up. X = the point"
+  },
+  "P2:8F31": {
+   "name": "leg_pt_x_up",
+   "desc": "leg point move 0 of the table at P2_8F1F: raises by 1 the x offset of the point at X from the point before it (8 bytes back) and stores x again as the previous point's x plus the offset, so a point follows the one before it. an offset that passes $20 is held at $20 and the direction is reversed (P2_8F93)"
+  },
+  "P2:8F48": {
+   "name": "leg_pt_xy_up",
+   "desc": "leg point move 2 of the table at P2_8F1F: x one step up (P2_8F31), then falls into P2_8F4A for y one step up. X = the point"
+  },
+  "P2:8F4A": {
+   "name": "leg_pt_y_up",
+   "desc": "leg point move 1 of the table at P2_8F1F: as P2_8F31 for the y word of the point at X (offset 2), its offset from the previous point's y raised by 1 and held at $20"
+  },
+  "P2:8F61": {
+   "name": "leg_pt_yup_xdn",
+   "desc": "leg point move 3 of the table at P2_8F1F: y one step up (P2_8F4A), then falls into P2_8F63 for x one step down. X = the point"
+  },
+  "P2:8F63": {
+   "name": "leg_pt_x_dn",
+   "desc": "leg point move 4 of the table at P2_8F1F: lowers by 1 the x offset of the point at X from the point before it and stores x as the previous point's x plus the offset. an offset below -$20 is held at -$20 and the direction is reversed (P2_8F93)"
+  },
+  "P2:8F7A": {
+   "name": "leg_pt_xy_dn",
+   "desc": "leg point move 6 of the table at P2_8F1F: x one step down (P2_8F63), then falls into P2_8F7C for y one step down. X = the point"
+  },
+  "P2:8F7C": {
+   "name": "leg_pt_y_dn",
+   "desc": "leg point move 5 of the table at P2_8F1F: as P2_8F63 for the y word of the point at X (offset 2), its offset from the previous point's y lowered by 1 and held at -$20"
+  },
+  "P2:8F93": {
+   "name": "leg_pt_reverse",
+   "desc": "flips bit 3 of byte 7 of the point at X, which turns each of the eight move directions into its opposite (0 and 4, 1 and 5, 2 and 6, 3 and 7). called by a move routine when the point's offset reaches its limit. the byte is that of the point being moved, so for the second and third point of a run it is not the byte the direction was read from"
+  },
+  "P2:8F9A": {
+   "name": "probot_timers",
+   "desc": "counts down the two timers of the probot at U, each until it is 0: byte 3, the time to the next shot, and byte $14, the time to the next transmission. called by P2_877C every frame for every live probot. the frame counter is masked with 0 before each count, so both count every frame"
+  },
+  "P2:8FB7": {
+   "name": "probots_view",
+   "desc": "view of the wave 1 probots, called from bank 0 through maze entry MZ_8196 by vew_probot, vew_probot_end, vew_probot_die and the training manual's man_view_probot. for each of the five $1A-byte records from ALIEN up to xmit_atst it sets S2_PRM to the record, clears the per-frame flags in byte 1 and, when the record is live, views the probot (P2_8FD3). Y = the display list"
+  },
+  "P2:8FD3": {
+   "name": "probot_view",
+   "desc": "views the probot at U. its position (words 5, 7 and the height at 9, with the player's position added when it is held player-relative) goes through matrix program MS_PSB2 into the player's view, and the result is kept in M_XT, M_YT, M_ZT. the probot is left out when its depth is $0100 or less or $3C00 or more, or when it is outside the 45 degree pyramid on either side or up and down. otherwise bit $10 of byte 1 is set (in view), bit $80 is set when it is near enough to the middle of the screen from side to side, the test that allows a transmission, and the body, the colour of the head and the head are drawn (P2_909A, P2_9080, P2_90FD)"
+  },
+  "P2:9080": {
+   "name": "probot_xmit_col",
+   "desc": "writes the colour word $67C0 to the display list ahead of the head when the probot at U is about to transmit: transmission timer (byte $14) under 4, prog_count under 4 and bit $04 of byte 0 set. otherwise the head is drawn in the colour of the body"
+  },
+  "P2:909A": {
+   "name": "probot_draw_body",
+   "desc": "draws the legs and body of the probot whose record is in S2_PRM. sets the ship 2 block to unit vectors (UNITV), yaws it by the body spin angle (byte 11) and concatenates it with the player's view (MS_CNCT). then the legs (P2_91CC), colour $62C0, the points of object 4 and of object 5 raised by the bob offset (P2_90CC), the draw routine those two objects share, the beam back to the centre (bank 1 KD8AC) and the lazar aim test on the body (P2_9272). leaves U = the record"
+  },
+  "P2:90CC": {
+   "name": "probot_neck_pts",
+   "desc": "moves the centre used for the next object points up the probot's own axis by the bob offset (word 13 of the record at U): the point 0, 0, offset goes through matrix program MS_PAD and the result replaces M_XT, M_YT and M_ZT. then processes the points of object 5 (JOBJBPNT), the ring the head sits on. the head drawn afterwards uses the same raised centre"
+  },
+  "P2:90FD": {
+   "name": "probot_draw_head",
+   "desc": "draws the head of the probot at U. yaws the ship 2 block by the head angle (byte $10) on top of the body spin and concatenates it again, processes the points of object 6 and draws it, runs the lazar aim test on the head (P2_92B0) and the launches (P2_9125), then draws object 7, which uses the points of object 6 and comes out in the colour P2_9125 set, and returns the beam to the centre"
+  },
+  "P2:9125": {
+   "name": "probot_head_acts",
+   "desc": "writes colour $6480 for the last part of the head, puts the universe position of the probot at U (words 5, 7 and 9, the player's position added when it is held player-relative) in M_XT2, M_YT2 and M_ZT2 as the place a transmission or a shot starts from, and tries both launches (P2_9158). X and U are preserved"
+  },
+  "P2:9158": {
+   "name": "probot_launch",
+   "desc": "tries to launch a transmission (P2_9175) and then a shot (P2_915F) from the probot at U, whose depth is in M_XT and whose universe position is in M_XT2, M_YT2, M_ZT2. called when the head is drawn and once more when the probot is shot down"
+  },
+  "P2:915F": {
+   "name": "probot_try_shot",
+   "desc": "lets the probot at U fire at the player: when its depth M_XT is above $0400, bit $02 of byte 0 is set and the shot timer (byte 3) has run out, it calls page 1 P1_9063, which reloads the timer and may start a shot from the position in M_XT2, M_YT2, M_ZT2"
+  },
+  "P2:9175": {
+   "name": "probot_try_xmit",
+   "desc": "lets the probot at U send a transmission: when its depth M_XT is above $0400 and under $3000, prog_count is under 4, bit $04 of byte 0 is set, bit $80 of byte 1 is set (near the middle of the screen) and the transmission timer (byte $14) has run out, it calls page 3 P3_98E8, which starts a transmission at the position in M_XT2, M_YT2, M_ZT2 and returns carry set when a record was free. then the bob direction (byte 15) is set to $FF, downwards, and the timer is loaded again (P2_91A8)"
+  },
+  "P2:91A8": {
+   "name": "probot_xmit_delay",
+   "desc": "loads the transmission timer (byte $14) of the probot at U: the entry of the table at P2_91C3 for w1_pace (8 at most), plus a random part of the same entry, plus 4. the entries fall from $3F to 2, so the probots transmit more often as the pace rises. X is changed"
+  },
+  "P2:91CC": {
+   "name": "probot_draw_legs",
+   "desc": "draws the legs of the probot at U: one of objects 9-$10 for each bit set in the part mask (byte $13), bit 0 for object 9. the four points of the leg are processed (JOBJBPNT) and the width of 6 units at the probot's depth is worked out with the divider and MS_PERS. the leg is drawn down from the body with the draw routine of object 9 and BJ_CX moved by that width, then back up with the draw routine of object 10 and BJ_CX moved the other way, so the two passes lie one width either side of the points and meet at the tip. a width of 2 or less gives a single line. the beam returns to the centre after each leg"
+  },
+  "P2:9233": {
+   "name": "lz_oct_dist",
+   "desc": "distance on the screen from the lazar cursor (LZ_CX, LZ_CY) to the perspected point at X (x word, y word), by the octagon rule the Star Wars collision tests use in line: the larger of the bigger axis distance and 9/16 of the sum of the two. returns it in D less 10, not below 0. uses tmp_scal and the temp at $4803"
+  },
+  "P2:9272": {
+   "name": "probot_body_aim",
+   "desc": "lazar aim test on the body of the probot at U, after its points are processed. when the probot's depth M_XT is less than the depth of the nearest probot found so far (prb_aim_dep) and the cursor is within the size of 45 units at that depth from point 18 of object 4, the middle of the body (P2_9233), it records this probot in prb_aim_rec and its depth in prb_aim_dep. page 3 P3_9838 reads them when the lazars fire"
+  },
+  "P2:92B0": {
+   "name": "probot_head_aim",
+   "desc": "lazar aim test on the head of the probot at U: the same as P2_9272 with a size of 30 units and point 19 of object 6, the middle of the head"
+  },
+  "P2:92EE": {
+   "name": "probot_shot_down",
+   "desc": "the probot in prb_aim_rec is hit by the lazars: jumped to from page 3 P3_9838 through maze entry P3_8454 when a probot is under the cursor and its depth is less than the one in $4C09, the next thing P3_9838 compares. the first time in a game it sends speech command $05 (foa_said). it makes the probot's position absolute, starts an explosion there (bank 1 BGBKXP through L6198), scores 25 points while bonus_left is not 0 and 250 after, sends sound $4E, gives the probot a last try at a transmission and a shot (P2_9158) and frees the record. while bonus_left is not 0 it is counted down, and the kill that brings it to 0 scores 5,000, awards the Jedi letter (page 1 P1_9573) and raises quota_probot by one"
+  }
+ },
+ "labels": {
+  "P2:8F1F": "leg_move_tab",
+  "P2:91C3": "xmit_delay_tab"
+ },
+ "comments": {
+  "P2:8E20": "sign of the head angle decides the direction of the turn",
+  "P2:8E25": "multiplier $0800 or -$0800",
+  "P2:8E30": "x and y offset from the point in words $15 and $17",
+  "P2:8E40": "MS_PERS: both offsets times the multiplier",
+  "P2:8E45": "x = x - y offset * rate",
+  "P2:8E4C": "y = y + x offset * rate",
+  "P2:8E56": "bit $08: the position is in universe coordinates",
+  "P2:8E5E": "x and y less the player's position",
+  "P2:8E6F": "bit $08 set: absolute already",
+  "P2:8E77": "x and y plus the player's position",
+  "P2:8E88": "first point of object 9 in math RAM",
+  "P2:8E8B": "byte 6 of the leg's point 0: time left in the current mode",
+  "P2:8E8F": "run out: a new time of 0-$70 and a new mode of $00, $01, $80 or $81",
+  "P2:8E9E": "mode 0: move points 1-3. $01: points 2 and 3. minus: point 3 alone",
+  "P2:8EA4": "point 3, the tip",
+  "P2:8EA7": "the point's own timer",
+  "P2:8EAB": "run out: a new time of 0-$3F and a new direction",
+  "P2:8EBA": "direction 0-7 as a word index",
+  "P2:8EC1": "move the tip",
+  "P2:8EC5": "point 1",
+  "P2:8EDA": "direction from point 1",
+  "P2:8EE3": "the same move for points 1, 2 and 3",
+  "P2:8EEF": "point 2",
+  "P2:8F05": "direction from point 2",
+  "P2:8F0E": "the same move for points 2 and 3",
+  "P2:8F14": "first point of the next leg",
+  "P2:8F16": "until the end of object $10's points",
+  "P2:8F1F": "leg point moves by direction 0-7: x up, y up, x and y up, y up and x down, x down, y down, x and y down, y down and x up. direction + 4 is the opposite",
+  "P2:8F31": "x offset from the previous point, plus 1",
+  "P2:8F38": "past $20: hold it there and reverse",
+  "P2:8F43": "x = previous point's x + offset",
+  "P2:8F4A": "y offset from the previous point, plus 1",
+  "P2:8F63": "x offset from the previous point, minus 1",
+  "P2:8F6A": "below -$20: hold it there and reverse",
+  "P2:8F7C": "y offset from the previous point, minus 1",
+  "P2:8F9D": "mask 0: the branch is never taken, the timer counts every frame",
+  "P2:8FA1": "shot timer",
+  "P2:8FAE": "transmission timer",
+  "P2:8FBC": "clear the in view and lined up flags of the last frame",
+  "P2:8FC2": "0 = free record",
+  "P2:8FC9": "next of the five $1A-byte records",
+  "P2:8FD5": "bit $08: the position is in universe coordinates",
+  "P2:8FE5": "player-relative: add the player's position",
+  "P2:8FF7": "the probot's height",
+  "P2:9000": "into the player's view: M_XP depth, M_YP left/right, M_ZP up/down",
+  "P2:900B": "depth $0100 or less: too near or behind",
+  "P2:9011": "depth $3C00 or more: too far",
+  "P2:9023": "left/right distance not less than the depth: off the screen",
+  "P2:9034": "up/down distance not less than the depth: off the screen",
+  "P2:9039": "bit $10: in view this frame",
+  "P2:903F": "factor for the lined up test: $80 with 300 or more on the phase timer, $C0 with 150 or more",
+  "P2:9056": "under 150: $C0 from level 2 up, $FF below",
+  "P2:9063": "high byte of the left/right distance, doubled, times the factor",
+  "P2:906B": "less than the depth: the probot is near the middle from side to side",
+  "P2:9070": "bit $80: lined up, it may transmit",
+  "P2:9080": "transmission timer",
+  "P2:9083": "4 or more: not yet",
+  "P2:908E": "bit $04: this probot transmits",
+  "P2:909A": "ship 2 block to unit vectors",
+  "P2:90A2": "block index 9 for the yaw and the concatenate",
+  "P2:90A8": "body spin angle",
+  "P2:90AD": "MS_CNCT: view the turned block from the player's ship",
+  "P2:90B5": "colour of the body",
+  "P2:90BA": "points of object 4, the body",
+  "P2:90C2": "draw with the routine of object 5, which bank 1 shares with object 4",
+  "P2:90C5": "beam back to the centre",
+  "P2:90D5": "bob offset",
+  "P2:90E0": "MS_PAD: the raised centre in view coordinates",
+  "P2:90E8": "it replaces the probot's centre for the points that follow",
+  "P2:90F7": "points of object 5, placed after those of object 4",
+  "P2:9103": "head angle",
+  "P2:9109": "MS_CNCT",
+  "P2:910E": "points of object 6, the head",
+  "P2:9113": "draw object 6",
+  "P2:911C": "draw object 7 from the same points",
+  "P2:9127": "colour for object 7",
+  "P2:912C": "bit $08: the position is in universe coordinates",
+  "P2:913E": "player-relative: add the player's position",
+  "P2:914E": "height",
+  "P2:9162": "nearer than $0400: no shot",
+  "P2:9169": "bit $02: this probot shoots",
+  "P2:916D": "shot timer still running",
+  "P2:9178": "nearer than $0400: no transmission",
+  "P2:917E": "$3000 or further: none either",
+  "P2:9183": "the wave's count is full",
+  "P2:918C": "bit $04: this probot transmits",
+  "P2:9192": "bit $80: lined up this frame",
+  "P2:9196": "transmission timer still running",
+  "P2:919E": "carry clear: no free transmission record",
+  "P2:91A0": "bob direction down",
+  "P2:91A8": "pace, 8 at most",
+  "P2:91B5": "table entry",
+  "P2:91B7": "a random part of it",
+  "P2:91BB": "plus the entry, plus 4",
+  "P2:91C3": "transmission delay by w1_pace 0-8",
+  "P2:91CC": "part mask: one bit for each of objects 9-$10",
+  "P2:91D2": "object 9 goes with bit 0",
+  "P2:91D7": "next bit of the mask",
+  "P2:91DA": "clear: this leg is missing",
+  "P2:91DC": "points of this leg",
+  "P2:91F0": "6 units, to be scaled by the reciprocal of the depth",
+  "P2:91FB": "the width on the screen",
+  "P2:91FE": "2 or less: none, the leg is a single line",
+  "P2:920A": "move BJ_CX so that the pass down the leg lies one width to the side",
+  "P2:9211": "draw routine of object 9: beam to point 0, then points 1, 2 and 3",
+  "P2:9216": "no width: one pass only",
+  "P2:921B": "move BJ_CX two widths the other way",
+  "P2:9222": "draw routine of object 10: back through points 2, 1 and 0",
+  "P2:922A": "next object number",
+  "P2:922D": "until no bits are left",
+  "P2:9233": "x distance from the lazar cursor",
+  "P2:9242": "y distance",
+  "P2:924D": "the larger of the two in $4803",
+  "P2:9254": "(x + y) / 2",
+  "P2:925A": "plus (x + y) / 16",
+  "P2:9262": "the larger of that and the bigger axis distance",
+  "P2:9269": "less 10, not below 0",
+  "P2:9272": "depth of this probot",
+  "P2:9275": "not nearer than the one already found",
+  "P2:927B": "depth less 20, at least 20, to the divider",
+  "P2:928A": "45 units: the size of the body",
+  "P2:9290": "reciprocal of the depth",
+  "P2:9296": "the size on the screen",
+  "P2:929B": "point 18 of object 4, the middle of the body",
+  "P2:92A1": "cursor outside the size: no hit",
+  "P2:92A6": "this probot is the nearest one under the cursor",
+  "P2:92B9": "depth less 20, at least 20, to the divider",
+  "P2:92C8": "30 units: the size of the head",
+  "P2:92CE": "reciprocal of the depth",
+  "P2:92D9": "point 19 of object 6, the middle of the head",
+  "P2:92E4": "this probot is the nearest one under the cursor",
+  "P2:92EE": "speech only for the first probot shot down in a game",
+  "P2:92F9": "the probot the cursor was on",
+  "P2:92FF": "its universe position for the explosion and for the last launches",
+  "P2:9317": "bank 1 BGBKXP: start the explosion",
+  "P2:931A": "quota still open: 25 points, else 250",
+  "P2:932A": "the probot's depth back in M_XT for the launch tests",
+  "P2:9330": "a last transmission and shot if the tests allow",
+  "P2:9333": "free the record",
+  "P2:9337": "quota already met: nothing more",
+  "P2:933F": "this kill meets the quota: 5,000 points and the letter",
+  "P2:9347": "one more probot to shoot for the next letter",
+  "P2:934B": "not a table: dead code from an earlier build, never reached (see the questions). the opcode of its first instruction, LDA #$00, lies under the RTS at P2_934A. $934C is STA WV_LVL and $934E-$93D1 is the alien record set-up that page 3 has at P3_85F0-P3_8673"
+ },
+ "ram": {
+  "5098": {
+   "name": "s1_tx",
+   "desc": "MS_TX+M_S1: the player's universe x position, word, first of the position words $5098/s1_ty/s1_tz. the pages add it to and take it off an object's x to change between universe and player-relative coordinates"
+  },
+  "4CAF": {
+   "name": "w1_anim_pts",
+   "desc": "word: math RAM address (BJ_RAM) taken by the probot set-up after objects 4-7 are loaded, so the first of the 8-byte point records of objects 9-$10. P2_8E86 starts its per-frame point animation here"
+  },
+  "4CB1": {
+   "name": "w1_anim_end",
+   "desc": "word: math RAM address (BJ_RAM) taken by the probot set-up after object $10 is loaded, the end of the point records that P2_8E86 animates"
+  },
+  "4CB3": {
+   "name": "leg_obj",
+   "desc": "temp of P2_91CC: the object number, 9-$10, of the probot leg that goes with the mask bit being looked at"
+  },
+  "4CB4": {
+   "name": "leg_mask",
+   "desc": "temp of P2_91CC: the probot's part mask (byte $13 of its record), shifted right one bit for each leg until it is 0"
+  },
+  "507E": {
+   "name": "leg_width",
+   "desc": "word in math RAM, temp of P2_91CC: the width of 6 units at the probot's depth, 0 when it comes to 2 or less. BJ_CX is moved by it so that the two passes along a leg lie one width either side of its points"
+  },
+  "4C0D": {
+   "name": "prb_aim_dep",
+   "desc": "word: view depth of the nearest probot whose body or head the lazar cursor is on this frame, set with prb_aim_rec by P2_9272 and P2_92B0. page 3 stores $FF in its high byte each frame (P3_95C3) for none, and P3_9838 compares it with the depths of the other things under the cursor to decide what the lazars hit. P2_92EE reads it back as the depth of the probot shot down"
+  },
+  "4C0F": {
+   "name": "prb_aim_rec",
+   "desc": "word: address of the record of the probot whose depth is in prb_aim_dep. P2_92EE takes the probot that is shot down from here"
+  }
+ },
+ "regions": [],
+ "sw_drop_comments": [
+  "P2:8FF7",
+  "P2:90E8",
+  "P2:90EE",
+  "P2:91F0",
+  "P2:928D",
+  "P2:9290",
+  "P2:9293",
+  "P2:92CB",
+  "P2:92CE",
+  "P2:92D1"
+ ],
+ "questions": [
+  "P2:934B-93D1 - the 135 bytes shown as data are code, but dead code. linear decoding gives 934C STA WV_LVL, 934E LDX #ALIEN / LDU #M_AL / LDB #MS_ALBC and the loop that gives each alien record its unit vector block, 936D JSR $9ACC, 9370 RTS, then from 9371 a second routine that runs the same loop, makes alien 0 live, faces it towards the player at x $1000, stores #$9C56 in word 13 of the record, JSR $9A1A, loads object 0 (the TIE fighter) through L60A8 and returns at 93D1. the same two routines are live on page 3 at P3_85EC and P3_8613 (there with JSR P3_8D85, #$908B and JSR NWCHOR_P3). on page 2 nothing reaches the block: the tracer has no reference to 934C, 934E or 9371, no maze entry leads there (the only operand that points into it, JSR P2_93B4 at P2_85B9, is a decoy), and its own calls to $9ACC and $9A1A land in the middle of instructions of page 2. the byte before it tells what it is: the routine began LDA #$00 / STA WV_LVL at $934A, and the present P2_92EE ends with its RTS on $934A, over the $86, leaving the operand $00 at $934B. so it is the tail of an earlier build of this ROM that the shorter final code did not overwrite. it could be listed as code under a header that says so, the starts being 934C (first instruction cut), and 9371",
+  "P2:9361-9561 - pages 2 and 3 hold the same bytes over this whole range (byte compare of the two pages), which takes in the end of the dead block above and SNVW at P2_93D2 and S2VW at P2_93E9 with what follows them. on page 2 SNVW has no caller (the tracer lists it as an orphan entry) and S2VW is called only from SNVW, so this copy of the two Star Wars routines is as dead as the block before it. bank 0 views the TIE fighters through page 3 SNVW_P3, and page 3 lists this same copy as P3_9371 (no caller found) and SNVW_P3_2. the carried names and comments are right for the code, so they are left alone here",
+  "P2:8E86 - the routine is called inside the per-record loop of P2_877C, once for each live probot, although it animates the one shared set of leg points. so the legs move faster the more probots are alive. described as the code runs",
+  "P2:8F93 - the reverse bit is flipped in byte 7 of the point being moved. for the first point of a run that is the byte its direction is read from, for the points after it it is their own byte 7, which is the direction byte of a shorter run (or, for no point, the mode byte, since point 0 never moves). whether Atari meant that is not clear",
+  "P2:903F - the lined up test uses PH_TIM: factor $80 (any probot on the screen passes) at 300 or more, $C0 at 150-299, and under 150 $C0 from w1_level 2 up and $FF (within half the depth of the middle) below. I did not check in bank 0 which way PH_TIM runs in the probot phases, so the comments give the numbers only",
+  "P2:909A / P2:90FD - yaw_by_angle is run on block index 9 twice between one UNITV, first with the body spin angle and then with the head angle, each followed by MS_CNCT. I took the second yaw as added to the first (the head turns on the spinning body) and did not verify in the matrix processor program that MS_CNCT leaves block 9 turned",
+  "P2:90C2 - L60E4 (bank 1 KDA2C) draws the object whose number is still in BJ_ID, which is 5 after P2_90CC. the draw table KD6CD has the same routine KBA37 for objects 4 and 5, and the point start table KD77C puts object 5's points right after object 4's 19 points ($4E05 and $4E64), so I describe one routine drawing both. I did not read KBA37 to its end",
+  "P2:8684 / P2:915F / P2:9175 - byte 0 of a probot record as this stretch uses it: 0 free, bit $02 may shoot, bit $04 may transmit, bit $08 position is in universe coordinates. bits $01 and $10 (the manual's table has $01 and $11) are not tested in this stretch",
+  "4803 - P2_9233 uses the temp at $4803 under two of its Star Wars names in the same routine (CMPD TMPSIZ, then bare $4803). it has six aliases in the defines already, so no new name is given",
+  "5098 4CAF 4CB1 - named here with the names p2_8a00.json (s1_tx) and p2_85ec.json (w1_anim_pts, w1_anim_end) gave them, same text, so that the listing of this stretch shows them"
+ ]
+}

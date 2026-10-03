@@ -1,0 +1,181 @@
+{
+ "about": "page 2 $8A00-$8DFF: the behaviour states of the wave 1 probots - for each $1A-byte ALIEN record (U) the routines that enter a state (byte 4 of the record) and the per-frame handlers of the states, which move the probot's position (words 5 and 7 of the record, relative to the player)",
+ "routines": {
+  "P2:8A02": {
+   "name": "probot_do_approach",
+   "desc": "per-frame handler of probot state 2 (entry 2 of the handler table P2_8873, also used for a state number past 11): closes in on the player. U = the probot record. makes the position player-relative (P2_8E54), and when both |x| and |y| are under $0300 picks a new behaviour (P2_88A7). otherwise applies P2_8954 and moves x and y a sixteenth of the way towards zero"
+  },
+  "P2:8A3E": {
+   "name": "probot_go_retreat",
+   "desc": "puts the probot at U in state 3, moving away from the player, and pushes its x and y $10 further from zero so the handler's growth has something to work on. one of the ten entries P2_88A7 picks at random (table P2_888B), and called by P2_88F0 when a probot in player-relative coordinates is within $0200 of the player on both axes"
+  },
+  "P2:8A5F": {
+   "name": "probot_do_retreat",
+   "desc": "per-frame handler of probot state 3: moves away from the player. U = the probot record. makes the position player-relative, then adds an eighth of x to x and an eighth of y to y. when |x| or |y| has reached $4000, or an addition overflows, it picks a new behaviour (P2_88A7) instead"
+  },
+  "P2:8A9D": {
+   "name": "probot_go_leave",
+   "desc": "puts the probot at U in state 11, leaving the field, and pushes its x and y $10 further from zero. not called directly: P2_88A7 loads its address and calls it through JSR ,X when w1_spawn is minus, which the end of the wave sets"
+  },
+  "P2:8ABE": {
+   "name": "probot_do_leave",
+   "desc": "per-frame handler of probot state 11: the probot flies off at the end of the wave. U = the probot record. makes the position player-relative and adds an eighth of x and y to themselves each frame, as the state 3 handler does. when |x| or |y| reaches $7800, or an addition overflows, it frees the record by clearing bytes 0 and 1"
+  },
+  "P2:8B07": {
+   "name": "probot_go_drift",
+   "desc": "puts the probot at U in state 5 and gives it a random velocity in words $15 and $17 of the record: two random words multiplied (matrix program MS_PERS) by twice the sum of the high bytes of |x| and |y|, at least $0100, so a distant probot gets a larger one. one of the ten entries P2_88A7 picks at random"
+  },
+  "P2:8B4B": {
+   "name": "probot_do_drift",
+   "desc": "per-frame handler of probot state 5: moves by the velocity in words $15 and $17 of the record. U = the probot record. while the probot is in view (bit $10 of byte 1) the velocity loses a thirty-second each frame and P2_8954 is applied. then the velocity is added to x and y, and a velocity component that points outwards while its coordinate is past +$4000 or -$4000 is negated, so the probot turns back"
+  },
+  "P2:8BD4": {
+   "name": "probot_go_point",
+   "desc": "puts the probot at U in state 6 and picks the point it flies to, kept player-relative in words $15 and $17 of the record: on each axis a random distance of up to $1FE0 plus $0200 plus the player's height s1_tz, with a random sign. one of the ten entries P2_88A7 picks at random. P2_8CD6 is the same code for state 7"
+  },
+  "P2:8C14": {
+   "name": "probot_go_ahead",
+   "desc": "puts the probot at U in state 9 and picks the point it flies to: a scratch block point with x a random distance ($0200 plus the player's height plus up to $1FE0), y a random part of that distance with a random sign, and z 0 goes through matrix program $60, and the result less the player's position ($5098, s1_ty) is stored in words $15 and $17 of the record. P2_88A7 calls it for a probot that is not in view and not already in state 9, as one of its ten random entries, and by w1_level in the last $96 counts of the phase timer"
+  },
+  "P2:8C62": {
+   "name": "probot_do_seek",
+   "desc": "per-frame handler of probot states 6 and 9: flies to the point in words $15 and $17 of the record. U = the probot record. applies P2_898D to the point, then moves x and y by a sixteenth of the distance left, a step that is halved until it is within +-$0400. when the probot is within $0200 of the point on both axes it picks a new behaviour (P2_88A7)"
+  },
+  "P2:8CD6": {
+   "name": "probot_go_point2",
+   "desc": "puts the probot at U in state 7 and picks the point it flies to, in words $15 and $17 of the record. the same code as P2_8BD4 but for the state number: a random distance of up to $1FE0 plus $0200 plus the player's height on each axis, with a random sign. one of the ten entries P2_88A7 picks at random"
+  },
+  "P2:8D16": {
+   "name": "probot_do_seek2",
+   "desc": "per-frame handler of probot state 7: flies to the point in words $15 and $17 of the record. the same as the handler of states 6 and 9 (P2_8C62) except that a step past +-$0400 is cut to $0400 or -$0400 and not halved. when the probot is within $0200 of the point on both axes it picks a new behaviour (P2_88A7)"
+  },
+  "P2:8D86": {
+   "name": "probot_go_circle",
+   "desc": "puts the probot at U in state 8 and stores a random turn rate in word $15 of the record: $0100 to $03FD, positive or negative by the sign of RND_S3. one of the ten entries P2_88A7 picks at random, and one of the four it picks by w1_level in the last $96 counts of the phase timer"
+  },
+  "P2:8DA8": {
+   "name": "probot_do_circle",
+   "desc": "per-frame handler of probot state 8: circles the player. U = the probot record. applies P2_8954, then multiplies x and y by the turn rate in word $15 of the record (matrix program MS_PERS) and takes the y product off x and adds the x product to y, a small rotation of the player-relative position about the player. it never picks a new behaviour itself: P2_88F0 does that at random"
+  },
+  "P2:8DD2": {
+   "name": "probot_go_orbit",
+   "desc": "puts the probot at U in state 10 and picks the point its handler (P2_8E1D) turns it around, in words $15 and $17 of the record: $0400 to one side of the probot on one axis, side and axis random, and a random -$0400 to +$03F8 from it on the other axis. one of the ten entries P2_88A7 picks at random, and one of the four it picks by w1_level in the last $96 counts of the phase timer"
+  }
+ },
+ "labels": {},
+ "comments": {
+  "P2:8A02": "position to player-relative if it was absolute",
+  "P2:8A05": "|y|",
+  "P2:8A0D": "$0300 or more away on either axis: keep closing in",
+  "P2:8A1F": "near the player on both axes: pick a new behaviour",
+  "P2:8A25": "x = x - x/16",
+  "P2:8A31": "y = y - y/16",
+  "P2:8A3E": "state 3: move away from the player",
+  "P2:8A42": "x $10 further from zero, whichever its sign",
+  "P2:8A50": "the same for y",
+  "P2:8A6A": "|y| $4000 or more: far enough, pick a new behaviour",
+  "P2:8A7A": "the same limit for |x|",
+  "P2:8A82": "x = x + x/8",
+  "P2:8A89": "overflow: pick a new behaviour",
+  "P2:8A8D": "y = y + y/8",
+  "P2:8A9D": "state 11: leave the field",
+  "P2:8AC9": "|y| $7800 or more: gone",
+  "P2:8ACE": "free the record",
+  "P2:8ADD": "the same limit for |x|",
+  "P2:8AE9": "x = x + x/8",
+  "P2:8AF4": "y = y + y/8",
+  "P2:8B00": "overflow: free the record",
+  "P2:8B0A": "state 5: drift",
+  "P2:8B0E": "two random words, RND_S1/S2 and RND_S2/S3",
+  "P2:8B1A": "high byte of |x| (one's complement when minus)",
+  "P2:8B27": "plus the high byte of |y|, times 2",
+  "P2:8B2D": "multiplier at least $0100",
+  "P2:8B39": "random words times the multiplier",
+  "P2:8B3E": "the products are the x and y velocity",
+  "P2:8B50": "bit $10 of byte 1: the probot is in view",
+  "P2:8B54": "in view: x velocity = x velocity - x velocity/32",
+  "P2:8B63": "the same for the y velocity",
+  "P2:8B75": "x = x + x velocity",
+  "P2:8B7C": "y = y + y velocity",
+  "P2:8B85": "x past +$4000 and still moving out: negate the x velocity",
+  "P2:8B99": "x past -$4000 and still moving out: negate the x velocity",
+  "P2:8BAD": "the same two tests for y and the y velocity",
+  "P2:8BD7": "state 6: fly to a point",
+  "P2:8BE1": "high byte of RND_S1 * RND_S2, times $20: 0 to $1FE0",
+  "P2:8BE8": "plus $0200 plus the player's height",
+  "P2:8BEB": "sign of RND_S1 decides the side",
+  "P2:8BF4": "x of the point",
+  "P2:8BFD": "the same for y with RND_S3 and the fourth saved random byte",
+  "P2:8C10": "y of the point",
+  "P2:8C17": "state 9: fly to a point given through the matrix processor",
+  "P2:8C21": "high byte of RND_S1 * RND_S2, times $20: 0 to $1FE0",
+  "P2:8C28": "plus $0200 plus the player's height",
+  "P2:8C2B": "scratch block x = that distance",
+  "P2:8C2E": "its high byte times RND_S3: a random part of the distance",
+  "P2:8C32": "sign from the fourth saved random byte",
+  "P2:8C3B": "scratch block y",
+  "P2:8C41": "scratch block z = 0",
+  "P2:8C4A": "program $60 on the scratch block",
+  "P2:8C4F": "result less the player's x and y: the point, player-relative",
+  "P2:8C65": "P2_8954 for the point in words $15 and $17",
+  "P2:8C68": "x step = (point x - x) / 16",
+  "P2:8C73": "halve a positive step until it is $0400 or less",
+  "P2:8C7F": "halve a negative step until it is -$0400 or more",
+  "P2:8C89": "x = x + step",
+  "P2:8C8D": "y step = (point y - y) / 16, limited the same way",
+  "P2:8CAE": "y = y + step",
+  "P2:8CB2": "|x - point x|",
+  "P2:8CC0": "more than $0200 from the point: carry on",
+  "P2:8CC2": "|y - point y|",
+  "P2:8CD2": "at the point: pick a new behaviour",
+  "P2:8CD9": "state 7: fly to a point, the same pick as state 6",
+  "P2:8CF6": "x of the point",
+  "P2:8D12": "y of the point",
+  "P2:8D1C": "x step = (point x - x) / 16",
+  "P2:8D27": "cut to +-$0400",
+  "P2:8D3B": "x = x + step",
+  "P2:8D3F": "y step = (point y - y) / 16, cut the same way",
+  "P2:8D5E": "y = y + step",
+  "P2:8D70": "more than $0200 from the point: carry on",
+  "P2:8D82": "at the point: pick a new behaviour",
+  "P2:8D89": "state 8: circle the player",
+  "P2:8D8D": "RND_S1 * 3: 0 to $02FD",
+  "P2:8D93": "sign of RND_S3 decides the direction",
+  "P2:8D98": "plus $0100",
+  "P2:8D9D": "or negated, minus $0100",
+  "P2:8DA4": "turn rate",
+  "P2:8DAE": "multiplier = the turn rate",
+  "P2:8DBE": "x * rate and y * rate",
+  "P2:8DC3": "x = x - y * rate",
+  "P2:8DCA": "y = y + x * rate",
+  "P2:8DD5": "state 10: turn around a point near the probot",
+  "P2:8DD9": "$0400: distance of the point",
+  "P2:8DE2": "sign of RND_S1 decides the side",
+  "P2:8DEB": "sign of RND_S2 decides the axis",
+  "P2:8DF0": "point x = x +- $0400",
+  "P2:8DF5": "8 * RND_S3 - $0400: -$0400 to +$03F8",
+  "P2:8E00": "point y = y + that",
+  "P2:8E07": "point y = y +- $0400",
+  "P2:8E0C": "8 * RND_S3 - $0400: -$0400 to +$03F8",
+  "P2:8E17": "point x = x + that"
+ },
+ "ram": {
+  "4855": {
+   "name": "rnd_s4",
+   "desc": "fourth saved random byte, the byte after RND_S3: rnd_set stores the old RND_S1/RND_S2 pair as a word at RND_S3, so the old RND_S2 lands here. page 2 uses it as one more random byte when it picks a probot's behaviour and target point"
+  },
+  "5098": {
+   "name": "s1_tx",
+   "desc": "MS_TX+M_S1: the player's universe x position, word, first of the position words $5098/s1_ty/s1_tz. the pages add it to and take it off an object's x to change between universe and player-relative coordinates"
+  }
+ },
+ "regions": [],
+ "sw_drop_comments": ["P2:8C41"],
+ "questions": [
+  "P2:8C4A - matrix program $60 has two names in the defines (MS_PSUB, presub, and MS_S1UN, S1 view to universe). here the code takes the player's position off the result, which fits a conversion from the player's view to universe coordinates (a point ahead of the player, random distance and sideways offset), but I did not verify what the program does with block MS_X0BC, so the description only says what goes in and out",
+  "P2:8A22 etc - P2_8954 and P2_898D (outside this range) multiply s1_vx and s1_vy by (|x|+|y|)/4 of the probot's position and take the products off the position or off the target point. the descriptions here just say they are applied",
+  "record layout as used here, for whoever names the fields: byte 0 bit $08 = position is in universe coordinates (P2_8E54 clears it and makes the position player-relative), byte 1 bit $10 = in view this frame (set by P2_8FD3), byte 4 = behaviour state 0-11, words 5 and 7 = x and y, words $15 and $17 = per-state data: velocity in state 5, target point in states 6, 7 and 9, turn rate (word $15 only) in state 8, centre point in state 10",
+  "P2:8C41 - the carried comment TOP OF SIDE PANELS is the Star Wars line L884A (STD M_Z0 before MS_PSB2) and means nothing here, dropped and replaced",
+  "states by handler table P2_8873 (outside this range): 0 P2_89D2 idle, 1 P2_89DB, 2 approach, 3 retreat, 4 P2_89F0, 5 drift, 6 and 9 fly to point (halving step), 7 fly to point (clamped step), 8 circle the player, 10 P2_8E1D turn around a point, 11 leave. the tables P2_888B (ten random state entries) and P2_889F (four entries by w1_level and 3) hold the go_ routines"
+ ]
+}

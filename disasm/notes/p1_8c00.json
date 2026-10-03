@@ -1,0 +1,228 @@
+{
+ "about": "page 1 $8C00-$8FFF: the AT-ST's animated legs, the laser hit tests on an AT-ST and its destruction, the init of the gun shot records, and the routines that make a TIE fighter, an AT-AT and an AT-ST fire a shot",
+ "routines": {
+  "P1:8C0D": {
+   "name": "atst_leg_part0",
+   "desc": "first of the four parts of one AT-ST leg. X points at the leg record (track number, hip x word, hip y word) and M_X0, M_Y0 hold the hip offset. sets M_Z0 to -50, has page 0 P0_93B4 interpolate keyframe track (leg's track number + 0) for the current walk frame, and passes the four points of atst_leg_pts0 through atst_leg_points"
+  },
+  "P1:8C22": {
+   "name": "atst_leg_part1",
+   "desc": "second part of an AT-ST leg, as atst_leg_part0: M_Z0 -50, keyframe track + 1, the four points of atst_leg_pts1"
+  },
+  "P1:8C39": {
+   "name": "atst_leg_part2",
+   "desc": "third part of an AT-ST leg, as atst_leg_part0: M_Z0 -716, keyframe track + 2, the four points of atst_leg_pts2"
+  },
+  "P1:8C50": {
+   "name": "atst_leg_part3",
+   "desc": "fourth and lowest part of an AT-ST leg, as atst_leg_part0: M_Z0 -1024, keyframe track + 3, the four points of atst_leg_pts3, then two more points stepped from the last one by (128, 37, -50) and (0, -37, 0). with them the leg has its 18 perspected points"
+  },
+  "P1:8D03": {
+   "name": "atst_leg_points",
+   "desc": "adds the animation offset anim_dx, anim_dy, anim_dz to the point in M_X0, M_Y0, M_Z0, then four times adds the next (dx, dy, dz) step from the table at U to it and has bank 1 (L60DE) transform and perspect the point into the next entry of BJ_PNT. U is left after the table, X is kept"
+  },
+  "P1:8D44": {
+   "name": "cursor_oct_dist",
+   "desc": "octagon distance from the laser cursor LZ_CX, LZ_CY to the perspected point at X (x word, y word): the larger of max(dx, dy) and 9/16 of dx + dy, less 10 and not below 0, returned in D. the same arithmetic as the octagon tests of Star Wars' VWGUN and S2VW. uses tmp_scal and $4803"
+  },
+  "P1:8D83": {
+   "name": "atst_body_hit",
+   "desc": "laser test on the body of the AT-ST head just perspected (object $11), called while it is drawn with its view distance in M_XT. does nothing if a nearer hit is already in atst_hit_d. otherwise turns a radius of 110 into screen units at that distance and, if the cursor is within it of perspected point 16 or 17 (the two points on the head's centre line), records the distance in atst_hit_d and clears atst_hit_rec: the shot stops on the armour and kills nothing"
+  },
+  "P1:8DD6": {
+   "name": "atst_window_hit",
+   "desc": "laser test on the front window of the AT-ST head, U = the AT-ST record, view distance in M_XT. if no nearer hit is recorded and the cursor is inside the rectangle spanned by perspected points 12 to 15 of the head (the four corners of the window), stores U in atst_hit_rec and the distance in atst_hit_d: this AT-ST is the one the laser will destroy"
+  },
+  "P1:8E33": {
+   "name": "atst_killed",
+   "desc": "the laser has hit an AT-ST window: jumped to through the maze from page 3 P3_980B with the record in atst_hit_rec. puts the AT-ST's universe position in M_XT, M_YT, M_ZT and starts the three-piece explosion there (bank 1 KE718 through L61A4), places the record anew or frees it (atst_place), scores 50 points while bonus_left is not zero and 500 after, sends the explosion sound and counts the kill in kill_count (50 at most). the kill that brings bonus_left to zero also scores the walker quota bonus, awards the Jedi letter (P1_9573) and bumps quota_walker"
+  },
+  "P1:8E99": {
+   "name": "atst_place",
+   "desc": "U = an AT-ST record. if the spawn count w2_spawn_a is zero or negative the record is freed (bytes 0 and 1 cleared). otherwise the record is made a fresh AT-ST: status $29 (the coordinate flag $40 kept), flags cleared, and a new place - one of x and y, chosen at random, gets $8000 added and the other a random value from -$4000 to $3FFF. an AT-ST that was not on screen is first put at the player's position, so it starts half the universe away. called for a free record by the AT-ST mover P1_86E1 and after a kill"
+  },
+  "P1:8EFC": {
+   "name": "gun_init",
+   "desc": "the last part of Star Wars' IPGEN (the IPGEN_40 loop), called from init_general in bank 0: gives each of the six gun shot records from GUN to BJBIC its 8-byte block in math RAM from M_GN, its BIC from MS_GNBC, and clears its type so that it is free"
+  },
+  "P1:8F16": {
+   "name": "tie_fire",
+   "desc": "makes a TIE fighter fire a shot: X = the alien record, carry set on return if a shot was started. called from page 3 CPUAL and from man_tie_fire in bank 0. it first runs the slapstic's alternate sequence for page 3, so that the page select on the way back through the maze, which names page 1, selects page 3, the caller's page. in the training manual the shot is started at once in the first gun record, otherwise tie_fire_try decides. close copies: atat_fire, atst_fire and P1_9063"
+  },
+  "P1:8F32": {
+   "name": "tie_fire_try",
+   "desc": "U = the alien record. takes the entry of the shot table P1_90E4 for fire_level (17 entries of 4 bytes, the level halved during 16 frames of every 64): byte 0 becomes the alien's reload time (byte 4 of its record), no shot is fired unless a random byte is above byte 1, and the word is the highest gun record that may be used. looks for a free record from there down (P1_90D2, which returns to this routine's caller with carry clear if there is none) and falls into tie_shot_start. returns carry clear when it does not fire"
+  },
+  "P1:8F5A": {
+   "name": "tie_shot_start",
+   "desc": "X = a free gun record, U = the alien record. starts a TIE fighter shot: life timer $40, type 1, kind 1, aim offsets from P1_9168, and the shot's point in math RAM set to the alien's position (MS_TX, MS_TY, MS_TZ of its block) less the player's. sends sound aud_cmd_3d and returns carry set"
+  },
+  "P1:8F8B": {
+   "name": "atat_fire",
+   "desc": "makes an AT-AT fire a shot: U = the AT-AT record, carry set on return if a shot was started. called from page 0 P0_8B72 and from man_atat_fire in bank 0. it first runs the slapstic's alternate sequence for page 0, so that the page select on the way back through the maze, which names page 1, selects page 0, the caller's page. in the training manual the shot is started at once in the first gun record, otherwise atat_fire_try decides. a close copy of tie_fire"
+  },
+  "P1:8FA5": {
+   "name": "atat_fire_try",
+   "desc": "U = the AT-AT record. as tie_fire_try without the halving of the level: the shot table entry for fire_level gives the reload time (byte 3 of the record), the random threshold and the highest gun record to use. falls into atat_shot_start when a record is free, returns carry clear when it does not fire"
+  },
+  "P1:8FC5": {
+   "name": "atat_shot_start",
+   "desc": "X = a free gun record. starts an AT-AT shot: life timer $70, type $41, kind 2, aim offsets from P1_9168, and the shot's point in math RAM set to the muzzle position the caller left in M_XT2, M_YT2, M_ZT2 less the player's position. sends sound aud_cmd_41 and returns carry set"
+  },
+  "P1:8FF7": {
+   "name": "atst_fire",
+   "desc": "makes an AT-ST fire a shot: U = the AT-ST record, carry set on return if a shot was started. called from P1_8B52 on this page and from man_atst_fire in bank 0. it runs the slapstic's alternate sequence for page 1, which the maze's page select names anyway, so this copy only keeps the pattern of tie_fire and atat_fire. in the training manual the shot is started at once in the first gun record (P1_9031), otherwise P1_9011 decides from the shot table"
+  }
+ },
+ "labels": {
+  "P1:8CA3": "atst_leg_pts0",
+  "P1:8CBB": "atst_leg_pts1",
+  "P1:8CD3": "atst_leg_pts2",
+  "P1:8CEB": "atst_leg_pts3",
+  "P1:8EF2": "gun_move_tab"
+ },
+ "comments": {
+  "P1:8C00": "bank 1 KDA2A: draw object $13, the AT-ST leg, from the 18 points just perspected",
+  "P1:8C03": "bank 1 KD8AC: adds the word $B956 (a JSRL) to the display list and sets the current position BJ_CX, BJ_CY to 0, $68",
+  "P1:8C06": "the walk frame, set back to 0 by P0_93B4 when the cycle has wrapped",
+  "P1:8C0D": "-50",
+  "P1:8C13": "the leg's first keyframe track, which P0_93B4 interpolates for the walk frame into anim_dx, anim_dy, anim_dz",
+  "P1:8C39": "-716",
+  "P1:8C50": "-1024",
+  "P1:8C65": "fifth point of this part: step by (128, 37, -50)",
+  "P1:8C80": "bank 1 KD9F6: transform and perspect the point into the next BJ_PNT entry",
+  "P1:8C83": "sixth point: step by (0, -37, 0)",
+  "P1:8CA3": "four steps (dx, dy, dz) from the leg part's start point to its four points, each step taken from the point before",
+  "P1:8D20": "four points",
+  "P1:8D3B": "bank 1 KD9F6: transform and perspect the point into the next BJ_PNT entry",
+  "P1:8D44": "x of the point less the cursor's",
+  "P1:8D53": "y of the point less the cursor's",
+  "P1:8D5E": "$4803 = dx: keep the larger of dx and dy there",
+  "P1:8D65": "dx + dy",
+  "P1:8D67": "half of it",
+  "P1:8D71": "plus a sixteenth: 9/16 of dx + dy",
+  "P1:8D73": "the octagon distance is the larger of the two",
+  "P1:8D7A": "10 units of allowance",
+  "P1:8D86": "a nearer hit is already recorded: leave",
+  "P1:8D8C": "view distance less 110, at least 110",
+  "P1:8D98": "the divider gives its reciprocal",
+  "P1:8D9B": "radius 110 for point 16",
+  "P1:8DA4": "radius 110 for point 17",
+  "P1:8DA7": "the reciprocal of the distance",
+  "P1:8DAA": "perspective multiply: both radii in screen units",
+  "P1:8DB2": "perspected point 16 of the head",
+  "P1:8DBB": "the cursor is within the radius: the body is hit",
+  "P1:8DBD": "perspected point 17 of the head",
+  "P1:8DC9": "no record: the shot stops on the body without a kill",
+  "P1:8DD9": "a nearer hit is already recorded: leave",
+  "P1:8DDF": "X at perspected point 13: point 12 is at -5, 14 at 5, 15 at 10",
+  "P1:8DE2": "the lower of the y of points 14 and 15, the window's bottom corners",
+  "P1:8DF1": "the cursor is below the window",
+  "P1:8DF3": "the higher of the y of points 12 and 13, the top corners",
+  "P1:8E02": "the cursor is above the window",
+  "P1:8E04": "the smaller of the x of points 12 and 14",
+  "P1:8E13": "the cursor is to one side of the window",
+  "P1:8E15": "the larger of the x of points 13 and 15",
+  "P1:8E24": "the cursor is to the other side",
+  "P1:8E29": "the cursor is on the window: this AT-ST is the laser's target",
+  "P1:8E38": "$40: the record holds universe coordinates, otherwise they are relative to the player",
+  "P1:8E62": "bank 1 KE718: start the three-piece explosion at M_XT, M_YT, M_ZT",
+  "P1:8E65": "place the AT-ST anew or free the record",
+  "P1:8E68": "quota not yet met: 50 points, otherwise 500",
+  "P1:8E7C": "the kill count stops at 50",
+  "P1:8E8D": "the quota is met with this kill",
+  "P1:8E8F": "5000 points",
+  "P1:8E99": "nothing left to spawn: free the record",
+  "P1:8EA8": "$10: the AT-ST was on screen at the last draw",
+  "P1:8EAE": "not on screen: start from the player's position (relative 0, 0)",
+  "P1:8EB7": "keep the coordinate flag, status $29",
+  "P1:8EC3": "random choice of the axis that gets the half-universe step",
+  "P1:8EC7": "x half the universe away",
+  "P1:8ECE": "y random, -$4000 to $3FFF",
+  "P1:8EDD": "y half the universe away",
+  "P1:8EE4": "x random, -$4000 to $3FFF",
+  "P1:8EF2": "move routines of the gun shots by kind (byte 4 of the gun record), used by P1_9185: kind 0",
+  "P1:8EF4": "kind 1, TIE fighter shot",
+  "P1:8EF6": "kind 2, AT-AT shot",
+  "P1:8EF8": "kind 3, AT-ST shot",
+  "P1:8EFA": "kind 4, probot shot",
+  "P1:8F18": "U = the alien record",
+  "P1:8F20": "training manual: fire at once from the first gun record",
+  "P1:8F32": "shot table: reload time, random threshold, highest gun record",
+  "P1:8F38": "for 16 frames in every 64 the level counts half",
+  "P1:8F40": "the table has entries 0-$10",
+  "P1:8F4C": "the alien's reload time",
+  "P1:8F4E": "fire only if the random byte is above the entry's threshold",
+  "P1:8F55": "highest gun record to try",
+  "P1:8F57": "find a free one from there down, or leave with carry clear",
+  "P1:8F5A": "life timer of the shot",
+  "P1:8F5E": "type 1: the record is in use",
+  "P1:8F62": "kind 1: TIE fighter shot",
+  "P1:8F66": "aim offsets, bytes 6 and 7",
+  "P1:8F69": "the shot's point in math RAM",
+  "P1:8F6B": "the alien's block in math RAM",
+  "P1:8F6D": "the alien's position less the player's",
+  "P1:8F85": "carry set: fired",
+  "P1:8F88": "carry clear: no shot",
+  "P1:8F93": "training manual: fire at once from the first gun record",
+  "P1:8FA5": "shot table: reload time, random threshold, highest gun record",
+  "P1:8FAB": "the table has entries 0-$10",
+  "P1:8FB7": "the AT-AT's reload time",
+  "P1:8FB9": "fire only if the random byte is above the entry's threshold",
+  "P1:8FC0": "highest gun record to try",
+  "P1:8FC2": "find a free one from there down, or leave with carry clear",
+  "P1:8FC5": "life timer of the shot",
+  "P1:8FC9": "type $41",
+  "P1:8FCD": "kind 2: AT-AT shot",
+  "P1:8FD1": "aim offsets, bytes 6 and 7",
+  "P1:8FD4": "the shot's point in math RAM",
+  "P1:8FD6": "the muzzle position the caller computed, less the player's position",
+  "P1:8FF1": "carry set: fired",
+  "P1:8FF4": "carry clear: no shot"
+ },
+ "ram": {
+  "4C11": {
+   "name": "atst_hit_d",
+   "desc": "word: view distance of the nearest AT-ST the laser cursor is on in this frame, written by atst_body_hit and atst_window_hit while the AT-STs are drawn. the laser start on page 3 (P3_95CC) sets the high byte to $FF for none, and page 3 P3_97CB compares it with the distances of the other things under the cursor and takes the nearest"
+  },
+  "4C13": {
+   "name": "atst_hit_rec",
+   "desc": "word, goes with atst_hit_d: the record of the AT-ST whose front window the cursor is on, which atst_killed then destroys, or 0 when the nearest hit was on the body and the shot only stops there"
+  },
+  "4C8B": {
+   "name": "anim_frame",
+   "desc": "frame counter of the walk cycle being drawn: loaded from the walker's record before its legs are drawn, read by the keyframe interpolation page 0 P0_93B4, which clears it when the cycle wraps, and stored back in the record afterwards (byte 14 of an AT-ST record)"
+  },
+  "4C8C": {
+   "name": "anim_dx",
+   "desc": "word: x offset of the leg part being drawn, interpolated by page 0 P0_93B4 from the part's keyframe track for anim_frame. atst_leg_points and the AT-AT code of page 0 add it to M_X0"
+  },
+  "4C8E": {
+   "name": "anim_dy",
+   "desc": "word: y offset of the leg part being drawn, as anim_dx"
+  },
+  "4C90": {
+   "name": "anim_dz",
+   "desc": "word: z offset of the leg part being drawn, as anim_dx"
+  },
+  "5098": {
+   "name": "s1_tx",
+   "desc": "MS_TX+M_S1 written as a bare address: the player's universe x position, word. the slapstic pages add it to or subtract it from an object's x to change between universe and player-relative coordinates"
+  }
+ },
+ "regions": [
+  ["P1", "8CA3", "8D03", "words"]
+ ],
+ "sw_drop_comments": ["P1:8DA4", "P1:8DA7", "P1:8DAA"],
+ "questions": [
+  "P1:8DA4-8DAA carry three comments of Star Wars' CLBLZ (MISNAMED--DELTA X, GET THE FRACTION OF LINE, GEN %*DY,%*DX) because the three instructions match. here they load a radius and the reciprocal of a distance, so they are listed in sw_drop_comments with new comments",
+  "P1:8C00-8C0B is the tail of P1_8BC3 (draws one AT-ST leg), whose header is in the chunk before this one. the names atst_leg_part0-3 assume that routine is the leg draw: it resets the point pointer (L60CC), calls the four parts and draws object $13",
+  "P1:8FC9 gun record byte 3 is set to $41 for AT-AT and AT-ST shots and to $01 for TIE fighter and probot shots. bit 0 marks the record as used and P1_91A6 uses bits $30 for the dying shot, but nothing in this range shows what bit $40 is for",
+  "P1:8E99 status $29 written to byte 0 of an AT-ST record: bit $20 is tested before firing (P1_8B4A) and bit $40 is the universe-coordinates flag, the meaning of bits $08 and $01 is not shown in this range",
+  "P1:8F66 P1_9168 gives the shot random aim offsets (bytes 6, 7 of the gun record) when a 5 bit random number is below fire_level and zero offsets otherwise. the routine is in the next chunk, the comments here only call them aim offsets",
+  "P1:8EF2 gun_move_tab: P1_9185 indexes it with twice the shot kind and, for a kind of 5 or more, with B = 1, an odd offset into the table - that looks like a slip in the original (out of this range)",
+  "P1:90E4 (next chunk, used by tie_fire_try, atat_fire_try and P1_9011): the shot table is 17 entries of 4 bytes, $90E4-$9127, followed by the probot table P1_9128 of 16 entries to $9167. the listing shows part of both as code (P1_90FD 'no caller found', P1_9148-P1_9165): those bytes are data",
+  "4C8B-4C90 and 5098 are also used by pages 0, 2 and 3: the names anim_frame, anim_dx/dy/dz and s1_tx were chosen here and may need reconciling with the chunks of those pages",
+  "$4803 appears bare in cursor_oct_dist (P1:8D63, 8D73, 8D78) though it has Atari's temp names (TMPOCT, TMPSIZ): no new name given"
+ ]
+}

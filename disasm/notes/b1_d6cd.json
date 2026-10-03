@@ -1,0 +1,456 @@
+{
+ "about": "bank 1 $D6CD-$EA02: the 3-D object tables and the object routines carried from Star Wars' WSOBJ (load, perspect and draw an object), a set of unused threaded draw primitives, the high score display, entry and NVRAM copy, and the explosion queue (WSXPLD). also the names of the 22 object draw routines at $AD68-$D6CC",
+ "routines": {
+  "B1:AD68": {
+   "name": "draw_tie",
+   "desc": "draw routine of object 0, the TIE fighter of Star Wars (53 points, 88 lines at full brightness, points 1 to 51). like all 22 draw routines it is entered from obj_draw with A, B, X and U stacked, sets the direct page to the point buffer BJ_PNT, writes one vector per line into the display list at Y - the first one a blank move from the beam position BJ_CX, BJ_CY - then restores the direct page, leaves the last point in BJ_CX, BJ_CY and returns to obj_draw's caller"
+  },
+  "B1:B423": {
+   "name": "draw_tie_wing",
+   "desc": "draw routine of objects 1 and 2, the left and the right wing with strut of an exploded TIE fighter (Star Wars' TDS_TI1 and TDS_TI2, explosion piece types 9 and 10): 30 lines at full brightness between points 1 to 18. the two objects differ only in their point tables"
+  },
+  "B1:B69A": {
+   "name": "draw_tie_cabin",
+   "desc": "draw routine of object 3, the centre cabin of an exploded TIE fighter (Star Wars' TDS_TI3, explosion piece type 11): 46 lines at full brightness between points 1 to 28"
+  },
+  "B1:BA37": {
+   "name": "draw_probot_body",
+   "desc": "draw routine of objects 4 and 5, which make one picture, the body of a probot: object 4 (19 points, a three-ring hexagonal body below the head) is perspected into buffer points 1 to 19 and object 5 (a hexagon of 6 points) into points 20 to 25, and this routine draws 36 lines, the last six from the body's top ring to the points of object 5. brightness of each line comes from the depth cue flags of its two points. page 2 processes object 4, then object 5 raised by the probot's bob offset, and draws once"
+  },
+  "B1:BDF1": {
+   "name": "draw_probot_head",
+   "desc": "draw routine of object 6, the head of a probot (20 points, a flat dome of three hexagonal rings, 27 lines with depth cue brightness). the explosion code also draws object 6 for the pieces of a destroyed probot (piece types 0 to 2)"
+  },
+  "B1:C081": {
+   "name": "draw_probot_eye",
+   "desc": "draw routine of object 7, which has the same point table as object 6: four lines round points 6, 13, 12 and 17 of the head, a four-sided figure on its front. page 2 draws it from the points perspected for object 6 after the head, in the colour its launch test chose"
+  },
+  "B1:C0FC": {
+   "name": "draw_limb_down",
+   "desc": "draw routine of objects 9 and 11 to 16 in the table, used by page 2 for all eight probot limbs (objects 9 to 16, four points each, hanging below the body): writes colour instruction $6260, moves to point 0 and draws points 0-1-2-3 at full brightness"
+  },
+  "B1:C15C": {
+   "name": "draw_limb_up",
+   "desc": "draw routine of object 10: draws from the beam position to point 2, then to 1 and to 0, three lines at full brightness with no move first. page 2 calls it as object 10 after draw_limb_down for every limb with BJ_CX shifted, so the limb is drawn down one side and back up the other"
+  },
+  "B1:C1A4": {
+   "name": "draw_hexagon",
+   "desc": "draw routine of object 8, a flat hexagon of six points (radius 60), six lines with depth cue brightness. page 3 draws it for the probot transmissions"
+  },
+  "B1:C247": {
+   "name": "draw_atst_head",
+   "desc": "draw routine of object 17, the head (cab) of an AT-ST walker: 18 lines with depth cue brightness between points 0 to 13 of its 18 points"
+  },
+  "B1:C430": {
+   "name": "draw_atst_port",
+   "desc": "draw routine of object 18, which has the same point table as object 17: four lines round points 12, 13, 15 and 14, the panel on the front of the AT-ST head. page 1 draws it from the points perspected for object 17, in the colour its aim test left"
+  },
+  "B1:C4AB": {
+   "name": "draw_atst_leg",
+   "desc": "draw routine of object 19, one AT-ST leg: 33 lines at full brightness between 18 buffer points. the object's own table holds a single point, the 18 points are put into the buffer one at a time by page 1 through pnt_add_scratch"
+  },
+  "B1:C752": {
+   "name": "draw_atst_side",
+   "desc": "draw routine of objects 20 and 22, the left and the right half of the AT-ST head as separate 8 point pieces, 11 lines at full brightness. they are the pictures of explosion piece types 3 and 5"
+  },
+  "B1:C840": {
+   "name": "draw_atst_top",
+   "desc": "draw routine of object 21, a 6 point wedge made of the top and front points of the AT-ST head, 9 lines at full brightness. it is the picture of explosion piece type 4"
+  },
+  "B1:C91C": {
+   "name": "draw_atat_body",
+   "desc": "draw routine of object 23, the body of an AT-AT walker (24 points perspected into buffer points 1 to 24): 26 lines at full brightness between points 1 to 16"
+  },
+  "B1:CB40": {
+   "name": "draw_atat_neck",
+   "desc": "draw routine of object 26, which has the point table of the AT-AT head: four lines at full brightness from buffer points 17 to 20, which belong to the body (object 23), to points 22 to 25, the back of the head - the neck. page 0 draws it only when the body is in view"
+  },
+  "B1:CBE3": {
+   "name": "draw_atat_head",
+   "desc": "draw routine of object 24, the head of an AT-AT (21 points perspected into buffer points 22 to 42, after the body's): 21 lines with depth cue brightness"
+  },
+  "B1:CE19": {
+   "name": "draw_atat_eye",
+   "desc": "draw routine of object 25, which has the point table of the AT-AT head: four lines round buffer points 38 to 41, the rectangle on the front of the head that page 0 turns red and tests the lazar against (the eye the player is told to shoot)"
+  },
+  "B1:CE94": {
+   "name": "draw_atat_leg",
+   "desc": "draw routine of object 27, one AT-AT leg: 18 lines at full brightness between 12 buffer points, three points at each of four levels joined into a three-sided tube. the object's own table holds a single point, the 12 points are put into the buffer one at a time by page 0 through pnt_add_scratch"
+  },
+  "B1:D005": {
+   "name": "draw_atat_piece",
+   "desc": "draw routine of objects 28, 29 and 30, the front, middle and rear third of the AT-AT body as separate 8 point boxes, 12 lines at full brightness. they are the pictures of explosion piece types 6 to 8"
+  },
+  "B1:D123": {
+   "name": "draw_dart",
+   "desc": "draw routine of object 31 (9 points perspected into buffer points 1 to 9): a long square shaft that widens to the rear, with a pointed nose. 18 lines at full brightness in three colours, written by the routine itself: $6180 for the nose, $6680 for the shaft and a JSRL $A013 before the rear end. page 0 loads it in the walker part's setup and draws it twice from the tow cable code (P0_972B on), what the two darts stand for I could not tell from here"
+  },
+  "B1:D2D3": {
+   "name": "draw_asteroid",
+   "desc": "draw routine of objects 32, 33 and 34, one 24 point solid - a cube with every corner and edge cut off - in three sizes (1000, 500 and 250 units): 48 lines with depth cue brightness. page 2 loads all three for the asteroid field and draws object 33"
+  },
+  "B1:D84E": {
+   "name": "obj_list_init",
+   "desc": "entry of JINOBJ through the cross-bank table (bank 0 L60A2, called by init_general): saves X, runs JINOBJ below, which in ESB ends by pulling X and returning"
+  },
+  "B1:D868": {
+   "name": "obj_load_b",
+   "desc": "loads object B into the math RAM: stores B in BJ_ID and runs obj_load. called through bank 0 L60A8 by the setup routines of the game parts, once for every object the part draws"
+  },
+  "B1:D86A": {
+   "name": "obj_load",
+   "desc": "Star Wars' JADOBJ, changed: copies the points of object BJ_ID from its ROM table (6 bytes each, address from obj_points_tab) into the math RAM at BJ_RAM (8 bytes each) and notes the block index in BJBIC, unless the object is already there. ESB rounds the point count up to an even number, keeps the counter on the stack, saves A, X and U, and returns without loading when the block index would overflow, where Star Wars had a SWI"
+  },
+  "B1:D8AC": {
+   "name": "obj_beam_home",
+   "desc": "ends an object: sets the beam position the draw routines work from to the screen centre (BJ_CX = 0, BJ_CY = $68, which is minus VGOFFY) and adds a JSRL to vector ROM $32AC, the default scale and a centre instruction. called after every object draw and by bank 0 when a display list is started"
+  },
+  "B1:D92F": {
+   "name": "obj_points",
+   "desc": "perspects the points of object BJ_ID into the point buffer, ESB's version of JOBJPNT. the buffer address comes from obj_buf_tab, the depth cue range (plus the centre's distance M_XT) and scale from obj_cue_depth and obj_cue_scale go to M_XPS and M_YPS, and the math box programs $32 and $36, which Star Wars' microcode does not have, do the transform, the perspective and the depth cue of each point while the divider supplies 1/depth. each point is stored as screen x (limited to -534..534), screen y (limited to -532..728) and a flag byte with the top three bits of the cue, the intensity bits of a vector. the word at COLOR is left pointing past the last point. returns at once if the object is not loaded"
+  },
+  "B1:D9EF": {
+   "name": "pnt_buf_reset",
+   "desc": "starts a new point list: the word at COLOR, the next free point of the buffer, is set to BJ_PNT ($4E00). called by pages 0 and 1 before they build the points of a walker leg"
+  },
+  "B1:D9F6": {
+   "name": "pnt_add_scratch",
+   "desc": "perspects the single point in the scratch block M_X0 (block index $0F) with MS_PAD, the divider and MS_PERS, as Star Wars' JOBJPNT did for every point, stores its screen x and y at the buffer position in the word at COLOR and moves that word on by 5. the flag byte is not written. pages 0 and 1 call it for every joint point of a walker leg, which is then drawn as object 27 or 19"
+  },
+  "B1:DA2A": {
+   "name": "obj_draw_b",
+   "desc": "draws object B from the points now in the buffer: stores B in BJ_ID and runs obj_draw. used to draw with another object's lines than the one whose points were perspected"
+  },
+  "B1:DA2C": {
+   "name": "obj_draw",
+   "desc": "draws object BJ_ID: stacks A, B, X and U and jumps to the object's draw routine from obj_draw_tab, which unstacks them and returns to the caller. it replaces Star Wars' JOBJDRW, which interpreted a line list"
+  },
+  "B1:DA38": {
+   "name": "thr_start",
+   "desc": "unused code that the listing shows as data ($DA38-$DAB2): a threaded interpreter that draws the same vectors as the generated draw routines from a list. entered with X at a 3-byte instruction (a JMP here, where obj_draw's JMP ,X would have arrived) that is followed by 4-byte cells, each the address of a primitive and an operand. it points U at BJ_CX as the last point, steps X over the 3 bytes and jumps through the first cell. every primitive ends by stepping X to the next cell and jumping through it. no word in either bank, the slapstic pages or the vector ROM holds the address of any of the six entries, so nothing runs it"
+  },
+  "B1:DA3F": {
+   "name": "thr_move",
+   "desc": "threaded primitive (unused): the operand is the address of a buffer point. writes a blank vector from the last point at U to it (y difference, then x difference, both masked to 13 bits), makes it the last point and goes to the next cell. it keeps the list pointer in the two stack bytes that hold obj_draw's saved A and B"
+  },
+  "B1:DA5D": {
+   "name": "thr_draw",
+   "desc": "threaded primitive (unused): as thr_move, but the vector is drawn at full brightness (ORA #$E0)"
+  },
+  "B1:DA7B": {
+   "name": "thr_draw_cued",
+   "desc": "threaded primitive (unused): as thr_move, but the vector's intensity bits are the sum of the flag bytes of the new point and of the last point, the depth cue that obj_points leaves"
+  },
+  "B1:DA9D": {
+   "name": "thr_word",
+   "desc": "threaded primitive (unused): writes the operand word to the display list as it is, a colour instruction for example, and goes to the next cell"
+  },
+  "B1:DAA5": {
+   "name": "thr_end",
+   "desc": "threaded primitive (unused), the end of a list: copies the last point at U to BJ_CX and BJ_CY and its flag byte to $48BE, then unstacks A, B, X, U and returns as the generated draw routines do"
+  },
+  "B1:DEE2": {
+   "name": "hs_view",
+   "desc": "Star Wars' VWHSCR, changed: draws the high score table. with UPDFLG plus (initials being entered) it shows message $32 in the middle of the screen, rows from the half-screen table hs_ypos_half and, after the rows, the alphabet with RUB and END and the cursor. otherwise message $33 at the top, a larger scale and the full-screen rows THSY2. both messages have the legend JEDI KNIGHT, next to which the mark at vector ROM $326A is drawn. ten of the 25 entries are shown, from entry hs_scroll (held to 0-15): each row is the three initials (the one being entered flashes), the mark again if bit 7 of the first initial is set, the rank number and the 8 digit score. when no initials are being entered the yoke scrolls the table: cursor y beyond +-$140 steps hs_scroll by one every third frame"
+  },
+  "B1:E209": {
+   "name": "hs_rank_step",
+   "desc": "called once a frame from bank 0 (L6303) through L60FC: when the player's score has reached the score of table entry rank_index (higher top word, or equal top word and the low word not below), rank_index is stepped down to the next better entry. does nothing once rank_index is minus"
+  },
+  "B1:E22D": {
+   "name": "hs_insert",
+   "desc": "Star Wars' UPDATE and PUTHI in one, for the 25 entry table of 7 byte records (3 initials, 4 BCD score bytes) at INITLS: finds the first entry the score S_SC87, S_SC43 is not below, moves the entries from there down by one (the last drops out), and writes the new one with the score and the initials in last_inits. UPDFLG = the entry's address, UPDINT = 0 and INITL = its first initial, or UPDFLG = $FFFF if the score is below all 25. hs_scroll is left at the entry's index less 5 so that the display shows it"
+  },
+  "B1:E363": {
+   "name": "jedi_mark_set",
+   "desc": "tail of GETINT, also called before it moves to the next initial: if jedi_done is set and the first initial is the current one (UPDINT = 0), sets bit 7 of the initial at U. the display shows the Jedi mark beside entries whose first initial has that bit"
+  },
+  "B1:E3E8": {
+   "name": "hs_load",
+   "desc": "start-up: fills the 25 entries with the defaults (hs_set_defaults), has NVRAM area 1 read and checked (K768E), copies the top ten entries (70 bytes) from the NVRAM image at nv_hiscores to INITLS and falls into hs_validate. Star Wars' SETINT"
+  },
+  "B1:E400": {
+   "name": "hs_validate",
+   "desc": "Star Wars' CHKHIS for the 7 byte entries: checks every entry up to the end of the table ($4BEE) - three initials below $1B (bit 7 of the first ignored) and four score bytes that are BCD. on any bad byte it goes to DOINTS, which puts in the defaults and writes the top ten back to the NVRAM image. also called from bank 0 through L6114"
+  },
+  "B1:E458": {
+   "name": "hs_save",
+   "desc": "copies the top ten entries (70 bytes from INITLS) to the NVRAM image at nv_hiscores and calls EECKSM for area 1. called when a player ends the entry of initials and by DOINTS"
+  },
+  "B1:E46D": {
+   "name": "hs_set_defaults",
+   "desc": "copies the 175 bytes of the default table hs_defaults, 25 entries, to INITLS"
+  },
+  "B1:E47D": {
+   "name": "hs_nv_defaults",
+   "desc": "copies the first 70 bytes of hs_defaults, the top ten entries, to the NVRAM image at nv_hiscores. called by the NVRAM code at K751E and offered to bank 0 as L611A, which nothing calls"
+  },
+  "B1:E53D": {
+   "name": "expl_clear",
+   "desc": "clears the timer byte XPS_TMR of every entry of the explosion queue XPQUE, so that no explosion piece is live. called through bank 0 L6186 by the setup of each part of a wave"
+  },
+  "B1:E57C": {
+   "name": "tie_expl_begin",
+   "desc": "cross-bank entry (L618C, called by page 3) that starts the explosion of the TIE fighter whose record is at X: clears byte 3 of the record and calls BGAXP with X and U saved. Star Wars' BGAXPLD without the CPUGON call"
+  },
+  "B1:E587": {
+   "name": "atat_expl_begin",
+   "desc": "cross-bank entry (L6192, called by page 0) that starts the explosion of an AT-AT: BGTWXP with X and U saved. the centre is in M_XT, M_YT, M_ZT"
+  },
+  "B1:E58E": {
+   "name": "probot_expl_begin",
+   "desc": "cross-bank entry (L6198, called by page 2) that starts the explosion of a probot: BGBKXP with X and U saved. the centre is in M_XT, M_YT, M_ZT"
+  },
+  "B1:E595": {
+   "name": "atst_expl_begin",
+   "desc": "cross-bank entry (L61A4, called by page 1) that starts the explosion of an AT-ST: atst_expl_setup with X and U saved. the centre is in M_XT, M_YT, M_ZT"
+  },
+  "B1:E59C": {
+   "name": "expl_stub_rts",
+   "desc": "a lone RTS that the cross-bank table offers to bank 0 as L619E. nothing calls it"
+  },
+  "B1:E718": {
+   "name": "atst_expl_setup",
+   "desc": "begins the explosion of an AT-ST: piece types 3, 4 and 5 and an upward speed byte of 3 into TMPTP1, TMPTP2, TMPTP3 and TMPVZ, then the three-piece code it shares with BGTWXP at $E72E"
+  },
+  "B1:E87C": {
+   "name": "expl_piece_kill",
+   "desc": "move routine of explosion piece type 1 in TMV: clears the piece's timer, which ends it. no code here makes a piece of type 1"
+  },
+  "B1:E96C": {
+   "name": "vwx_probot_0",
+   "desc": "view routine of explosion piece type 0 (table expl_view_tab): object 6, the probot head, through VWTIN"
+  },
+  "B1:E970": {
+   "name": "vwx_probot_1",
+   "desc": "view routine of explosion piece type 1: object 6 through VWTIN"
+  },
+  "B1:E974": {
+   "name": "vwx_probot_2",
+   "desc": "view routine of explosion piece type 2: object 6 through VWTIN"
+  },
+  "B1:E978": {
+   "name": "vwx_atst_0",
+   "desc": "view routine of explosion piece type 3: object $14 (20), one half of the AT-ST head, through VWTIN"
+  },
+  "B1:E97C": {
+   "name": "vwx_atst_1",
+   "desc": "view routine of explosion piece type 4: object $15 (21), the top wedge of the AT-ST head, through VWTIN"
+  },
+  "B1:E980": {
+   "name": "vwx_atst_2",
+   "desc": "view routine of explosion piece type 5: object $16 (22), the other half of the AT-ST head, through VWTIN"
+  },
+  "B1:E984": {
+   "name": "vwx_atat_0",
+   "desc": "view routine of explosion piece type 6: object $1C (28), the front third of the AT-AT body, through VWTIN"
+  },
+  "B1:E988": {
+   "name": "vwx_atat_1",
+   "desc": "view routine of explosion piece type 7: object $1D (29), the middle third of the AT-AT body, through VWTIN"
+  },
+  "B1:E98C": {
+   "name": "vwx_atat_2",
+   "desc": "view routine of explosion piece type 8: object $1E (30), the rear third of the AT-AT body, through VWTIN"
+  }
+ },
+ "labels": {
+  "B1:D6CD": "obj_draw_tab",
+  "B1:D736": "obj_points_tab",
+  "B1:D77C": "obj_buf_tab",
+  "B1:D7C2": "obj_cue_scale",
+  "B1:D808": "obj_cue_depth",
+  "B1:DAB8": "fuller_credit",
+  "B1:E1E1": "hs_ypos_half",
+  "B1:E48E": "hs_defaults",
+  "B1:E564": "expl_view_tab",
+  "B1:E9B2": "tie_expl_colors"
+ },
+ "comments": {
+  "B1:D6CD": "object 0: TIE fighter. this table: the draw routine of each of the 35 objects, indexed by BJ_ID",
+  "B1:D6CF": "object 1: exploded TIE, left wing",
+  "B1:D6D1": "object 2: exploded TIE, right wing",
+  "B1:D6D3": "object 3: exploded TIE, centre cabin",
+  "B1:D6D5": "object 4: probot body",
+  "B1:D6D7": "object 5: hexagon on top of the probot body, drawn with object 4",
+  "B1:D6D9": "object 6: probot head",
+  "B1:D6DB": "object 7: figure on the front of the probot head",
+  "B1:D6DD": "object 8: hexagon of the probot transmissions",
+  "B1:D6DF": "object 9: probot limb, the stroke down",
+  "B1:D6E1": "object 10: probot limb, the stroke back up",
+  "B1:D6E3": "objects 11 to 16: six more probot limbs, drawn by the game as objects 9 and 10",
+  "B1:D6EF": "object 17: AT-ST head",
+  "B1:D6F1": "object 18: panel on the front of the AT-ST head",
+  "B1:D6F3": "object 19: AT-ST leg, 18 points made by the game",
+  "B1:D6F5": "object 20: AT-ST head, one half (explosion piece)",
+  "B1:D6F7": "object 21: AT-ST head, top wedge (explosion piece)",
+  "B1:D6F9": "object 22: AT-ST head, other half (explosion piece)",
+  "B1:D6FB": "object 23: AT-AT body",
+  "B1:D6FD": "object 24: AT-AT head",
+  "B1:D6FF": "object 25: the eye on the AT-AT head",
+  "B1:D701": "object 26: AT-AT neck, between body and head points",
+  "B1:D703": "object 27: AT-AT leg, 12 points made by the game",
+  "B1:D705": "objects 28 to 30: thirds of the AT-AT body (explosion pieces)",
+  "B1:D70B": "object 31: the dart of the tow cable code",
+  "B1:D70D": "objects 32 to 34: asteroid, three sizes",
+  "B1:D77C": "this table: where in BJ_PNT obj_points puts each object's first perspected point. $4E05 is point 1, $4E64 point 20, $4E6E point 22, so that two objects can share one draw routine",
+  "B1:D7C2": "this table: depth cue scale of each object, to M_YPS. scale times range is about 64 in the math box's $4000 = 1 units, so the cue runs from 0 to 127 across the object",
+  "B1:D808": "this table: depth cue range of each object, about its radius. added to the distance of the object's centre it is the depth at which the cue is 0",
+  "B1:D866": "ESB: X was saved by the entry at $D84E",
+  "B1:D87E": "ESB: the count is rounded up to an even number, points are loaded in pairs",
+  "B1:D881": "loop counter on the stack, in the place of the saved A",
+  "B1:D888": "ESB: too many points, return without loading (a SWI in Star Wars)",
+  "B1:D8B6": "JSRL to vector ROM $32AC: default scale, centre",
+  "B1:D941": "ESB: object not loaded, return (a SWI in Star Wars)",
+  "B1:D94C": "address in BJ_PNT of this object's first point",
+  "B1:D956": "the word at COLOR is the next free point of the buffer here",
+  "B1:D95A": "depth cue scale of the object",
+  "B1:D964": "depth cue range of the object",
+  "B1:D96B": "plus the distance of the object's centre: the depth where the cue is 0",
+  "B1:D971": "program $32: M_XP = depth of the first point, M_ZPS = (M_XPS - depth) * M_YPS",
+  "B1:D979": "start the divide for 1/depth",
+  "B1:D97C": "low byte of M_ZPS: the depth cue of the first point",
+  "B1:D97F": "the quotient, read at the address of M_PCGO",
+  "B1:D985": "program $36: x and y of this point with perspective, then depth and cue of the next point",
+  "B1:D98A": "the top three bits are the intensity bits of a vector",
+  "B1:D98C": "flag byte of the first point",
+  "B1:D98E": "wait while the math box runs (bit 7 of this port)",
+  "B1:D993": "depth of the next point",
+  "B1:D996": "start its divide",
+  "B1:D999": "screen x of this point",
+  "B1:D99C": "1/depth of the next point",
+  "B1:D9A2": "screen y of this point",
+  "B1:D9A5": "depth cue of the next point",
+  "B1:D9A8": "A is still $36: start the program for the next point",
+  "B1:D9AD": "flag byte of the next point",
+  "B1:D9B3": "the operand is the number $FDEA, not an address: x is held to -534..534",
+  "B1:D9BD": "534",
+  "B1:D9CB": "the operand is the number $FDEC, not an address: y is held to -532..728",
+  "B1:D9D6": "728",
+  "B1:D9E1": "program number for the next pass",
+  "B1:D9E9": "next free point of the buffer",
+  "B1:D9F8": "block index of the scratch point M_X0 (MS_X0BC)",
+  "B1:D9FE": "next free point of the buffer",
+  "B1:DA36": "the draw routine returns for us with PULS A,B,X,U,PC",
+  "B1:DAB8": "text FULLER DID THE EFFECTS, not referenced by any code. the five bytes before it ($DAB3: 10 6E 39 3C 00) follow the unused threaded primitives and are not referenced either",
+  "B1:DECE": "the text here is COPYRIGHT 1984 ATARI",
+  "B1:DEE9": "message $32: REBEL FORCE ROSTER in the middle of the screen and the legend JEDI KNIGHT",
+  "B1:DEEE": "blank vector to y -512, x -168, left of the legend",
+  "B1:DEFD": "JSRL to vector ROM $326A, the Jedi mark",
+  "B1:DF0C": "the operand is the address of hs_ypos_half ($E1E1), the row positions for the half screen (Star Wars' THSY1)",
+  "B1:DF11": "message $33: the same two lines for the full-screen table",
+  "B1:DF16": "blank vector to y -384, x -168, left of the legend",
+  "B1:DF25": "the Jedi mark",
+  "B1:DF3A": "first entry to show, held to 0-15",
+  "B1:DF4C": "ten rows",
+  "B1:DF60": "7 bytes per entry: 3 initials, 4 score bytes",
+  "B1:DF9D": "bit 7 of the first initial is the Jedi mark",
+  "B1:E02E": "first initial of this entry: bit 7 set = made by a Jedi knight",
+  "B1:E039": "x -230, left of the initials",
+  "B1:E03E": "the Jedi mark",
+  "B1:E048": "TMPCOL: back to the row's colour",
+  "B1:E058": "rank number = entry index + 1",
+  "B1:E08F": "hs_top, the score field of the first entry",
+  "B1:E0A2": "until ten rows are done",
+  "B1:E0B3": "not entering initials: delay between scroll steps",
+  "B1:E0C4": "yoke pushed past $140: scroll towards the top of the table",
+  "B1:E0D7": "pulled past -$140: scroll towards the end",
+  "B1:E20E": "minus: the score is already the best",
+  "B1:E22D": "-6: counts up to the entry's index less 5 in the search below",
+  "B1:E249": "the operand is the end of the 25 entry table, $4BEE",
+  "B1:E258": "the last entry, INITLS + 24*7",
+  "B1:E27B": "the initials of the last entry made are the first offer",
+  "B1:E32E": "END: keep the initials for the next entry",
+  "B1:E333": "without the Jedi mark",
+  "B1:E33D": "top ten to the NVRAM image",
+  "B1:E343": "no entry in progress any more",
+  "B1:E35B": "the initial already in the next place is the first offer",
+  "B1:E3EB": "NVRAM area 1",
+  "B1:E3FA": "INITLS + 70: the top ten",
+  "B1:E449": "the operand is the end of the 25 entry table, $4BEE",
+  "B1:E462": "INITLS + 70: the top ten",
+  "B1:E487": "the first 70 bytes: the top ten",
+  "B1:E48E": "default high scores, 25 entries of 3 initials (1 = A) and 4 BCD score bytes: OBI 00285353 first",
+  "B1:E4D4": "defaults from the 11th entry on, which are not kept in NVRAM",
+  "B1:E54E": "type 1: ended at once",
+  "B1:E550": "type 2. types 0 and 2 are the two probot pieces",
+  "B1:E554": "types 3 to 5 (from $E552): AT-ST pieces",
+  "B1:E558": "types 6 to 8: AT-AT pieces",
+  "B1:E55E": "types 9 to 11: TIE fighter pieces",
+  "B1:E564": "view routines of the 12 explosion piece types (Star Wars' TVW): types 0 to 2 draw object 6",
+  "B1:E56A": "types 3 to 5: objects 20, 21, 22",
+  "B1:E570": "types 6 to 8: objects 28, 29, 30",
+  "B1:E576": "types 9 to 11: objects 1, 2, 3",
+  "B1:E580": "byte 3 of the TIE fighter's record",
+  "B1:E6D6": "TMPTP3: the second and last piece is of type 2",
+  "B1:E775": "TMPTP1",
+  "B1:E851": "12 piece types in ESB",
+  "B1:E8AF": "ESB: below the ground - bounce",
+  "B1:E8B5": "height = half of the depth below ground",
+  "B1:E8BC": "only when it was falling: upward speed = half of the falling speed",
+  "B1:E95B": "load the object if it is not in the math RAM",
+  "B1:E95E": "perspect its points",
+  "B1:E961": "draw it",
+  "B1:E964": "beam back to the centre",
+  "B1:E9A0": "the table has $18 entries",
+  "B1:E9B2": "colour instruction for each value of the piece's timer below $18, Star Wars' TVWCLE with other values",
+  "B1:E9E2": "33 bytes that no code refers to, up to the ROM fill at $EA03"
+ },
+ "ram": {
+  "4C70": {
+   "name": "hs_scroll",
+   "desc": "high score display: index of the first of the ten entries shown, held to 0-15 by hs_view. hs_insert leaves the new entry's index less 5 here, and while no initials are entered the yoke steps it up and down"
+  },
+  "4C71": {
+   "name": "hs_row_end",
+   "desc": "high score display: hs_scroll + 10, the entry index at which hs_view stops"
+  },
+  "4C76": {
+   "name": "last_inits",
+   "desc": "3 bytes ($4C76-$4C78): the initials of the last high score entry made, saved when END is chosen (the first without its Jedi bit) and written into the next new entry as the initials offered"
+  },
+  "4C79": {
+   "name": "hs_scr_delay",
+   "desc": "high score display: frames until the yoke may scroll the table again. set to 1 after a step, counted down to minus"
+  },
+  "4D04": {
+   "name": "nv_hiscores",
+   "desc": "70 bytes of the NVRAM image ($4D04-$4D49): the top ten high score entries, 3 initials and 4 BCD score bytes each, copied to and from INITLS"
+  },
+  "5075": {
+   "name": "m_zps_lo",
+   "desc": "low byte of M_ZPS: math box programs $32 and $36 leave a point's depth cue in M_ZPS, (M_XPS - depth) * M_YPS, and obj_points takes the top three bits of this byte as the point's intensity flag"
+  }
+ },
+ "ram_notes": {
+  "COLOR": "in the game the word at this address is the next free point of the perspected point buffer BJ_PNT: obj_points sets it to the object's buffer address and leaves it past the last point, pnt_buf_reset sets it to $4E00 and pnt_add_scratch stores a point there and adds 5"
+ },
+ "regions": [
+  ["B1", "E1E1", "E1EF", "words"],
+  ["B1", "E9B2", "E9D0", "words"]
+ ],
+ "sw_drop_names": ["B1:DEFD"],
+ "no_header": ["B1:DEFD"],
+ "sw_drop_comments": ["B1:DEEE", "B1:DEF3", "B1:DEFD", "B1:DF1B", "B1:DECE", "B1:E6D6", "B1:E775"],
+ "esb_notes": {
+  "B1:D92D": "only the entry is the same. obj_points below does not use MS_PAD and MS_PERS point by point: programs $32 and $36 of ESB's own microcode do each point, the points are 5 bytes with a depth cue flag, and they go to the buffer address of obj_buf_tab",
+  "B1:E29B": "the fire or thumb switch edge picks a letter. RUB and a letter send sound commands $3B and $3F. END copies the entry's initials to last_inits, saves the top ten to the NVRAM image (hs_save), sends sound $38 and sets UPDFLG to $FFFF. after a letter the next initial offered is the one already in the entry. the routine ends in jedi_mark_set, which sets bit 7 of the first initial when jedi_done is set",
+  "B1:E59D": "the three TIE pieces are types 9, 10 and 11 here, with timers $18, $18 and $10",
+  "B1:E683": "in ESB this begins the explosion of a probot. BGBKN makes two pieces, not three: type 0 from a point $100 above the centre going left and type 2 (TMPTP3) from the centre going right, both with a random upward speed whose high byte TMPVZ is 0. both are drawn as object 6, the probot head",
+  "B1:E724": "in ESB this begins the explosion of an AT-AT with piece types 6, 7 and 8, and it does not fall into BGBKN: its own three-piece code at $E72E, shared with atst_expl_setup, starts type TMPTP2 $200 ahead of the centre, TMPTP1 $200 to one side and TMPTP3 $200 to the other",
+  "B1:E846": "12 piece types in ESB: 0-2 probot, 3-5 AT-ST, 6-8 AT-AT, 9-11 TIE fighter",
+  "B1:E881": "in ESB a piece that goes below ground level bounces: its height becomes half the depth it went below, and if it was falling its upward speed becomes half the falling speed. type 1's entry of TMV is expl_piece_kill instead",
+  "B1:E904": "in ESB the type's view routine only picks the object and the colour (VWTIN), then obj_load, obj_points, obj_draw and obj_beam_home draw it: obj_points gives screen positions without a move to the object's centre first",
+  "B1:E99C": "in ESB all 12 piece types come here. it does not call OBJCEN, the colour table has $18 entries and a timer of $18 or more gives a JSRL $A013"
+ },
+ "questions": [
+  "B1:DA38-DAB2 - the .byte rows are code: six threaded draw primitives at $DA38, $DA3F, $DA5D, $DA7B, $DA9D and $DAA5 (given routine entries above). a search of both banks, the four slapstic pages and the vector ROM finds no word with any of these addresses, so the interpreter is unused and the lists it would have run are not in the ROM",
+  "B1:DAB3 - five bytes 10 6E 39 3C 00 between the threaded primitives and the text FULLER DID THE EFFECTS, not code that anything reaches and not referenced, purpose unknown",
+  "B1:E9E2-EA02 - 33 bytes after the explosion colour table that nothing refers to, purpose unknown",
+  "B1:DEFD - the carried name SDIV_B1 (self test divider) and its header sit in the middle of hs_view, dropped. the carried comments at $DEEE, $DEF3, $DEFD and $DF1B belonged to other Star Wars lines and are dropped too",
+  "B1:D9B3, D9B8, D9CB, D9D1 - the operands KFDEA and KFDEC are the numbers -534 and -532 (screen limits), not addresses in the ROM fill. B1:DF0C - LDD #$E1E1 is the address of the table at KE1E1. B1:E249 and E449 - the operand shown as cont_wave or HSCORS+40 is $4BEE as the end of the high score table",
+  "object 31 (draw_dart) - page 0 draws it twice in the tow cable code, each with its own roll angle. I could not tell from bank 1 what the two darts stand for",
+  "the table entries of objects 11 to 16 name draw_limb_down, but page 2 always draws limbs as objects 9 and 10, so those six entries are never used as draw routines",
+  "ram_notes and no_header are used here although the brief does not list them for this pass: ram_notes for COLOR ($48C0), which the game uses as the point buffer pointer, and no_header for $DEFD"
+ ]
+}

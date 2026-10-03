@@ -1,0 +1,477 @@
+{
+ "about": "reconciliation of the sixteen notes files of the slapstic pages and of bank 1 (p0_*, p1_*, p2_*, p3_*, b1_*): one name for each RAM address they named twice, neutral names for the shared temps of the direct page, the Star Wars symbols that have a wrong value or another meaning in ESB dropped or noted, operands that printed as the wrong thing given their real expression, the leftover and unused code said to be so in every header, and the texts of other files that used a losing name or that later findings made wrong repeated here with the right one",
+ "sw_drop_symbols": [
+  "AS_ROL",
+  "AS_GLW",
+  "GAMES",
+  "MS_PSUB",
+  "HSCORS"
+ ],
+ "sw_drop_names": [
+  "B1:639F",
+  "B1:63B7",
+  "B1:E718"
+ ],
+ "sw_drop_comments": [
+  "B1:7A12",
+  "B1:7A18",
+  "B1:E688",
+  "B1:E718",
+  "B1:E71D"
+ ],
+ "no_header": [
+  "B1:6357",
+  "B1:639F",
+  "B1:63B7",
+  "P3:9A1A"
+ ],
+ "ram": {
+  "4801": {
+   "name": "scratch_1",
+   "desc": "shared scratch of the direct page, a byte or a word that many routines use for the length of one call: Atari's TMPDX, TMPBIN, TMPCOL, TMPTP1, TMPLP, TMPABS and TMPSIZ in the carried lines. among others the scale word of bank 0's shrinking picture (LA775), the pen x of title_outline and jedi_letter_strokes, the sum of the two distances in the octagon distance routines of the pages, a loop counter of the indicator marks and a nibble temp of bank 1's NVRAM code"
+  },
+  "4802": {
+   "name": "scratch_2",
+   "desc": "shared scratch byte of the direct page: Atari's TMPLIN and TMPTP2 in the carried lines. bank 1's NVRAM code counts bytes in it, and page 1's indicator code keeps the x of the last mark drawn in the word that starts here, which takes in the first byte of scratch_3"
+  },
+  "4803": {
+   "name": "scratch_3",
+   "desc": "shared scratch of the direct page, a word in most uses: Atari's TMPDY, TMPOCT, TMPSIZ and TMPTP3 in the carried lines. among others the larger of the two distances in the octagon distance routines of the pages, the pen y of title_outline and jedi_letter_strokes and the y distance left to the sight in view_lazars"
+  },
+  "4805": {
+   "name": "scratch_5",
+   "desc": "shared scratch of the direct page: Atari's TMPXD in the carried lines. the intensity bits of the vector being written in title_outline and jedi_letter_strokes, and in astrd_lz_test first the saved X, then the asteroid's radius on the screen"
+  },
+  "4806": {
+   "name": "scratch_6",
+   "desc": "shared scratch byte of the direct page: jedi_letter_strokes keeps the offset of the point it draws to here"
+  },
+  "48C0": {
+   "name": "pnt_next",
+   "desc": "word: the next free point of the perspected point buffer BJ_PNT, the game's use of the address the self test knows as COLOR. obj_points sets it to the object's place in the buffer and leaves it past the last point, pnt_buf_reset sets it to the start of the buffer, and pnt_add_scratch stores a point there and moves it on by 5"
+  },
+  "4A54": {
+   "name": "xmit_atst",
+   "desc": "enemy record area with a different use in each part: the three $28-byte probot transmission records ($4A54-$4ACB, page 3 xmit_init on) in the probot part, the three AT-ST records of $11 bytes ($4A54-$4A86, page 1 atst_init on) in the walker part. byte 0 of a record is zero when it is free. the address is also the end of the five probot records at ALIEN"
+  },
+  "4A87": {
+   "name": "atat_rec",
+   "desc": "the three AT-AT records of the walker part, $19 bytes each up to cable_rec ($4AD2), kept by page 0 (atat_init on). byte 0 is the type, zero when the record is free, byte 1 the flags of the frame, 3 the shot delay, 4 the movement mode, 5-10 x, y and height, 11-16 where the head is from the centre, $11 and $13 the head's yaw and pitch angles, $15 the walk cycle counter, $16 the leg set. the address is also the end of the AT-ST records"
+  },
+  "4C0D": {
+   "name": "prob_hit_d",
+   "desc": "word: view distance of the nearest probot whose body or head the lazar cursor is on in this frame, set with prob_hit_rec by probot_body_aim and probot_head_aim on page 2 while the probots are drawn. TSTLAZ on page 3 stores $FF in its high byte each frame (P3_95C3) for none, lz_hit_probot compares it with the distances of the shots and the transmissions, and probot_shot_down reads it back as the depth of the probot shot down"
+  },
+  "4C0F": {
+   "name": "prob_hit_rec",
+   "desc": "word, goes with prob_hit_d: address of that probot's record, which probot_shot_down on page 2 then destroys. lz_hit_probot only splashes the lazar when it is 0"
+  },
+  "4C54": {
+   "name": "left_shown",
+   "desc": "the value of bonus_left that vw_wave_left last showed, kept to start the flash of the number (left_flash) when it changes"
+  },
+  "4C5F": {
+   "name": "w2_level_b",
+   "desc": "copy of fire_level made by the walker part's setup. from 9 up atat_head_aim on page 0 takes an AT-AT's head as aimed whenever the player is in front of it, whatever the angle"
+  },
+  "4C63": {
+   "name": "w1_spawn",
+   "desc": "probot part: how many of the five probot records at ALIEN page 2 keeps filled (probots_move), 5 from probot_setup and 0 from the training manual's set-up. minus ($FF from the end of the part): probots_move frees every probot that is not in view and probot_pick_state gives the others state 11, fly off"
+  },
+  "4C64": {
+   "name": "w2_spawn_a",
+   "desc": "walker part: spawn count of the AT-STs on page 1 (atst_move_all, atst_place), 3 from atst_init and 0 in the training manual. while it is above 0 a free record among the first w2_spawn_a gets a new AT-ST, one a frame, and a destroyed one is placed anew. minus ($FF from the end of the part) frees every AT-ST that was not in view in the last frame"
+  },
+  "4C65": {
+   "name": "w2_spawn_b",
+   "desc": "walker part: spawn count of the AT-ATs on page 0 (atat_move_all, atat_spawn), kept as w2_spawn_a is: 3 from atat_init, 0 in the training manual. minus ($FF from the end of the part) frees, once no tow cable is out, the walkers that are neither falling nor in view nor over the player"
+  },
+  "4C69": {
+   "name": "w1_active",
+   "desc": "probot part: number of probot records in use, counted afresh every frame by probots_move on page 2. the part's last phase (wave1_end_exec) ends when it is 0"
+  },
+  "4C6A": {
+   "name": "w2_active_a",
+   "desc": "walker part: number of AT-ST records in use, counted afresh every frame by atst_move_all on page 1"
+  },
+  "4C6B": {
+   "name": "w2_active_b",
+   "desc": "walker part: number of AT-AT records in use, counted afresh every frame by atat_move_all on page 0"
+  },
+  "4C7C": {
+   "name": "jedi_fade",
+   "desc": "brightness of the Jedi letters other than the new one while a letter is growing into place (jedi_show 1): $80 from jedi_award, down by 3 a frame in jedi_draw until it is below 8. cleared by jedi_clear"
+  },
+  "4C7E": {
+   "name": "jedi_idx",
+   "desc": "number of the Jedi letter being drawn, 0 to 3 for J, E, D, I: loop counter of jedi_draw and jedi_word_draw, read by jedi_letter_draw and jedi_letter_strokes to pick the letter's points and strokes"
+  },
+  "4C7F": {
+   "name": "jedi_new",
+   "desc": "number of the Jedi letter just earned, 0 to 3, set by jedi_award: the letter jedi_letter_draw shows in the flash colour, shrinking into place, while jedi_show is 1"
+  },
+  "4C81": {
+   "name": "jedi_scale",
+   "desc": "animation of a newly earned Jedi letter: 0 from jedi_award, up by 5 a frame in jedi_draw until it reaches $F0, which ends display state 1 (jedi_show goes to 2). held at $C8 it is the linear part of the scale word the new letter is drawn with, so the letter shrinks from full size into its place"
+  },
+  "4C8B": {
+   "name": "anim_frame",
+   "desc": "frame of the walk cycle of the walker whose legs are being drawn: the leg routines of page 0 (atat_legs) and page 1 (atst_draw_legs) copy the record's walk counter here (AT-AT byte $15, AT-ST byte 14), anim_track_pos on page 0 reads it to place each leg joint along its keyframe track and clears it when the cycle has gone round, and the leg routines store it back in the record"
+  },
+  "4CA1": {
+   "name": "prog_count",
+   "desc": "count of marks on the indicator at the top of the screen (page 1 vw_wave_ind). probot part: transmissions that got through, counted up from 0 when the flash of a new mark has faded (vw_xmit_mark_new). at 4 the probots send no more and the part ends. walker part: marks left, 4 at the start, one less each time the advance walk_adv passes -150, -50, 50 and 150 (vw_walker_ind). in both parts it also picks the status message"
+  },
+  "4CA2": {
+   "name": "flash_fade",
+   "desc": "level of the mark that is changing on the top indicator: $7F from ind_flash_start, down by 8 a frame while ind_flash is set (vw_xmit_mark_new, vw_gen_mark_lost). the IRQ keeps the flash colour with brightness $80 minus this level in the slot at vector RAM $0032, which the probot part's new mark is drawn with, and the walker part uses the level as the linear scale and twice the level as the brightness of the lost mark's burst"
+  },
+  "4CA6": {
+   "name": "adv_hold",
+   "desc": "walker part: frames the walkers' advance is held up. page 0 adds hold_add to it ($FF at most) when an AT-AT is destroyed, caught by the tow cable or flown under while the bonus quota is open, vw_walker_ind on page 1 counts it down and moves walk_adv only when it is 0. the play phase clears it after 1200 frames, or once the quota is met with Jedi time running"
+  },
+  "4CCB": {
+   "name": "kill_count",
+   "desc": "AT-STs shot in a walker part, counted to 50 at most by atst_killed on page 1 (AT-ATs are not counted). cable_init on page 0 gives the next walker part 4 + count/5 tow cables, 9 at most, and clears it. cleared at game start"
+  },
+  "4CD8": {
+   "name": "glow_said",
+   "desc": "set once the speech for a shot that hits the ship while its shield is already glowing has been sent (GNAHIT on page 1, P1_94D2: spk_cmd_19 in the probot and walker parts, spk_cmd_27 in the other two). cleared by the setups of the probot part and of the TIE fighter part only, so it is said once for each pair of parts"
+  },
+  "4CD9": {
+   "name": "hit_said",
+   "desc": "set at the first enemy shot that hits the ship in a part while the shield is not glowing and shields are left (GNAHIT on page 1, P1_94AB). in the TIE fighter and asteroid parts that hit sends a speech (spk_cmd_1d, spk_cmd_25), in the other two nothing. cleared by the setup of every part"
+  },
+  "4D58": {
+   "name": "GAMES",
+   "desc": "NUMBER OF GAMES PLAYED (Atari's name): 3 BCD bytes in the NVRAM image, $4D58-$4D5A, after RMECH. EEACCT adds 1 at the end of a game, the accounting page shows it and divides the total game time by it. the one matched Star Wars line, LDX #GAMES-2, had put the name on the middle byte"
+  },
+  "4D59": {
+   "name": "games_mid",
+   "desc": "second byte of GAMES"
+  },
+  "4D80": {
+   "name": "cable_scrx",
+   "desc": "word: screen x of the tow cable's centre, from cable_view on page 0. cable_draw_lines draws the two lines from this point. first of the walker part's tow cable temps $4D80-$4DA0, which lie over the start of the star queues ST_QU"
+  },
+  "4D82": {
+   "name": "cable_scry",
+   "desc": "word: screen y of the tow cable's centre, from cable_view, the word after cable_scrx. cable_draw_lines draws the two lines from this point"
+  },
+  "4D7B": {
+   "name": "OPTS1",
+   "desc": "GAME MODE OPTIONS (Atari's name), the second byte of option area 3 in the NVRAM image: bits 1-0 starting shields (2 to 5), bits 3-2 play difficulty, bits 5-4 Jedi-letter mode - with bit 5 set jedi_award gives the letters in the order J, E, D, I whatever part is played, with bit 4 set completing JEDI starts no force period - bit 6 music in attract, bit 7 set by the default. the option page changes the fields, the default is the option switch byte R_OPT2 with bits 0, 3 and 4 inverted"
+  },
+  "50E6": {
+   "name": "cable_vx",
+   "desc": "MS_VX+M_AL: word in the tow cable's block at M_AL, the x step the cable's centre takes each frame, set by cable_fire from the gun sight's direction. cable_leg_test widens its catch range by its size"
+  },
+  "50EE": {
+   "name": "cable_vy",
+   "desc": "MS_VY+M_AL: word in the tow cable's block at M_AL, the y step the cable's centre takes each frame, as cable_vx"
+  },
+  "50F8": {
+   "name": "cable_tx",
+   "desc": "MS_TX+M_AL: word, universe x of the tow cable's centre, first of the position words of its block at M_AL (cable_tz is the third). the two ends are viewed $02AA to either side of it. cable_mode_fly moves it by cable_vx each frame, cable_leg_test compares it with the knees of the AT-ATs and cable_catch sets it to the knee caught"
+  },
+  "50FA": {
+   "name": "cable_ty",
+   "desc": "MS_TY+M_AL: word, universe y of the tow cable's centre, as cable_tx"
+  },
+  "50FC": {
+   "name": "cable_tz",
+   "desc": "MS_TZ+M_AL: word, the height of the tow cable's centre in its unit vector block at M_AL. cable_mode_fly takes it a quarter of the way to $1300 each frame, and atat_move_all sets it to half the height of a falling walker + $0300 every frame"
+  },
+  "5098": {
+   "name": "s1_tx",
+   "desc": "MS_TX+M_S1: the player's universe x position, word, first of the position words s1_tx, s1_ty and s1_tz (math box block index $13). the pages add it to and take it off an object's x to change between universe coordinates and coordinates relative to the player"
+  }
+ },
+ "routines": {
+  "B0:ABF5": {
+   "desc": "tests whether the lazar is sweeping the ground and sets up the splash. a point $4000 ahead at half the lazar's screen position goes through math box program MS_S1UN on the scratch block, which turns it from the player's view into universe coordinates, and if its z is below zero or below half the player's height s1_tz while LZ_ON, LZ_HIT is set with splash type 3, a colour (white, or purple while the Jedi force is on) and SP_LOC from the high byte of z. made from the first half of Star Wars' GRLZIN, which transposed the ship's matrix and used MS_PSUB"
+  },
+  "B1:6000": {
+   "name": "prog_start_b1",
+   "desc": "bank 1's copy of prog_start: a jump to the cross-bank entry that leads to RESET in bank 0 (K601E), then the address of the IRQ entry. bank 1's RESET vector points at K601E itself, so nothing comes here"
+  },
+  "B1:6005": {
+   "name": "irq_entry_b1",
+   "desc": "bank 1's copy of irq_entry, where the IRQ vector of both banks points: U = the interrupted frame, the cross-bank entry K6018 runs irq_handler in bank 0 and comes back, then RTI"
+  },
+  "B1:600B": {
+   "name": "xbank_call_b1",
+   "desc": "bank 1's copy of xbank_call, the cross-bank call described at bank 0's copy: this one clears W_BANK D7, on the way out of bank 1 and on the way back to bank 0, where bank 0's copy sets it. the instruction after each ROR is fetched from the other bank's copy"
+  },
+  "B1:765C": {
+   "desc": "ESB's version of Star Wars' EEINI2: loads area A of the image at EEROM from the NVRAM, packing two nibbles (high first) into each byte, the checksum byte included. A is preserved, area_end and scratch_1 are used"
+  },
+  "B1:D123": {
+   "desc": "draw routine of object 31 (9 points perspected into buffer points 1 to 9): a long square shaft that widens to the rear, with a pointed nose. 18 lines at full brightness in three colours, written by the routine itself: $6180 for the nose, $6680 for the shaft and a JSRL $A013 before the rear end. it is the body at each end of the tow cable: page 0 loads it in cable_init and draws it once for each end (cable_view_end1, cable_view_end2)"
+  },
+  "B1:D92F": {
+   "desc": "perspects the points of object BJ_ID into the point buffer, ESB's version of JOBJPNT. the buffer address comes from obj_buf_tab, the depth cue range (plus the centre's distance M_XT) and scale from obj_cue_depth and obj_cue_scale go to M_XPS and M_YPS, and the math box programs $32 and $36, which Star Wars' microcode does not have, do the transform, the perspective and the depth cue of each point while the divider supplies 1/depth. each point is stored as screen x (limited to -534..534), screen y (limited to -532..728) and a flag byte with the top three bits of the cue, the intensity bits of a vector. pnt_next is left pointing past the last point. returns at once if the object is not loaded"
+  },
+  "B1:D9EF": {
+   "desc": "starts a new point list: pnt_next, the next free point of the buffer, is set to BJ_PNT ($4E00). called by pages 0 and 1 before they build the points of a walker leg"
+  },
+  "B1:D9F6": {
+   "desc": "perspects the single point in the scratch block M_X0 (block index $0F) with MS_PAD, the divider and MS_PERS, as Star Wars' JOBJPNT did for every point, stores its screen x and y at the buffer position pnt_next and moves pnt_next on by 5. the flag byte is not written. pages 0 and 1 call it for every joint point of a walker leg, which is then drawn as object 27 or 19"
+  },
+  "P0:8705": {
+   "desc": "per-frame movement of the AT-ATs, called by the walker phases and by man_move_walker. while w2_spawn_b is positive it respawns one free record (atat_spawn), when it is negative (end of the part) it frees the walkers that are neither falling nor in view nor over the player, then it awards the legs bonus when the player comes under a walker (atat_under remembers which one until the player has left it), and for every live record counts it in w2_active_b, runs down its shot delay, swings the head, moves it by its mode and steps the walk cycle. a falling walker carries the height of the tow cable's centre down with it"
+  },
+  "P0:904E": {
+   "desc": "tests the tow cable against the knee just worked out in M_X0 and M_Y0 for the AT-AT at U, called by atat_knee. nothing when the walker is already falling or no cable is out (cable_rec 0). the knee's universe x (twice the point's x plus the walker's) must be within $02AA, the distance of each end of the cable from its centre, plus the cable's step of this frame (cable_vx) of the cable's centre (cable_tx), and the same in y, then cable_catch is called"
+  },
+  "P0:90A5": {
+   "desc": "the tow cable has caught a leg of the AT-AT at U: moves the cable's centre to the knee, holds up the advance (hold_adv_catch), scores as atat_destroy does (75 points and the count down of bonus_left with the 5000 points and Jedi letter when it closes, else 750 points), sets bit 1 of the type byte and movement mode 2 so that the walker falls, and marks the cable attached (cable_attach)"
+  },
+  "P0:8B82": {
+   "desc": "draws the head of the AT-AT at U: marks the record drawn, yaws and pitches the ship 2 block by a quarter of the head's two angles and concatenates it, views the points of object $18, the head, and draws the neck (object $1A, only when the body is in view, since its lines run from points of the body to the back of the head), the head itself (object $18) and, after the lazar test on the head (atat_head_hit) and atat_head_aim, the eye (object $19) in the colour atat_head_aim left"
+  },
+  "P0:969D": {
+   "desc": "view of the tow cable, called by vew_walker and vew_walker_end with Y at the display list. first fires a cable when a thumb button went down this frame (lz_sw_edge). then, with a cable out, views its centre from the ship (MS_PSB2 on the position of the block at M_AL), keeps the result in cable_viewx/y/z and, when it is ahead and within 45 degrees both ways, its screen position in cable_scrx and cable_scry, views and draws the two ends and draws the lines"
+  },
+  "P1:8B8A": {
+   "desc": "draws the two legs of the AT-ST in U: writes the body colour, copies the walk counter (byte 14) to anim_frame and takes the pair of leg definitions for the record's leg set (byte 15, 0-2, set 0 if out of range) from atst_leg_sets"
+  },
+  "P1:8BC3": {
+   "desc": "draws one leg, X = pointer to the pointer to its 5-byte definition (joint track number, hip x word, hip y word). starts a new point list in BJ_PNT, has the four parts of the leg worked out by atst_leg_part0 to atst_leg_part3 - each from the hip position and the next joint track of page 0 anim_track_pos at the walk time in anim_frame - and has the 18 points drawn as object 19. the walk counter is copied back from anim_frame to byte 14"
+  },
+  "P1:8D44": {
+   "desc": "octagon distance from the laser cursor LZ_CX, LZ_CY to the perspected point at X (x word, y word): the larger of max(dx, dy) and 9/16 of dx + dy, less 10 and not below 0, returned in D. the same arithmetic as the octagon tests of Star Wars' VWGUN and S2VW. uses scratch_1 and scratch_3. pages 0 and 2 have their own copies (atat_oct_dist, lz_oct_dist, astrd_oct_dist)"
+  },
+  "P1:9DFE": {
+   "name": "slap_alt_read",
+   "desc": "LDA 0,X / ASLA / RTS, the one live routine in the tail $9DCD-$9FFF that is the same on all four pages. tie_fire, atat_fire, atst_fire and probot_fire call it with X = $9B5C + n: the jump to $9DFE and the read of $9B5C + n are the slapstic's alternate sequence, after which the next page select selects page n, the page of the routine's caller. the byte read is not used. only page 1 calls it"
+  },
+  "P1:9E2D": {
+   "name": "irq_old_tail_p1",
+   "desc": "not a routine start: the middle of the leftover copy of bank 0's irq_handler that ends every page, the same bytes as on page 0, where irq_old_tail describes it. nothing runs it. of $9DCD-$9FFF only slap_alt_read at $9DFE is live, and only on this page"
+  },
+  "P2:9233": {
+   "desc": "distance on the screen from the lazar cursor (LZ_CX, LZ_CY) to the perspected point at X (x word, y word), by the octagon rule the Star Wars collision tests use in line: the larger of the bigger axis distance and 9/16 of the sum of the two. returns it in D less 10, not below 0. uses scratch_1 and scratch_3"
+  },
+  "P2:9272": {
+   "desc": "lazar aim test on the body of the probot at U, after its points are processed. when the probot's depth M_XT is less than the depth of the nearest probot found so far (prob_hit_d) and the cursor is within the size of 45 units at that depth from point 18 of object 4, the middle of the body (lz_oct_dist), it records this probot in prob_hit_rec and its depth in prob_hit_d. page 3 lz_hit_probot reads them when the lazars fire"
+  },
+  "P2:92EE": {
+   "desc": "the probot in prob_hit_rec is hit by the lazars: jumped to from page 3 lz_hit_probot through maze entry P3_8454 when a probot is under the cursor and nearer than the enemy shot and the transmission under it. the first time in a game it sends speech command $05 (foa_said). it makes the probot's position absolute, starts the explosion there (bank 1 BGBKXP through L6198), scores 25 points while bonus_left is not 0 and 250 after, sends sound $4E, gives the probot a last try at a transmission and a shot (probot_launch) and frees the record. while bonus_left is not 0 it is counted down, and the kill that brings it to 0 scores 5,000, awards the Jedi letter (page 1 jedi_award) and raises quota_probot by one"
+  },
+  "P2:9B04": {
+   "desc": "launches an asteroid into the free record at U: status $41 (in use, universe position), flags, flash timer and size index 0, movement type 5 or 6 by the sign of a random byte, a random yaw rate of 0-7 either way, and a second random value up to 7 either way stored in the pitch angle. the scratch point x $7000 with random y and z, a point far ahead in the player's view, goes through math box program MS_S1UN and the result, in universe coordinates, becomes the record's position"
+  },
+  "P2:9E2D": {
+   "name": "irq_old_tail_p2",
+   "desc": "not a routine start: the middle of the leftover copy of bank 0's irq_handler, the same bytes as on page 0, where irq_old_tail describes it. on this page the copy starts at $9CA7, after the leftover wave tables from $9C1B. nothing runs it: the one live routine of the tail $9DCD-$9FFF, the helper at $9DFE, is called on page 1 only"
+  },
+  "P3:9E2D": {
+   "name": "irq_old_tail_p3",
+   "desc": "not a routine start: the middle of the leftover copy of bank 0's irq_handler, the same bytes as on page 0, where irq_old_tail describes it. on this page the copy starts at $9D2C, behind xmit_hit. nothing runs it: the one live routine of the tail $9DCD-$9FFF, the helper at $9DFE, is called on page 1 only"
+  }
+ },
+ "comments": {
+  "B0:6369": "bank 1 EETMP2: the 4 bytes at X, a plain copy from the byte-wide NVRAM image, to U",
+  "B0:AC16": "z of the point in universe coordinates",
+  "B1:619B": "BGBKXP with X and U saved: begin the explosion of a probot, two pieces (called by page 2 probot_shot_down)",
+  "B1:6540": "of bank 1's copies of the sound stubs only aud_cmd_38_b1, aud_cmd_3b_b1 and aud_cmd_3f_b1 are called (by GETINT, the initials entry). nothing calls the others, AUDTST_B1 and PMTST_B1 included: bank 0 and the pages use bank 0's stubs",
+  "B1:6796": "scratch_1 = last x, starts at 0",
+  "B1:7A18": "the last default byte, for high_wave, then one zero byte that nothing reads. area 2's checksum is worked out, not copied",
+  "B1:D956": "pnt_next is the next free point of the buffer here",
+  "B1:E688": "TMPTP3 = 2, the type of the second probot piece, and TMPVZ = 0",
+  "B1:E718": "TMPTP1 = 3, TMPTP2 = 4: explosion piece types of the AT-ST",
+  "B1:E71D": "TMPTP3 = 5, and TMPVZ = 3, the high byte of the pieces' upward speed",
+  "P0:8814": "falling: the cable's centre comes down with it, at half the walker's height + $0300",
+  "P0:9060": "distance in x from the cable's centre",
+  "P0:90A5": "the cable's centre goes to the knee",
+  "P0:956B": "AT-STs shot in the last walker part (atst_killed on page 1 counts them, AT-ATs are not counted), held to 25 here",
+  "P0:9717": "screen x of the centre. the cable's temps lie over the start of the star queues ST_QU",
+  "P1:8B9C": "byte 14, the walk counter, to anim_frame for the joint routine",
+  "P1:8C06": "the walk counter back to the record: anim_track_pos clears anim_frame when the walk cycle has gone round",
+  "P1:8F1A": "the number $9B5C + 3, an address the slapstic watches for, not a place in vw_walker_ind: its read at slap_alt_read is the alternate sequence for page 3",
+  "P1:8F8D": "$9B5C + 0: the alternate sequence for page 0",
+  "P1:8FF9": "$9B5C + 1: the alternate sequence for page 1",
+  "P1:940B": "JSRL $0020 (the slot named VRLZS): the sparkle picture, drawn for a walker's shot, which the IRQ changes every second field",
+  "P1:9448": "JSRL $0022 (the slot named VRGNX): the ring of sparkles, the burst of a walker's shot, which the IRQ changes every field",
+  "P1:947B": "JSRL $0022: the ring of sparkles, for a walker's shot",
+  "P1:9DD0": "from $9DCD to the end of the page the bytes are the same on all four pages: the back part of a copy of bank 0's irq_handler that nothing runs (see irq_old_tail on page 0), shown as bytes up to $9E2C",
+  "P1:9DF8": "$9DF7-$9DFD: LDX #$9E02 / LDB diff_adder / ABX, put over the handler copy in front of the helper. nothing enters there",
+  "P1:9E02": "16 bytes of $00 and $FF that the LDX above points at, read by nothing",
+  "P1:9E12": "the handler copy goes on, as bank 0 from LEBE8",
+  "P1:9FE2": "the start of a copy of GNSITE, as bank 0 LEDB8-LEDD4, cut off by the end of the page",
+  "P2:9B61": "MS_S1UN on the scratch block: from the player's view to universe coordinates",
+  "P2:9DCA": "from $9DCD to the end of the page the bytes are the same on all four pages (see irq_old_tail on page 0)",
+  "P2:9DFA": "$9DFE: LDA 0,X / ASLA / RTS, the helper page 1 calls for the slapstic's alternate sequence. nothing calls it on this page",
+  "P2:9E02": "16 bytes of $00 and $FF that the LDX #$9E02 at $9DF7 points at, read by nothing",
+  "P2:9FE2": "the start of a copy of GNSITE, as bank 0 LEDB8-LEDD4, cut off by the end of the page",
+  "P3:9DCB": "from $9DCD to the end of the page the bytes are the same on all four pages (see irq_old_tail on page 0)",
+  "P3:9DFB": "$9DFE: LDA 0,X / ASLA / RTS, the helper page 1 calls for the slapstic's alternate sequence. nothing calls it on this page. from $9E02 16 bytes of $00 and $FF, read by nothing",
+  "P3:9FE2": "the start of a copy of GNSITE, as bank 0 LEDB8-LEDD4, cut off by the end of the page"
+ },
+ "esb_notes": {
+  "B1:61B6": "bank 1's copy of bank 0's routine. nothing in bank 1 calls it and no entry of the cross-bank table leads to it, so it is unused",
+  "B1:61C6": "bank 1's copy of bank 0's routine. it is reached only from IPGEN_B1, which nothing calls, so it is unused",
+  "B1:62B3": "bank 1's copy, with its real entry at tranu1_entry_b1 two bytes before. no call to either address was found, so it is unused",
+  "B1:6325": "bank 1's copy of bank 0's routine. nothing in bank 1 calls it and no entry of the cross-bank table leads to it, so it is unused",
+  "B1:63DD": "bank 1's copy of bank 0's routine. nothing calls it, so it is unused",
+  "B1:63E8": "bank 1's copy of bank 0's routine. nothing calls it, so it is unused",
+  "B1:63F3": "bank 1's copy of bank 0's routine. nothing calls it, so it is unused",
+  "B1:64FA": "bank 1's copy of bank 0's routine. nothing calls it, so it is unused",
+  "B1:6536": "bank 1's copy of bank 0's stub. nothing calls it",
+  "B1:653B": "bank 1's copy of bank 0's stub. nothing calls it",
+  "P0:9A31": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9A48": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9A53": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9A6F": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9A91": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9A9A": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9AA8": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9AB0": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P0:9AC4": "part of the leftover copy at $9958-$9C19, never called. the working copy is on page 3",
+  "P1:9EEA": "copy of bank 0's DEBNCE inside the leftover irq_handler copy that ends every page ($9DCD-$9FFF, see irq_old_tail on page 0), never run",
+  "P1:9EFD": "copy of bank 0's DOPOTS inside the leftover irq_handler copy that ends every page, never run",
+  "P1:9F44": "copy of bank 0's RHCTRL inside the leftover irq_handler copy that ends every page, never run",
+  "P1:9F7D": "copy of bank 0's RHLIM inside the leftover irq_handler copy that ends every page, never run",
+  "P1:9FB4": "copy of bank 0's RHPOS inside the leftover irq_handler copy that ends every page, never run",
+  "P2:93D2": "this copy is not reached on page 2: from $9361 to $9560 the page holds the same bytes as page 3, left from an earlier build, and $934C-$93D1 before it is leftover TIE fighter set-up code. no maze entry of page 2 leads here, bank 0 views the TIE fighters through SNVW_P3 on page 3",
+  "P2:93E9": "part of the same leftover: called only by the SNVW in front of it, which nothing reaches. its end, $952B-$9560, is the same on all four pages",
+  "P2:9EEA": "copy of bank 0's DEBNCE inside the leftover irq_handler copy that ends every page ($9DCD-$9FFF, see irq_old_tail on page 0), never run",
+  "P2:9EFD": "copy of bank 0's DOPOTS inside the leftover irq_handler copy that ends every page, never run",
+  "P2:9F44": "copy of bank 0's RHCTRL inside the leftover irq_handler copy that ends every page, never run",
+  "P2:9F7D": "copy of bank 0's RHLIM inside the leftover irq_handler copy that ends every page, never run",
+  "P2:9FB4": "copy of bank 0's RHPOS inside the leftover irq_handler copy that ends every page, never run",
+  "P3:9EEA": "copy of bank 0's DEBNCE inside the leftover irq_handler copy that ends every page ($9DCD-$9FFF, see irq_old_tail on page 0), never run",
+  "P3:9EFD": "copy of bank 0's DOPOTS inside the leftover irq_handler copy that ends every page, never run",
+  "P3:9F44": "copy of bank 0's RHCTRL inside the leftover irq_handler copy that ends every page, never run",
+  "P3:9F7D": "copy of bank 0's RHLIM inside the leftover irq_handler copy that ends every page, never run",
+  "P3:9FB4": "copy of bank 0's RHPOS inside the leftover irq_handler copy that ends every page, never run"
+ },
+ "ram_notes": {
+  "fire_level": "the 5 bit random number compared with it does not decide firing: in gun_aim_error on page 1 a number below the level gives the new shot a random aim error, otherwise the shot homes on the player exactly. whether an enemy fires is decided by the entry the level picks in gun_fire_tab (TIE fighters, AT-ATs and AT-STs, the level held at 16 and for the TIE fighters halved during 16 frames of every 64) or in probot_fire_tab (probots, held at 15): the entry gives the time the enemy waits before it asks again, the value a random byte has to exceed and the highest gun record it may take",
+  "COLOR": "the name is right in the self test only. in the game the word at this address is pnt_next, the next free point of the perspected point buffer BJ_PNT, and the listing shows that name in bank 1's object routines",
+  "ST_QU": "in the walker part page 0's tow cable view keeps its screen positions and flags in the first $21 bytes, $4D80-$4DA0 (cable_scrx on): the star view fills and empties the queues within its own call. bank 1's NVRAM code uses the address as the end of the image at EEROM",
+  "EEROM": "a RAM image of the NVRAM with one byte for every two nibbles, $4D00-$4D7F: area 0 the options backup $4D00-$4D03, area 1 the top ten high scores $4D04-$4D4A, area 2 the pot limits and the accounting $4D4B-$4D79, area 3 the options $4D7A-$4D7D, the last byte of each its checksum. ee_init builds it from the NVRAM and EECKSM writes an area back",
+  "EEBUF": "the address is the NVRAM itself: the image is kept as whole bytes at EEROM, and EETST and EECMP compare it with the nibbles here",
+  "INITLS": "the high score table itself: 25 entries of 7 bytes, 3 initials (bit 7 of the first is the Jedi mark) and 4 BCD score bytes, $4B3F-$4BED. there is no separate table of scores",
+  "MS_S1UN": "the pages and lz_ground_hit also run it on the scratch block, to turn a point given in the player's view into universe coordinates: the muzzles of the AT-AT and the AT-ST, the tow cable's aim point, a probot's goal and a new asteroid's place. the two lines where the matcher had read this number as MS_PSUB show MS_S1UN now",
+  "VRLZS": "the slot at vector RAM $0020 holds the sparkle picture, not the lazar splash: every second field the IRQ puts the next of the four JMPLs at $B952 there (index VG_LZS). GN1DRW on page 1 calls it for a walker's shot (type bit 6) and the four rings of sparkles at $B95A call it six times each. the lazar splash of ESB is the slot at $0012, filled from VTLZS every field (pic12_index)",
+  "VG_LZS": "index (0, 2, 4, 6) of the sparkle picture in the slot at $0020, stepped every second field (lzs_timer). the lazar splash index is pic12_index",
+  "VRGNX": "the slot at $0022 holds the ring of sparkles, the burst of a walker's shot: the next of the four JMPLs at $B95A every field (gnx_index). page 1 calls it for a walker's shot that is hurt or glowing against the shield (P1_9448, P1_947B). the shot explosion, which had this name in Star Wars, is the slot at $001E",
+  "VF_GNB": "field timer of the slot at $0022 (gnx_index), reloaded with 1. the picture of a shot in flight, VG_GNB and the slot at $001A, has gnb_timer",
+  "VRGNT": "the slot at $0024 holds a triangle of display list set 2: the next of the four JMPLs at $B96C every field (VG_GNT, VF_GNT). only the asteroid hit flash pictures of that set, which page 2 astrd_flash_draw draws, call it. the tip fuse of the shot pictures, which had this name in Star Wars, is the slot at $001C (pic1c_index)",
+  "VG_GNT": "index (0, 2, 4, 6) into the four JMPLs at $B96C for the slot at $0024",
+  "VF_GNT": "field timer of the slot at $0024, reloaded with 1",
+  "TPS_BK1": "piece type 0 is the first piece of a destroyed probot, drawn as object 6, the probot head",
+  "TPS_BK2": "BGBKXP puts piece type 1 in TMPTP2 but makes no such piece: a probot breaks into types 0 and 2. the move routine of type 1, expl_piece_kill, would end the piece at once"
+ },
+ "operands": {
+  "B0:AC11": "MS_S1UN",
+  "B0:B4EB": "sine_tab+2",
+  "B0:CCDD": "TSPMAL-(2*$D8)",
+  "B1:6437": "sine_tab_b1+2",
+  "B1:6751": "ttl_outline_tab+54",
+  "B1:7203": "GAMES-1",
+  "B1:72A6": "GAMES-1",
+  "B1:737B": "acc_tmp+4",
+  "B1:7485": "HISTOG+18",
+  "B1:74F1": "T_DFLT-$4B",
+  "B1:AFED": "BJ_PNT+$101",
+  "B1:AFFE": "BJ_PNT+$106",
+  "B1:B001": "BJ_PNT+$101",
+  "B1:B008": "BJ_PNT+$104",
+  "B1:B013": "BJ_PNT+$106",
+  "B1:B01C": "BJ_PNT+$104",
+  "B1:B345": "BJ_PNT+$101",
+  "B1:B358": "BJ_PNT+$101",
+  "B1:B3BA": "BJ_PNT+$106",
+  "B1:B3C3": "BJ_PNT+$104",
+  "B1:B3CE": "BJ_PNT+$106",
+  "B1:B3D7": "BJ_PNT+$104",
+  "B1:B665": "BJ_PNT+$3E",
+  "B1:B66D": "BJ_PNT+$3C",
+  "B1:B677": "BJ_PNT+$3E",
+  "B1:B9E2": "BJ_PNT+$3E",
+  "B1:B9EA": "BJ_PNT+$3C",
+  "B1:B9F4": "BJ_PNT+$3E",
+  "B1:D956": "pnt_next",
+  "B1:D9B3": "$FDEA",
+  "B1:D9B8": "$FDEA",
+  "B1:D9CB": "$FDEC",
+  "B1:D9D1": "$FDEC",
+  "B1:D9E9": "pnt_next",
+  "B1:D9EF": "BJ_PNT",
+  "B1:D9F2": "pnt_next",
+  "B1:D9FE": "pnt_next",
+  "B1:DA25": "pnt_next",
+  "B1:DF0C": "hs_ypos_half",
+  "B1:E08F": "hs_top",
+  "B1:E249": "INITLS+175",
+  "B1:E258": "INITLS+(24*7)",
+  "B1:E283": "last_inits+1",
+  "B1:E288": "last_inits+2",
+  "B1:E2F3": "TINTXY+116",
+  "B1:E33A": "last_inits+1",
+  "B1:E3FA": "INITLS+70",
+  "B1:E449": "INITLS+175",
+  "B1:E462": "INITLS+70",
+  "B1:E477": "hs_defaults+175",
+  "B1:E487": "hs_defaults+70",
+  "P0:863F": "atat_init_tab+30",
+  "P0:8AF9": "MS_S1UN",
+  "P0:93C1": "anim_track_tab+136",
+  "P0:95E4": "MS_S1UN",
+  "P0:9717": "cable_scrx",
+  "P0:98C1": "cable_scrx",
+  "P0:98DB": "cable_scrx",
+  "P0:98F0": "cable_scrx",
+  "P0:990A": "cable_scrx",
+  "P1:8AC0": "MS_S1UN",
+  "P1:8F1A": "$9B5F",
+  "P1:8F8D": "$9B5C",
+  "P1:8FF9": "$9B5D",
+  "P1:9065": "$9B5E",
+  "P1:9A8B": "$A015",
+  "P1:9C0B": "adv_mark_x-2",
+  "P2:8C4A": "MS_S1UN",
+  "P2:969A": "ALIENZ+$17",
+  "P2:9B61": "MS_S1UN",
+  "P3:8664": "man_tie_chor",
+  "P3:8D98": "SETA1_P3-4",
+  "P3:8D9D": "SETA1_P3-2",
+  "P3:8E44": "SETA1_P3-4",
+  "P3:8E49": "SETA1_P3-2",
+  "P3:98E2": "xmit_atst+(3*$28)",
+  "P3:996A": "xmit_atst+(3*$28)",
+  "P3:99B1": "xmit_atst+(3*$28)",
+  "P3:9C07": "xmit_atst+(3*$28)",
+  "P3:9D1A": "xmit_atst+(3*$28)"
+ },
+ "questions": [
+  "tracer: bytes that are code but are listed as data, each decoding cleanly from the address given. B1:621B-621C (ASRA RORB, the ASRD7 entry, falls into ASRD6_B1) and B1:6275-627E (LSLB ROLA five times, the LSLD7 to LSLD3 entries, falls into LSLD2), unused entries like B0:B2FC. B1:DA38-DAB2, the six unused threaded draw primitives with entries at $DA38, $DA3F, $DA5D, $DA7B, $DA9D and $DAA5 (the last ends with PULS A,B,X,U,PC at $DAB1). P1:90CF-90D1, LDX #$4928 falling into gun_find_free at $90D2, an entry nothing uses. they could go in hints.ENTRIES_MAIN",
+  "tracer: leftover code that is listed as data, never run, decoding cleanly. P0:9958-9A19 (the end of CPUAL to $999A, CPUMVL $999B-$99E0, CPCHKL $99E1-$9A19). P2:934C-93D1 (two routines: $934C-$9370, whose first instruction LDA #$00 lost its opcode to the RTS at $934A, and $9371-$93D1). the copy of irq_handler: P0:9CA7-9E2C, P2:9CA7-9E2C, P3:9D2C-9E2C and P1:9DCD-9E2C, and on all four pages $9FE2-$9FFE, the start of GNSITE ($9FFF is $FF). inside the copy $9DF7-$9E01 is the planted LDX #$9E02 / LDB diff_adder / ABX / LDA 0,X / ASLA / RTS and $9E02-$9E11 a 16 byte table, the same on every page. whether dead code is better shown as code or as bytes is the maintainer's choice: the headers and comments say what it is either way",
+  "tracer: code listed from the wrong byte. P0:9472, the header address of s2vw_old_tail, is the middle of an instruction: $9472-$9473 are the operand of an LDD M_XP whose opcode page 0's own code overwrote, the first whole instruction is CMPD #$0010 at $9474, and the listing's lines P0_9472 NEGB, P0_9473 NEG $4810 and P0_9475 SUBD #$0010 are a misreading (it is in step again from $9478). P1:952B likewise: $952B is the last byte of a cut-off ORA #, $952C-$952E is STD $15,X, and the listing's ASL $48ED / EORA #$15 is a misreading (in step again from $952F), so $48ED is no RAM use. the two stretches should start at $9474 and $952C with the bytes before them as data",
+  "generator: tables that need a row format, with exact ranges. (a) P1:90E4-9127 gun_fire_tab, 17 rows, and P1:9128-9167 probot_fire_tab, 16 rows: byte, byte, word - wait count, random threshold, address of a gun record (GUN + 0, 8, 16 ... $28). (b) P0:91BE-932B, the keyframe rings of anim_track_pos: rows of 7 bytes, three words (x, y and z offset) and a byte (frame count). a row whose count is 0 ends a ring and is followed by one link word, the address of the ring's first row. the rings start at $91BE (2 rows), $91CE (11), $921D (11), $926C (3), $9283 (2), $9293 (7), $92C6 (7) and $92F9 (7), the link words are at $91CC, $921B, $926A, $9281, $9291, $92C4, $92F7 and $932A (given as ptrs regions by p0_8c00). the 68 words of anim_track_tab at $932C-$93B3 point at rows inside the rings, so every row wants a label. (c) P3:908B-9360, the choreographies: 242 steps of 3 bytes, an op byte and two operand bytes. by the low three bits of the op: 0 is a control step, op $00 until + status mask word, any other value ($80 in Atari's tables) if + mask word. 1 goto + address word. 2 gosub + address word. 3 return, operand bytes not used. 4 twirl for op / 2 frames + twirl flags byte + move flags byte. the labels TCHxxx_P3, SPLIT_P3 and man_tie_chor fall on step starts. (d) records of three words and four bytes: P0:8656-8673 atat_init_tab (3 rows), P0:86E7-8704 atat_demo_tab (3), P1:8633-866E atst_init_tab (6), P1:86C3-86E0 man_atst_tab (3), P2:875E-877B man_probot_tab (3), P2:95E6-965D astrd_init_tab (12), P2:96C2-96DF astrd_man_tab (3). (e) rows of four bytes: P2:866C-8683 probot_init_tab (6 rows). (f) leg records of a byte and two words: P0:8BEB-8C26 (12 rows) and P1:8B6C-8B89 atst_leg_defs (6 rows)",
+  "generator: B1:79EB-7A19, T_DFLT, is 46 single bytes for $4D4B-$4D78 and one zero byte that nothing reads, but K79F4-K7A19 keep Star Wars' .word rows, because a carried data statement cannot be given another layout by a region. this file drops the two carried comments that named the wrong things (B1:7A12, B1:7A18). a way to drop a carried data statement is needed to show the bytes singly",
+  "generator: a routines entry in any notes file makes a header even when the address is in no_header. so the pieces of swap_u1_u2_b1 (B1:6357, B1:639F, B1:63B7), the middle of xmit_trail_shift (P3:9A1A) and the fragments P1:952B, P0:9472 and $9E2D on all four pages keep a header whose text says that they are not routines. if no_header is to win, their descriptions have to become comments. the four addresses in no_header here are for that case",
+  "generator: the dead copies carry Atari's plain names and the live copies the suffixed ones. on page 0 NWCHOR, CHCN_D, CHCN_E, CHIF_D, CHGO_D, CHGS_D, CHRT_D, CHTW_D, CHTW_E, NWASHP and ADASHP ($9A1A-$9C19, never run) against NWCHOR_P3 and the others on page 3, on page 2 SNVW and S2VW ($93D2, $93E9, never run) against SNVW_P3 and S2VW_P3. the plain name goes to the lowest space, it should go to the copy that runs. a notes file cannot do this, since a name equal to a carried symbol is refused",
+  "generator: names in bank 1 that end in a Star Wars address - BJCNTR_6761, BJLNV_6782, BJLNB_67AA, INOBJ_670D, OBJBPNT_67D2, OBJPNT_67D4. they look like second labels of the Star Wars listing carried with their address suffix",
+  "AS_ROL and AS_GLW are dropped: the alien record of ESB has a new byte 4, the fire delay, so from the picture number on every field is one byte further on than in Star Wars (picture 5, dying 6, glow 7, hits left 8, damage 9, forced roll 10, aim 11, target 12), and the two symbols had Star Wars' values 9 and 6 on lines that clear the damage count and the dying byte (P3:8EA0, P3:8EA4 and the dead copies P0:9BE7, P0:9BEB). the lines print 9,X and 6,X now. ESB's offsets could be defined (AS_PIC 5, AS_DIE 6, AS_GLW 7, AS_HTA 8, AS_DMC 9, AS_ROL 10, AS_AIM 11, AS_TRGT 12), which needs a way to give constants from a notes file",
+  "MS_PSUB is dropped: its value $60 came from two lines (B0:AC11, P2:9B61) where ESB runs program $60 and Star Wars ran MS_PSUB, which is $2A there. $60 is MS_S1UN in both games (STARNW is the same instruction for instruction) and every use on the pages fits it: a point in the player's view goes in, universe coordinates come out. the six lines that load $60 for it are given the operand MS_S1UN. program $2A, which gun_mov_home still runs at P1:9201, has no name now. it could be given back as MS_PSUB = $2A. what the two programs do was read from their uses, not from the microcode",
+  "a second name for an address that has a voted Star Wars name: this file gives $48C0 the name pnt_next (COLOR in the self test) and $4D80 the name cable_scrx (ST_QU for the stars and as the end of the NVRAM image) with ram entries and puts them on the lines of the game with operands (B1:D956, D9E9, D9F2, D9FE, DA25 and P0:9717, 98C1, 98DB, 98F0, 990A). the generator takes this as it is, because a RAM hint at an address with a voted name is only used where an operand asks for it. it is the per-range alias 01_reconcile asked for, done by hand, and would serve for WV_BGP, WV_LP and WV_LIV in the self test too",
+  "the vector RAM slot names of the IRQ sit on slots ESB added, as v_vector.json also reports: VRLZS ($0020) is the sparkle picture of a walker's shot and not the lazar splash (ESB: $0012), VRGNX ($0022) the ring of sparkles and not the shot explosion (ESB: $001E), VRGNT ($0024) the triangle of the asteroid flash and not the tip fuse (ESB: $001C), and with them the IRQ's VG_LZS, VF_GNB, VF_GNT and VG_GNT. this file leaves the symbols and says in ram_notes what each holds in ESB. dropping the seven and naming slots and counters afresh would be cleaner, but touches bank 0's IRQ and its four dead copies on the pages, which 01_reconcile owns",
+  "GAMES is dropped and given again to $4D58, the first of the three bytes, with games_mid for $4D59: b1_7000's games_hi is superseded. HSCORS is dropped: its only vote was CMPX #HSCORS+40 at B1:E449, which is the end of ESB's one high score table (INITLS+175)",
+  "generator: the points of object 0 (53 points of 5 bytes) run to $4F09, past the RAM block BJ_PNT $4E00-$4EFF, so twelve lines of draw_tie showed bare $4F01, $4F04 and $4F06. operands give BJ_PNT+$101 and so on. the block could end at $4F0A. six lines of draw_tie_wing (B1:B665, B66D, B677, B9E2, B9EA, B9F4) printed <$5E3E and <$5E3C for the direct page operands $3E and $3C: with the direct page at $4E the address is $4E3E, so the number printed is wrong though it encodes the same byte. operands give BJ_PNT+$3E and BJ_PNT+$3C, but where the $5E comes from should be looked at",
+  "B0:CCDD (TSPMAL-(2*$D8)) and B0:B4EB (sine_tab+2) are given operands although they are in bank 0: 01_reconcile listed the first under its questions before the operands key existed, the second is the twin of B1:6437",
+  "the descriptions of bank 1's copies of the sound stubs are in 01_reconcile and cannot be changed here. only the copies for $38, $3B and $3F are called. a comment at B1:6540 says so",
+  "fire_level's description is in 01_reconcile too: the 5 bit random test it mentions is the aim error of a new shot, not the decision to fire. the correction is given as a ram_notes line, which prints with the words In ESB in front and reads oddly on a name of this disassembly. likewise w2_spk_cnt there could say what its page 0 test is: the count runs while the lazar cursor rests on the body of an AT-AT (atat_body_hit), where a shot destroys nothing",
+  "$4C87, read at P1:9715 by jedi_frame_draw and written by nothing in any listing: not named",
+  "record bits no file settles: bits 0 and 3 of the AT-AT type byte ($29 from atat_spawn, 1 and 9 in atat_demo_tab), bits $01 and $08 of the AT-ST status byte ($29 from atst_place, $01 and $09 in man_atst_tab), bits $01 and $10 of the probot type byte (7 from probot_spawn, $01 and $11 in man_probot_tab). no test of them was found",
+  "bytes that nothing reads and that are not code: P0:992B-9940 (22 bytes in front of the signature word), B1:7D87-7D8E (8 bytes), B1:DAB3-DAB7 (5 bytes after the threaded primitives), B1:E9E2-EA02 (33 bytes), and P2:9C1A ($FF where page 0 has $00). purpose not known",
+  "why the copy of irq_handler is on the pages, and whether the LDX #$9E02 / LDB diff_adder / ABX in front of the helper at $9DFE and its 16 byte table are only camouflage, is not settled. nothing enters at $9DF7 on any page",
+  "things that look like slips in Atari's code, described as the code runs and not checked in the running game: B1:7477-7489 (the histogram halving loop tests U, which it never steps), P1:9CD8 (walker_status_msg indexes its table with count * 2 where the table is laid out for count * 4), P1:8856 (AT-ST movement mode 4), the odd fallback indexes at P1:880A, P1:9195 and P2:97AF, P2:9861, P2:98C1 and P2:9921 (CMPD #0 then BCC, always taken), P2:9B3B (a rate stored in the pitch angle), P2:87F9 (a changed rate that is not stored), P3:98A7 (only A loaded before CMPD), the twirl steps of the choreographies whose halved time bytes $80 and $08 decode as IF steps (P3:91BD, 9244, 924A-9253, 9268, 92DD), and P0:90A5 with P0:9006, which score an AT-AT brought down by the tow cable twice",
+  "glow_said is cleared by the setups of the probot part (B0:6BEA) and of the TIE fighter part (B0:6FA6) only, hit_said by all four. so the speech for a hit on a glowing shield comes once in the probot and walker parts together and once in the two space parts together. whether that was meant is not known",
+  "craft_type 2 is accepted by view_lazars (P3:96C5, P3:96DD) but nothing sets it. movement types 2 and 3 of the asteroids, modes 1, 2, 4 and 5 of the AT-STs and cable mode 0 are in their tables, but no instruction was found that gives a live record any of them",
+  "what the speech phrases say is still not known, so the texts give command numbers only. which letters the six STAR WARS outlines of the title are, and that its last four outlines spell BACK, was read from plots of the points and from the point counts (b1_61b6, b1_7000)"
+ ]
+}

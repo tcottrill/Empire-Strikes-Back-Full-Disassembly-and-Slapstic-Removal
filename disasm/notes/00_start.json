@@ -1,0 +1,86 @@
+{
+ "about": "bank 0 $6000-$61B5: program start, IRQ entry, the cross-bank call and its table",
+ "routines": {
+  "B0:6000": {
+   "name": "prog_start",
+   "desc": "start of the program ROM: a jump to RESET, kept from Star Wars where it let the development system start the program, then the address of the IRQ entry"
+  },
+  "B0:6005": {
+   "name": "irq_entry",
+   "desc": "the IRQ vector of both banks. U = the interrupted frame, then the IRQ handler proper, which is in bank 0, then RTI. Bank 1's copy of this code reaches the handler through its cross-bank table entry"
+  },
+  "B0:600B": {
+   "name": "xbank_call",
+   "desc": "cross-bank call, at the same address in both banks. Reached by JSR from an entry of the table that follows, it flips W_BANK D7 by rotating the carry into it, so the next instruction is fetched from the other bank's copy of this routine, which calls the address on the stack - the instruction after the table entry's JSR, in the other bank a JMP to the routine - then flips the bank back and returns to the original caller. Bank 0's copy sets D7 on the way out and bank 1's copy sets it on the way back, bank 1's copy clears it on the way out and bank 0's on the way back"
+  }
+ },
+ "comments": {
+  "B0:6003": "address of the IRQ entry",
+  "B0:600B": "carry = 1: bank 1",
+  "B0:600D": "into W_BANK D7, the next instruction comes from bank 1",
+  "B0:6010": "(arriving from bank 1) call the JMP after the caller's table entry",
+  "B0:6012": "carry = 1: back to bank 1",
+  "B0:6017": "(in bank 1 again) return to the original caller",
+  "B1:600B": "carry = 0: bank 0",
+  "B1:600D": "into W_BANK D7, the next instruction comes from bank 0",
+  "B1:6010": "(arriving from bank 0) call the JMP after the caller's table entry",
+  "B1:6012": "carry = 0: back to bank 0",
+  "B1:6017": "(in bank 0 again) return to the original caller",
+  "B0:FFF2": "6809 vectors: SWI3, SWI2, FIRQ, IRQ, SWI, NMI, RESET",
+  "B1:FFF2": "6809 vectors: SWI3, SWI2, FIRQ, IRQ, SWI, NMI, RESET - all through the cross-bank table",
+  "B0:EEFE": "the four slapstic page-select addresses, read through by the ROM test to select each page"
+ },
+ "ram_blocks": [
+  {
+   "start": "4E00",
+   "end": "4F00",
+   "name": "BJ_PNT",
+   "desc": "PERSPECTED POINTS (Atari's name, at $4C00 in Star Wars): 5 bytes per point - x word, y word, a flag byte. The object draw routines of bank 1 run with the direct page here."
+  }
+ ],
+ "regions": [
+  [
+   "B0",
+   "6003",
+   "6005",
+   "ptrs"
+  ],
+  [
+   "B1",
+   "6003",
+   "6005",
+   "ptrs"
+  ],
+  [
+   "B0",
+   "FFF2",
+   "10000",
+   "ptrs"
+  ],
+  [
+   "B1",
+   "FFF2",
+   "10000",
+   "ptrs"
+  ],
+  [
+   "S",
+   "FFF2",
+   "10000",
+   "ptrs"
+  ],
+  [
+   "B0",
+   "EEFE",
+   "EF06",
+   "ptrs"
+  ]
+ ],
+ "no_header": [
+  "B0:6623",
+  "B0:B214",
+  "B0:B40B",
+  "B0:B453",
+  "B0:B46B"
+ ]
+}

@@ -1,0 +1,338 @@
+{
+ "about": "slapstic page 0 $8C00-$93FF: the AT-AT walkers continued - the four animated legs (hip, knee, ankle and foot points made from keyframe tracks and drawn as object $1B), the laser cursor tests on body, head and eye, the destruction, tow cable catch, crash and respawn of a walker, the keyframe rings and track table of the walk cycles and the start of the interpolation routine that pages 0 and 1 share",
+ "routines": {
+  "P0:8C27": {
+   "name": "atat_legs",
+   "desc": "draws the four legs of the AT-AT at U, called by atat_view_legs: puts the walk cycle counter (byte $15 of the record) in anim_frame, takes the leg set for byte $16 from atat_gait_tab (set 0 when it is over 2) and calls atat_leg_set with X at the set's four leg record pointers"
+  },
+  "P0:8C46": {
+   "name": "atat_leg_set",
+   "desc": "draws the four legs of one leg set: X points at four pointers to 5-byte leg records, the first two (front legs) go to atat_front_leg and the last two (rear legs) to atat_rear_leg"
+  },
+  "P0:8C5C": {
+   "name": "atat_front_leg",
+   "desc": "works out and draws one front leg of the AT-AT at U. X points at the pointer to the leg record (first track number, hip x word, hip y word). restarts the perspected points at BJ_PNT and views three points of the hip (atat_front_hip) and three of the knee (atat_knee, which also tests the tow cable). only when the knee is within 45 degrees left and right of straight ahead it marks the walker drawn, sets the brightness or crashes the ship (atat_leg_shade), views the ankle and the foot (atat_ankle_foot) and has bank 1 draw object $1B through the 12 points. ends by storing anim_frame back in byte $15 of the record"
+  },
+  "P0:8CBA": {
+   "name": "atat_rear_leg",
+   "desc": "works out and draws one rear leg of the AT-AT at U: the same code as atat_front_leg except that the hip points come from atat_rear_hip"
+  },
+  "P0:8D18": {
+   "name": "atat_leg_shade",
+   "desc": "called for a leg whose knee is in view. when the walker's centre (M_XT) is farther than $2000 it writes the colour word for the leg, colour 2 with a brightness of ($4000 - distance, held to 0-$0800) / 16. when the walker is nearer and the knee is less than $0280 ahead of the ship (M_XP) the ship has flown into the leg and atat_crash is called"
+  },
+  "P0:8D49": {
+   "name": "atat_rear_hip",
+   "desc": "hip of a rear leg: with the hip's x and y already in M_X0 and M_Y0 it sets z to 0, adds the offset of the leg's first track (atat_add_track) and views the three points of the joint (atat_joint_pts)"
+  },
+  "P0:8D55": {
+   "name": "atat_front_hip",
+   "desc": "hip of a front leg: as atat_rear_hip but with z $0117 and the three slanted points of atat_fr_hip_pts"
+  },
+  "P0:8D61": {
+   "name": "atat_add_track",
+   "desc": "takes the track number in the first byte of the leg record at X, has anim_track_pos (maze entry P0_85B3) interpolate that track for anim_frame and adds the offset it leaves in anim_dx, anim_dy and anim_dz to the scratch point M_X0, M_Y0, M_Z0"
+  },
+  "P0:8D82": {
+   "name": "atat_knee",
+   "desc": "knee of the leg whose record is at X, hip x and y already in M_X0 and M_Y0: z is half way down the walker's height (word 9 of the record at U) plus $0300, in the half units the leg points use, the offset of the leg's second track is added, the tow cable is tested against the knee (cable_leg_test) and the three points of the joint are viewed (atat_joint_pts)"
+  },
+  "P0:8DBA": {
+   "name": "atat_ankle_foot",
+   "desc": "ankle and foot of the leg whose record is at X, hip x and y already in M_X0 and M_Y0: the ankle is $0300 above the ground plus the offset of the leg's third track and gives three points (atat_joint_pts), then z is set to the ground plus the track's z offset and the three points of the foot are viewed around the place the ankle's points ended (atat_foot_pts)"
+  },
+  "P0:8DFD": {
+   "name": "atat_fr_hip_pts",
+   "desc": "views three points around the scratch point for a front hip, each through bank 1 KD9F6 (L60DE) which adds the next perspected point to BJ_PNT: x - $0100 and z - $60, then x + $0100, y + $80 and z + $60, then the same with y - $80. it leaves M_X0, M_Y0 and M_Z0 at the last point"
+  },
+  "P0:8E3D": {
+   "name": "atat_joint_pts",
+   "desc": "views three points around the scratch point M_X0, M_Y0, M_Z0 for one joint of a leg, each through bank 1 KD9F6 (L60DE): x - $0100, then x + $0100 and y + $80, then x + $0100 and y - $80, all at the same z. it leaves M_X0 and M_Y0 at the last point"
+  },
+  "P0:8E6B": {
+   "name": "atat_foot_pts",
+   "desc": "views the three points of a foot through bank 1 KD9F6 (L60DE), starting from the last point of the ankle: with the ankle's centre as origin they are x - $0200, then x + $0200 and y + $0100, then x + $0200 and y - $0100, a triangle twice the size of a joint's"
+  },
+  "P0:8EA2": {
+   "name": "atat_oct_dist",
+   "desc": "octagon distance from the laser cursor (LZ_CX, LZ_CY) to the perspected point at X, as in Star Wars' S2VW and VWGUN hit tests: the larger of the absolute x and y differences or 9/16 of their sum, whichever is greater, less 10, not below 0. returns it in D. page 1 has its own copy, cursor_oct_dist"
+  },
+  "P0:8EE1": {
+   "name": "atat_body_hit",
+   "desc": "laser cursor test on the body of an AT-AT, called by atat_draw_body after object $17 is drawn. only when the walker (M_XT) is nearer than atat_hit_d: finds the screen size of a length of $02EE at the walker's distance and tests the cursor against the body's perspected points 21 to 24 with atat_oct_dist. when the cursor is on one of them it records the distance in atat_hit_d with atat_hit_rec 0, so a shot stops on the body and destroys nothing, and counts w2_spk_cnt, which starts the speech spk_cmd_03 after 20 such frames in a row and then parks at $80. when it is on none the count starts again"
+  },
+  "P0:8F64": {
+   "name": "atat_head_hit",
+   "desc": "laser cursor test on the head of an AT-AT, called by atat_draw_head after object $18 is drawn. only when the head (M_XT) is nearer than atat_hit_d: finds the screen size of a length of $0271 at the head's distance (less $01F4, at least $01F4) and, when the cursor is within it of perspected point 42, records the distance in atat_hit_d with atat_hit_rec 0, a hit that destroys nothing"
+  },
+  "P0:8FA6": {
+   "name": "atat_eye_hit",
+   "desc": "laser cursor test on the four-sided figure of the head that object $19 draws (perspected points 38 to 41), the one atat_head_aim turns red, called at the end of atat_head_aim with U at the AT-AT record. when the head (M_XT) is not farther than atat_hit_d and the cursor lies inside the box around the four points, it puts U in atat_hit_rec and the distance in atat_hit_d: this walker is the one a laser shot destroys"
+  },
+  "P0:9003": {
+   "name": "atat_eye_shot",
+   "desc": "reached through the maze entry P0_8538 from the laser routine of page 3 (P3_97FA) when the nearest thing under the cursor is the eye of an AT-AT: loads U with atat_hit_rec and falls into atat_destroy"
+  },
+  "P0:9006": {
+   "name": "atat_destroy",
+   "desc": "destroys the AT-AT at U, shot in the eye or fallen to the ground (atat_mode_fall): starts the three-piece explosion of bank 1 BGTWXP at the walker's position plus its head offset, frees the tow cable record when the walker was caught by the cable, respawns or frees the record (atat_spawn), holds up the walkers' advance (hold_adv_kill) and scores: 75 points while bonus_left is open and, when this kill closes it, 5000 points, the Jedi letter (page 1 P1_9573) and one more on quota_walker, else 750 points. ends with the sound aud_cmd_51"
+  },
+  "P0:904E": {
+   "name": "cable_leg_test",
+   "desc": "tests the tow cable against the knee just worked out in M_X0 and M_Y0 for the AT-AT at U, called by atat_knee. nothing when the walker is already falling or no cable is out (cable_rec 0). the knee's universe x (twice the point's x plus the walker's) must be within $02AA plus the cable's step of this frame (cable_vx) of the cable's end (cable_tx), and the same in y, then cable_catch is called"
+  },
+  "P0:90A5": {
+   "name": "cable_catch",
+   "desc": "the tow cable has caught a leg of the AT-AT at U: moves the cable's end to the knee, holds up the advance (hold_adv_catch), scores as atat_destroy does (75 points and the count down of bonus_left with the 5000 points and Jedi letter when it closes, else 750 points), sets bit 1 of the type byte and movement mode 2 so that the walker falls, and marks the cable attached (P0_9915)"
+  },
+  "P0:90E5": {
+   "name": "hold_adv_kill",
+   "desc": "called when an AT-AT is destroyed: while bonus_left is not 0 adds hold_add to adv_hold, the frames the walkers' advance is held up ($FF at most), and takes 1 off hold_add while it is over 15. the first of three identical copies"
+  },
+  "P0:9102": {
+   "name": "hold_adv_catch",
+   "desc": "called when the tow cable catches an AT-AT: the same code as hold_adv_kill"
+  },
+  "P0:911F": {
+   "name": "hold_adv_legs",
+   "desc": "called by atat_move_all when the player flies under an AT-AT and the legs bonus is scored: the same code as hold_adv_kill"
+  },
+  "P0:913C": {
+   "name": "atat_crash",
+   "desc": "the ship has run into the AT-AT being viewed (record in S2_PRM), called for a leg close in front (atat_leg_shade) and under a falling walker (atat_view_all): replaces the walker's colour word in the display list (atat_col_ptr) with the flash list call $A013 and sets bit 7 of byte 1 so that it is written again next frame, starts the shield hit glow (BG1GLW) and the crash sound aud_cmd_32, and sets the roll from the hit S_ROL to $20, with the sign it already has or, when it is 0, the sign of the high byte of M_YP"
+  },
+  "P0:9163": {
+   "name": "atat_spawn",
+   "desc": "puts a new AT-AT in the record at U, called by atat_move_all for a free record and by atat_destroy. when w2_spawn_b is not positive the record is freed instead. a walker that was not drawn this frame restarts half the world ($8000) from the player in x, one that was drawn moves half the world in x or, one time in two, half the world in y with a random x. in the first two cases y gets a random step added, is cut to a multiple of $1000 and gets 0-$03FC added. the height is $2000, the mode 1 (walk), the type $29 and the flags 0. the head angles, the walk cycle counter and the leg set are kept"
+  },
+  "P0:93B4": {
+   "name": "anim_track_pos",
+   "desc": "keyframe interpolation for the legs of the walkers, called through the maze entry P0_85B3 by the AT-AT code of this page and the AT-ST code of page 1. B = track number, anim_frame = frames into the walk cycle. takes the track's starting key from anim_track_tab (track 0 when B is past the table), walks round the ring of 7-byte keys taking each key's frame count off the time, and blends the offsets of the key the time falls in and of the next one by the fraction of the key that has passed, with the divider and the matrix multiply MS_PERS. returns the x, y and z offset in anim_dx, anim_dy and anim_dz. when the walk comes back to the starting key the cycle is over and anim_frame is cleared. leaves the divider's numerator at $0200. the routine runs on to $9471"
+  }
+ },
+ "labels": {
+  "P0:91BE": "anim_keys",
+  "P0:932C": "anim_track_tab"
+ },
+ "comments": {
+  "P0:8C03": "leg records continued, 5 bytes: first track number, hip x word, hip y word. front legs have x $04DC, rear legs $FB24, the two sides y $01F1 and $FE0F",
+  "P0:8C29": "the walk cycle counter of the record",
+  "P0:8C32": "byte $16: leg set 0-2",
+  "P0:8C37": "past the three sets: set 0",
+  "P0:8C3F": "X = the set's four leg record pointers",
+  "P0:8C48": "the two front legs",
+  "P0:8C52": "the two rear legs",
+  "P0:8C5E": "X = leg record: first track number, hip x, hip y",
+  "P0:8C60": "bank 1 KD9EF: perspected points from the start of BJ_PNT",
+  "P0:8C6D": "three points of the hip",
+  "P0:8C7A": "three points of the knee, and the tow cable test",
+  "P0:8C7D": "the scratch point is now the knee's last point",
+  "P0:8C88": "is the knee within 45 degrees left and right of straight ahead",
+  "P0:8C92": "no: the lower leg is not worked out and the leg is not drawn",
+  "P0:8C94": "bit 4: the walker was drawn this frame",
+  "P0:8C9A": "dim with the distance, or crash into the leg",
+  "P0:8CA7": "three points of the ankle and three of the foot",
+  "P0:8CAA": "object $1B, the leg: bank 1 draws it through the 12 points",
+  "P0:8CAF": "end of the object",
+  "P0:8CB2": "the cycle counter back to the record, 0 when the cycle has wrapped",
+  "P0:8CBE": "perspected points from the start of BJ_PNT",
+  "P0:8CCB": "three points of the hip",
+  "P0:8CD8": "three points of the knee, and the tow cable test",
+  "P0:8CE6": "is the knee within 45 degrees left and right of straight ahead",
+  "P0:8CF0": "no: the leg is not drawn",
+  "P0:8D05": "three points of the ankle and three of the foot",
+  "P0:8D08": "object $1B, the leg",
+  "P0:8D18": "distance of the walker's centre, left by atat_view_body",
+  "P0:8D1E": "$2000 or nearer: full colour, test for a crash",
+  "P0:8D20": "$4000 - distance, held to 0-$0800",
+  "P0:8D34": "/16: brightness 0-$80",
+  "P0:8D37": "colour 2 (green) with that brightness",
+  "P0:8D3D": "how far ahead of the ship the knee is",
+  "P0:8D43": "less than $0280: the ship runs into the leg",
+  "P0:8D49": "rear hip: z 0",
+  "P0:8D55": "front hip: z $0117",
+  "P0:8D61": "track number of the hip",
+  "P0:8D85": "word 9 of the record: the walker's height, $2000 standing",
+  "P0:8D8E": "knee z from the body, in half units: half way down plus $0300",
+  "P0:8D93": "the knee's track follows the hip's",
+  "P0:8DB3": "has the tow cable reached this knee",
+  "P0:8DC4": "ankle z from the body, in half units: $0300 above the ground",
+  "P0:8DC9": "the ankle's track is the third of the leg",
+  "P0:8DF3": "foot z: the ground plus the ankle track's z offset",
+  "P0:8DF9": "x and y still at the ankle's last point",
+  "P0:8E0F": "bank 1 KD9F6: view the scratch point, its screen x and y go to the next 5 bytes of BJ_PNT",
+  "P0:8EC1": "$4803 (TMPOCT) = the larger of the two distances",
+  "P0:8EC7": "half the sum",
+  "P0:8ECF": "plus an eighth of that: 9/16 of the sum",
+  "P0:8ED8": "less 10, not below 0",
+  "P0:8EE4": "something nearer is already under the cursor",
+  "P0:8EEA": "distance less $02EE, at least $02EE, to the divider",
+  "P0:8EF9": "a length of $02EE in both multiplier inputs",
+  "P0:8F05": "the reciprocal of the distance",
+  "P0:8F08": "M_YP and M_ZP = that length as seen on the screen",
+  "P0:8F10": "perspected points 21 to 24, the last four of the body (its points start at BJ_PNT+5)",
+  "P0:8F16": "cursor nearer to the point than that length: on the body",
+  "P0:8F3C": "cursor not on the body: the count starts again, unless the speech has been given",
+  "P0:8F45": "on the body: no record, the shot stops here and destroys nothing",
+  "P0:8F4B": "the nearest thing under the cursor so far",
+  "P0:8F51": "$80: the speech has been given",
+  "P0:8F57": "20 frames in a row on a body",
+  "P0:8F6D": "distance less $01F4, at least $01F4, to the divider",
+  "P0:8F7C": "a length of $0271",
+  "P0:8F82": "the reciprocal of the distance",
+  "P0:8F85": "M_YP = that length as seen on the screen",
+  "P0:8F8D": "perspected point 42, the last of the head (its points start at BJ_PNT+$6E)",
+  "P0:8F99": "on the head: no record, the shot stops here and destroys nothing",
+  "P0:8FAD": "equal counts as nearer, so the eye wins over its own head",
+  "P0:8FAF": "X = perspected point 39. points 38 to 41 are the corners object $19 draws",
+  "P0:8FB2": "the smaller y of points 38 and 39",
+  "P0:8FC1": "the cursor's y is smaller still: miss",
+  "P0:8FC3": "the larger y of points 40 and 41",
+  "P0:8FD2": "the cursor's y is larger still: miss",
+  "P0:8FD4": "the smaller x of points 40 and 38",
+  "P0:8FE5": "the larger x of points 41 and 39",
+  "P0:8FF9": "inside the box: this walker is the laser's target",
+  "P0:9006": "centre of the explosion: the walker's position plus the head's offset",
+  "P0:901B": "bank 1 BGTWXP: three explosion pieces around M_XT, M_YT, M_ZT",
+  "P0:9020": "bit 1 of the type: brought down by the tow cable",
+  "P0:9024": "the cable's record is free again",
+  "P0:9029": "a new walker in this record, or the record freed",
+  "P0:902F": "bonus quota still open: 75 points and one less to go",
+  "P0:903C": "that was the last: 5000 points and the Jedi letter",
+  "P0:9042": "the quota is one more next time",
+  "P0:9047": "quota closed: 750 points",
+  "P0:9050": "already falling",
+  "P0:9054": "no cable out",
+  "P0:9059": "the knee's universe x: twice the point's x plus the walker's",
+  "P0:9060": "distance in x from the cable's end",
+  "P0:9069": "less the size of the cable's x step this frame",
+  "P0:9078": "within $02AA",
+  "P0:907D": "the same in y",
+  "P0:90A1": "the cable has caught this leg",
+  "P0:90A5": "the cable's end goes to the knee",
+  "P0:90BC": "scored as a kill: 75 points while the quota is open",
+  "P0:90C9": "the last of the quota: 5000 points and the Jedi letter",
+  "P0:90D4": "quota closed: 750 points",
+  "P0:90D7": "bit 1 of the type: falling",
+  "P0:90DD": "movement mode 2: atat_mode_fall",
+  "P0:90E5": "only while the bonus quota is open",
+  "P0:90EA": "hold the advance hold_add frames longer, $FF at most",
+  "P0:90F7": "the next hit holds it one frame less, 15 at least",
+  "P0:913C": "AVG JSRL $0026, the flash list call atat_view_all uses for a hit walker",
+  "P0:913F": "over the walker's colour word in the display list",
+  "P0:9144": "the record being viewed",
+  "P0:9146": "bit 7: the hit flash, kept while the walker is drawn",
+  "P0:914C": "the shield hit glow",
+  "P0:9152": "already rolling from a hit: keep the direction",
+  "P0:9156": "else the side comes from the sign of the last viewed point's y",
+  "P0:915A": "a roll of $20 one way or the other",
+  "P0:9163": "spawn count: positive while walkers are brought in",
+  "P0:9168": "none to bring in: free the record",
+  "P0:9172": "bit 4: the walker was drawn this frame",
+  "P0:9178": "not drawn: start from the player's x",
+  "P0:917F": "drawn: one of two moves at random",
+  "P0:9183": "half the world away in x",
+  "P0:918A": "y high byte: 0, $40, $80 or $C0 added, cut to a multiple of $10, low byte 0",
+  "P0:9195": "plus 4 * a random byte",
+  "P0:91A1": "or half the world away in y",
+  "P0:91A8": "with a random x",
+  "P0:91AC": "height of a standing walker",
+  "P0:91AF": "the walker's z",
+  "P0:91B1": "movement mode 1: walk",
+  "P0:91B5": "type $29: live",
+  "P0:91B9": "no flags",
+  "P0:91BE": "keyframe rings for anim_track_pos. a key is 7 bytes: x, y and z offset words and a frame count. a key with count 0 ends a ring: its offsets repeat the first key's and the address of the first key follows it. this ring: one key at 0, 0, 0 for 80 frames, the track of a part that does not move",
+  "P0:91CE": "ring of the AT-AT knee: 10 keys, 80 frames, x from -$0190 to $0320 and z up to $7D. ends with the link at $921B",
+  "P0:9216": "from $921D the ring of the AT-AT ankle and foot: 10 keys, 80 frames, x from -$0320 to $0320 and z up to $01C2. ends with the link at $926A",
+  "P0:926B": "from $926C a ring of two still keys of 6 frames, which no track of the table uses",
+  "P0:9283": "still ring of 12 frames, used by the tracks of page 1's AT-ST",
+  "P0:9293": "first of three rings of 6 keys and 12 frames for the AT-ST of page 1, at $9293, $92C6 and $92F9",
+  "P0:932C": "track table of anim_track_pos, 68 words: the key each track starts its cycle on. tracks 0-3 the still ring, then from track 4 the 12 AT-AT legs (3 leg sets of 4), three tracks a leg: hip (still), knee and ankle, the four legs of a set starting 20 frames apart in the 80-frame rings",
+  "P0:937C": "tracks 40 to 67, used by the AT-ST legs of page 1 (four tracks a leg, leg records at P1_8B6C)",
+  "P0:93B6": "frames into the walk cycle",
+  "P0:93BC": "B = track number",
+  "P0:93C1": "past the end of the table: track 0",
+  "P0:93C9": "U = the key this track starts its cycle on",
+  "P0:93CB": "kept to see when the ring has been gone round",
+  "P0:93CE": "the key's frame count",
+  "P0:93D2": "0: end of the ring, go on at its first key",
+  "P0:93D6": "time left, less this key's frames",
+  "P0:93DB": "the time falls in this key",
+  "P0:93DD": "next key",
+  "P0:93E5": "back at the starting key: the walk cycle starts again",
+  "P0:93ED": "frames into the key over the key's frame count",
+  "P0:93FA": "time for the divider",
+  "P0:93FC": "the quotient (M_QUO, the same address as M_PCGO): the fraction of the key that has passed",
+  "P0:93FF": "times the offsets of the next key, then the rest of the fraction times this key's"
+ },
+ "ram": {
+  "4C05": {
+   "name": "atat_hit_d",
+   "desc": "word: view distance of the nearest part of an AT-AT the laser cursor is on in this frame, written by atat_body_hit, atat_head_hit and atat_eye_hit while the AT-ATs are drawn. the laser start on page 3 (P3_95C9) sets the high byte to $FF for none, and page 3 P3_97CB compares it with the distances of the other things under the cursor (atst_hit_d, CL_GDS) and takes the nearest"
+  },
+  "4C07": {
+   "name": "atat_hit_rec",
+   "desc": "word, goes with atat_hit_d: the record of the AT-AT whose eye the cursor is on, which atat_eye_shot then destroys, or 0 when the nearest hit was on a body or a head and the shot only stops there"
+  },
+  "4C88": {
+   "name": "anim_start",
+   "desc": "word: address of the key the track being interpolated starts its cycle on, kept by anim_track_pos to notice when it has gone once round the ring"
+  },
+  "4C8A": {
+   "name": "anim_left",
+   "desc": "temp of anim_track_pos: the frames of anim_frame not yet used up by the keys passed, in the end the frames into the key the time falls in"
+  },
+  "50E6": {
+   "name": "cable_vx",
+   "desc": "word in the tow cable's block at M_AL (10 bytes before its position): the x step the cable's end takes each frame, set by the cable launch (P0_95EF) from the cursor's direction. cable_leg_test widens its catch range by its size"
+  },
+  "50EE": {
+   "name": "cable_vy",
+   "desc": "word in the tow cable's block at M_AL: the y step the cable's end takes each frame, as cable_vx"
+  },
+  "50F8": {
+   "name": "cable_tx",
+   "desc": "MS_TX+M_AL: word, universe x of the tow cable's end, first of the position words of its block at M_AL (cable_tz is the third). the cable code moves it by cable_vx each frame, cable_leg_test compares it with the knees of the AT-ATs and cable_catch sets it to the knee caught"
+  },
+  "50FA": {
+   "name": "cable_ty",
+   "desc": "MS_TY+M_AL: word, universe y of the tow cable's end, as cable_tx"
+  }
+ },
+ "regions": [
+  ["P0", "91CC", "91CE", "ptrs"],
+  ["P0", "921B", "921D", "ptrs"],
+  ["P0", "926A", "926C", "ptrs"],
+  ["P0", "9281", "9283", "ptrs"],
+  ["P0", "9291", "9293", "ptrs"],
+  ["P0", "92C4", "92C6", "ptrs"],
+  ["P0", "92F7", "92F9", "ptrs"],
+  ["P0", "932A", "932C", "ptrs"],
+  ["P0", "932C", "93B4", "ptrs"]
+ ],
+ "sw_drop_comments": [
+  "P0:8C88",
+  "P0:8CE6",
+  "P0:8F02",
+  "P0:8F05",
+  "P0:8F08",
+  "P0:8F7F",
+  "P0:8F82",
+  "P0:8F85"
+ ],
+ "questions": [
+  "the 502 bytes at P0:91BE-P0:93B3 are data for anim_track_pos (P0:93B4): eight rings of 7-byte keyframes (x, y, z offset words and a frame count), each ended by a key with count 0 followed by a 2-byte pointer back to the ring's first key, at $91BE, $91CE, $921D, $926C, $9283, $9293, $92C6 and $92F9, then the 68-word track table at $932C. the keys cannot be shown with the region kinds: only the eight link pointers and the track table are given as ptrs. the pointers of the table and the links point at keys inside the rows, which have no label of their own",
+  "P0:926C the ring of two still keys of 6 frames is pointed at by no entry of the track table and by nothing else found: unused",
+  "the labels P0_922B and P0_92EE that split rows of the keyframe data are only targets of decoy calls in the maze (P0_81D8, P0_845A), not starts of anything",
+  "P0:90A5 and P0:9006 both score and both count bonus_left down, so an AT-AT brought down by the tow cable is scored twice, when the cable catches the leg and again when the walker reaches the ground and blows up. this is what the code does, whether it is intended is not known",
+  "P0:90E5, P0:9102 and P0:911F are three identical copies of one routine, each with one caller",
+  "P0:91B5 the type byte $29 of a spawned AT-AT: bit 5 lets it shoot and bit 1 is falling, what bits 0 and 3 mean is not shown by any test in this stretch",
+  "P0:913C the AVG word $A013 is a JSRL to vector RAM $0026. it is described as the flash list call after atat_view_all (P0:8939), which list is copied there was not checked",
+  "P0:9156 when S_ROL is 0 the side of the roll is taken from the high byte of M_YP, whatever point the math box viewed last (the knee for a leg crash, the walker's centre for a crash under a falling walker). the NOP after it looks like a patched out instruction",
+  "P0:8F5B which phrase the speech spk_cmd_03 is, was not determined here: it is started when the cursor has been on an AT-AT's body for 20 frames in a row, which fits a hint that lasers do not hurt the body",
+  "P0:8EC1, P0:8ED1 and P0:8ED6 show $4803 as a bare operand although the address has the names TMPOCT and TMPSIZ in the defines (P0:8EAD and P0:8EBC use them). no new name given",
+  "the perspected point numbers in the comments (21-24 body, 42 head, 38-41 eye) are 5-byte slots of BJ_PNT counted from $4E00, the numbering the bank 1 draw routine of object $19 (KCE19) is commented with. the body's points start at slot 1 and the head's at slot 22 (bank 1 table KD77C)",
+  "names taken from the neighbouring stretches and used here without renaming: atat_col_ptr, cable_rec, cable_tz, s1_tx (p0_85ec), anim_frame, anim_dx, anim_dy, anim_dz (p1_8c00), hold_add (p1_9800). atat_hit_d and atat_hit_rec ($4C05, $4C07) are also named, with the same names, by p3_9800. cable_tx, cable_ty, cable_vx and cable_vy are named here from the AT-AT side, the tow cable code at P0_9561 on is outside this stretch",
+  "P0:93B4 anim_track_pos runs on to $9471, past the end of this stretch. its lines from $9402 on are not commented here"
+ ]
+}
