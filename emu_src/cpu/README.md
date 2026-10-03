@@ -1,4 +1,4 @@
-# emu_src/cpu — the 6809 core
+# emu_src/cpu â€” the 6809 core
 
 `cpu_m6809.cpp` and `cpu_m6809.h` are the MC6809 core of the
 [AAE emulator](https://github.com/tcottrill/AAE) (Tim Cottrill, 2026), copied
